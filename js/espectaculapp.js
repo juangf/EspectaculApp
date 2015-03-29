@@ -18,19 +18,35 @@
 		/* Current App page */
 		_currentPage : null,
 
+		_header : null,
+
+		_footer : null,
+
 		/**
 		 * Resample registered Pages
 		 */
 		_resamplePages : function(){
-
 			var width = _w.innerWidth,
-				height = _w.innerHeight;
+				height = _w.innerHeight - this._header.clientHeight - this._footer.clientHeight;
 
 			for(var key in this._pages){
 				this._pages[key].resize(width, height);
 			}
 
 			return this;
+		},
+
+		/**
+		 * Resample general ui
+		 */
+		_resampleUI : function(){
+			if(this._header){
+				_d.getElementsByTagName('body')[0].style.paddingTop = this._header.clientHeight + 'px';
+			}
+			if(this._footer){
+				_d.getElementsByTagName('body')[0].style.paddingBottom = this._footer.clientHeight + 'px';	
+			}
+			this._resamplePages();
 		},
 
 		/**
@@ -41,7 +57,7 @@
 
 			//On Window resize
 			_w.onresize = function(){
-				that._resamplePages();
+				that._resampleUI();
 			};
 
 			return this;
@@ -80,7 +96,7 @@
 
 			return this;
 		},
-		
+
 		/**
 		 * Check a tag attribute as flag
 		 * @param  {DOM Element} element 
@@ -212,9 +228,16 @@
 					}
 				}
 
+				/* Register Header */
+				that._header = _d.getElementsByTagName("head")[0];
+
+				/* Register Footer */
+				that._footer = _d.getElementsByTagName("footer")[0];
+
+				trace('Register basic events', 'info');
 				that
 				._registerEvents()
-				._resamplePages();
+				._resampleUI();
 
 			});
 		}
