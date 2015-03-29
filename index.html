@@ -1,22 +1,26 @@
 <!DOCTYPE html> 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>EspectaculApp</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
-        <meta name="format-detection" content="telephone=no">
-        <!--link rel="stylesheet" href="css/gen.min.css" /-->
-    </head>
-	<body>	
-		<!-- App Page "Home" -->
-		<page id="home"></page>
+<head>
+	<meta charset="utf-8">
+	<title>EspectaculApp</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="css/espectaculapp.css" />
+</head>
+<body>	
+	<!-- App Page "Home" -->
+	<page id="home" first></page>
 
-		<!-- App Page "Profile" -->
-		<page id="profile"></page>
+	<!-- App Page "Profile" -->
+	<page id="profile"></page>
 
-		<script src="js/espectaculapp.js"></script>
-		<script>
-			app.init(true /*Debug flag Enabled*/);
-		</script>
-	</body>
+	<!-- App Page "Tasks" -->
+	<page id="tasks"></page>
+
+	<script src="js/espectaculapp.js"></script>
+	<script>
+		//Initialize EspectaculApp
+		app.init(true /*Debug flag Enabled*/);
+	</script>
+</body>
 </html>
