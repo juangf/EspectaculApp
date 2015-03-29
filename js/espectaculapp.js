@@ -22,16 +22,31 @@
 		 * Inject the system dependencies
 		 */
 		_injectDependencies : function(callBack){
-			var script = _d.createElement('script');
+			var dependencies = [
+				"js/Page.js"
+			],			
+			loadedDependenciesNum = 0,
+			bodyTag = _d.getElementsByTagName('body')[0];
 
-			script.src = "js/Page.js";
-			if(callBack){
-				script.onload = function() {
-					callBack();
-				};
+			//Load each dependency
+			for(var i=0; i<dependencies.length; i++){
+				var script = _d.createElement('script');
+
+				script.src = dependencies[i];
+
+				trace('Injecting "'+script.src+'"', 'info', 1);
+				
+				if(callBack){
+					script.onload = function(){
+						//If all the dependencies are loaded --> callback
+						if(++loadedDependenciesNum === dependencies.length){
+							callBack();
+						}
+					}
+				}
+				
+				bodyTag.appendChild(script);
 			}
-
-			_d.getElementsByTagName('body')[0].appendChild(script);
 		},
 
 		/**
