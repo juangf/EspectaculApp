@@ -20,6 +20,7 @@
 
 		/**
 		 * Inject the system dependencies
+		 * @param  {function} callBack A callback function
 		 */
 		_injectDependencies : function(callBack){
 			var dependencies = [
