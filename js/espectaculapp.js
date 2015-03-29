@@ -19,6 +19,22 @@
 		_currentPage : null,
 
 		/**
+		 * Inject the system dependencies
+		 */
+		_injectDependencies : function(callBack){
+			var script = _d.createElement('script');
+
+			script.src = "js/Page.js";
+			if(callBack){
+				script.onload = function() {
+					callBack();
+				};
+			}
+
+			_d.getElementsByTagName('body')[0].appendChild(script);
+		},
+
+		/**
 		 * Console log helper
 		 * @param  {String} message   Console message
 		 * @param  {String} type      Message Type ('info' | 'error' | 'warn')
@@ -53,10 +69,8 @@
 		 * Set an App page
 		 * @param {String} name Page name
 		 */
-		setPage : function(name){			
-			this._pages[name] = {
-				name : name
-			};
+		setPage : function(name, element){			
+			this._pages[name] = new Page(name, element);
 		},
 
 		/**
@@ -65,7 +79,7 @@
 		 * @return {Object}      Page
 		 */
 		getPage : function(name){
-			return this._pages[name];	
+			return this._pages[name];
 		},
 
 		/**
@@ -98,35 +112,43 @@
 		 * @param  {Boolean} debug Set the debug mode
 		 */
 		init : function(debug){			
+			var that = this;
+
 			/* Set the debug flag */
 			if(debug) this._debug = debug;
 
 			trace('Init EspectaculApp', 'info');
 
-			trace('Register App Pages', 'info');
+			trace('Inject dependencies', 'info');
 
-			/* Register app pages */
-			var pageTags = _d.getElementsByTagName("page");
+			this._injectDependencies(function(){
 
-			for(var i=0; i<pageTags.length; i++){
-				
-				var page = pageTags[i],
-					isCurrent = false;
+				trace('Register App Pages', 'info');
 
-				trace('Set Page: '+ page.id, 'info', 1);				
+				/* Register app pages */
+				var pageTags = _d.getElementsByTagName("page");
 
-				//Add new page to the system
-				this.setPage(page.id);
+				for(var i=0; i<pageTags.length; i++){
 
-				//Check if has the flag 'First' (current page)
-				isCurrent = page.getAttribute('first')!==null ? (page.getAttribute('first')==='true' || page.getAttribute('first')==='') : false;
+					var page = pageTags[i],
+						isCurrent = false;
 
-				//Check if we have to set the first current page
-				if(!this.getCurrentPage() && isCurrent){
-					this.setCurrentPage(page.id);
-					trace('Set as current', 'info', 2);
+					trace('Set Page: '+ page.id, 'info', 1);				
+
+					//Add new page to the system
+					that.setPage(page.id, page);
+
+					//Check if has the flag 'First' (current page)
+					isCurrent = page.getAttribute('first')!==null ? (page.getAttribute('first')==='true' || page.getAttribute('first')==='') : false;
+
+					//Check if we have to set the first current page
+					if(!that.getCurrentPage() && isCurrent){
+						that.setCurrentPage(page.id);
+						trace('Set as current', 'info', 2);
+					}
 				}
-			}
+
+			});
 		}
 	};
 
