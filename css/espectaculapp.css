@@ -12,10 +12,20 @@ body{
 
 /* App head style */
 head{    
+	position: absolute;
 	display: block;
 	width: 100%;
 	height: 50px;  
 	background-color: #F00;
+}
+
+footer{
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 50px;  
+	background-color: #F00;
+	bottom: 0px;
 }
 
 /* Pages styles */
@@ -23,4 +33,6 @@ page{
 	width: 100%;
 	height: 100%;
 	position: absolute;
+	background-color: #0F0;
+    -webkit-overflow-scrolling: touch;
 }

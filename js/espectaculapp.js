@@ -19,6 +19,35 @@
 		_currentPage : null,
 
 		/**
+		 * Resample registered Pages
+		 */
+		_resamplePages : function(){
+
+			var width = _w.innerWidth,
+				height = _w.innerHeight;
+
+			for(var key in this._pages){
+				this._pages[key].resize(width, height);
+			}
+
+			return this;
+		},
+
+		/**
+		 * Register system events
+		 */
+		_registerEvents : function(){
+			var that = this;
+
+			//On Window resize
+			_w.onresize = function(){
+				that._resamplePages();
+			};
+
+			return this;
+		},
+
+		/**
 		 * Inject the system dependencies
 		 * @param  {function} callBack A callback function
 		 */
@@ -48,6 +77,18 @@
 				
 				bodyTag.appendChild(script);
 			}
+
+			return this;
+		},
+		
+		/**
+		 * Check a tag attribute as flag
+		 * @param  {DOM Element} element 
+		 * @param  {String} attributeName 
+		 * @return {Boolean}
+		 */
+		_checkTagAttribute : function(element, attributeName){
+			return element.getAttribute(attributeName)!==null ? (element.getAttribute(attributeName)==='true' || element.getAttribute(attributeName)==='') : false;
 		},
 
 		/**
@@ -79,6 +120,8 @@
 						console.log(message);
 				}				
 			}
+
+			return this;
 		},
 
 		/**
@@ -87,6 +130,9 @@
 		 */
 		setPage : function(name, element){			
 			this._pages[name] = new Page(name, element);
+
+
+			return this;
 		},
 
 		/**
@@ -112,6 +158,8 @@
 		 */
 		setCurrentPage : function(name){
 			this._currentPage = this._pages[name];
+
+			return this;
 		},
 
 		/**
@@ -119,7 +167,7 @@
 		 * @param  {String} name Page name
 		 * @return {Object}      Page
 		 */
-		getCurrentPage : function(name){
+		getCurrentPage : function(){
 			return this._currentPage;
 		},
 
@@ -155,7 +203,7 @@
 					that.setPage(page.id, page);
 
 					//Check if has the flag 'First' (current page)
-					isCurrent = page.getAttribute('first')!==null ? (page.getAttribute('first')==='true' || page.getAttribute('first')==='') : false;
+					isCurrent = that._checkTagAttribute(page, 'first');
 
 					//Check if we have to set the first current page
 					if(!that.getCurrentPage() && isCurrent){
@@ -163,6 +211,10 @@
 						trace('Set as current', 'info', 2);
 					}
 				}
+
+				that
+				._registerEvents()
+				._resamplePages();
 
 			});
 		}
