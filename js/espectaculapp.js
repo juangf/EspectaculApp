@@ -96,6 +96,26 @@
 			return this;
 		},
 
+		ajaxCall : function(params){
+			// Load the view HTML from external file
+			var xmlhttp = new XMLHttpRequest();
+
+			//Load template file with ajax
+		    xmlhttp.onreadystatechange = function() {
+		        if (xmlhttp.readyState == 4 ) {
+		           	if(xmlhttp.status == 200){
+		            	params.success(xmlhttp.responseText);
+		           	}
+		           	else{
+		            	params.error(xmlhttp, xmlhttp.status, 'error');
+		           	}
+		        }
+		    };
+
+		    xmlhttp.open(params.method ? params.method : 'GET', params.url, params.asynch ? params.asynch : true);
+		    xmlhttp.send();
+		},
+
 		/**
 		 * Check a tag attribute as flag
 		 * @param  {DOM Element} element 
@@ -166,26 +186,23 @@
 				this._appendView(scriptTemplate.innerHTML);
 
 			}else{
+				
 				// Load the view HTML from external file
-				var xmlhttp = new XMLHttpRequest();
-
-				//Load template file with ajax
-			    xmlhttp.onreadystatechange = function() {
-			        if (xmlhttp.readyState == 4 ) {
-			           	if(xmlhttp.status == 200){
-			               that._appendView(xmlhttp.responseText);
-			           	}
-			           	else if(xmlhttp.status == 400) {
+				this.ajaxCall({
+					url : route.templateUrl,
+					success : function(data){
+						that._appendView(data);
+					},
+					error : function(xhr, status){
+			           	if(status == 400) {
 			              trace('The view template does not exist.', 'error');
 			           	}
 			           	else {
-			              trace('Cannot load view template.', 'error');
-			           	}
-			        }
-			    };
+			              trace('Cannot load view template.', 'error');					
+						}
+		           	}
+				});
 
-			    xmlhttp.open("GET", route.templateUrl, true);
-			    xmlhttp.send();
 			}
 
 			return this;
