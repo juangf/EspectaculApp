@@ -12,30 +12,10 @@ body{
 	height: 100%;
 }
 
-/* App head style */
-head{    
-	position: absolute;
-	display: block;
-	width: 100%;
-	height: 50px;  
-	background-color: #F00;
-	z-index: 10000;
-}
-
-footer{
-	position: absolute;
-	display: block;
-	width: 100%;
-	height: 50px;  
-	background-color: #F00;
-	bottom: 0px;
-}
-
-/* Pages styles */
-page{
+/* View Style */
+esp-view{
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	background-color: #0F0;
-    -webkit-overflow-scrolling: touch;
+	background-color: #F00;
 }

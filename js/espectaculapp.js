@@ -12,15 +12,14 @@
 		/* Debug Flag */
 		_debug : false,
 
-		/* App pages*/
-		_pages : {},
+		/* App view wrapper */
+		_viewWrapper : null,
 
-		/* Current App page */
-		_currentPage : null,
+		/* App routing config */
+		_routing : {},
 
-		_header : null,
-
-		_footer : null,
+		/* App current route */
+		_currentRoute : null,
 
 		/**
 		 * Resample registered Pages
@@ -42,7 +41,7 @@
 		_resampleUI : function(){
 			if(this._header){
 				_d.getElementsByTagName('body')[0].style.paddingTop = this._header.clientHeight + 'px';
-			}
+			} 
 			if(this._footer){
 				_d.getElementsByTagName('body')[0].style.paddingBottom = this._footer.clientHeight + 'px';	
 			}
@@ -141,105 +140,69 @@
 		},
 
 		/**
-		 * Set an App page
-		 * @param {String} name Page name
+		 * Load App template by Route object
+		 * @param  {[type]} route [description]
+		 * @return {[type]}       [description]
 		 */
-		setPage : function(name, element){			
-			this._pages[name] = new Page(name, element);
+		_loadTemplate : function(route){
+			//Check if there is a template <script>
+			var scriptTemplate = _d.getElementById(route.templateUrl);
+			
+			if(scriptTemplate){
+				//Insert the HTML
+				this._viewWrapper.innerHTML = scriptTemplate.innerHTML;
 
+			}else{
+				//TODO Load the external template file
+				console.log('loading external template');
+			}
 
 			return this;
-		},
-
-		/**
-		 * Get an App Page
-		 * @param  {[type]} name Page name
-		 * @return {Object}      Page
-		 */
-		getPage : function(name){
-			return this._pages[name];
-		},
-
-		/**
-		 * Get all the App Pages
-		 * @return {Array} List of pages
-		 */
-		getPages : function(){
-			return this._pages;	
-		},
-
-		/**
-		 * Set the App current page
-		 * @param {String} name Page name
-		 */
-		setCurrentPage : function(name){
-			this._currentPage = this._pages[name];
-
-			return this;
-		},
-
-		/**
-		 * Get the current App page
-		 * @param  {String} name Page name
-		 * @return {Object}      Page
-		 */
-		getCurrentPage : function(){
-			return this._currentPage;
 		},
 
 		/**
 		 * Init EspectaculApp
 		 * @param  {Boolean} debug Set the debug mode
 		 */
-		init : function(debug){			
+		init : function(params){			
 			var that = this;
 
-			/* Set the debug flag */
-			if(debug) this._debug = debug;
+			// Set the debug flag
+			if(params.debugMode) this._debug = params.debugMode;
 
-			trace('Init EspectaculApp', 'info');
+			trace('Init EspectaculApp.', 'info');
 
-			trace('Inject dependencies', 'info');
+			//Set the view wrapper
+			this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
 
-			this._injectDependencies(function(){
+			// Work the app routing
+			if(params.routing){
+				//Save internaly
+				this._routing = params.routing;
 
-				trace('Register App Pages', 'info');
+				//check the "fistRoute" param
+				if(params.firstRoute){
+					if(this._routing.hasOwnProperty(params.firstRoute)){
+						this._currentRoute = this._routing[params.firstRoute];
 
-				/* Register app pages */
-				var pageTags = _d.getElementsByTagName("page");
-
-				for(var i=0; i<pageTags.length; i++){
-
-					var page = pageTags[i],
-						isCurrent = false;
-
-					trace('Set Page: '+ page.id, 'info', 1);				
-
-					//Add new page to the system
-					that.setPage(page.id, page);
-
-					//Check if has the flag 'First' (current page)
-					isCurrent = that._checkTagAttribute(page, 'first');
-
-					//Check if we have to set the first current page
-					if(!that.getCurrentPage() && isCurrent){
-						that.setCurrentPage(page.id);
-						trace('Set as current', 'info', 2);
+						//Load the route template
+						this._loadTemplate(this._currentRoute);
+					}else{
+						trace('The first route "'+params.firstRoute+'" does not exist.', 'error');
 					}
+				}else{
+					//If the "firstRout2e param is not defined, get the first defined.
+					var routingKeys = Object.keys(this._routing);
+					
+					this._currentRoute = this._routing[routingKeys[0]];
+
+					//Load the route template
+					this._loadTemplate(this._currentRoute);
 				}
+			}else{
+				trace('Routing values fault.', 'error');				
+			}
 
-				/* Register Header */
-				that._header = _d.getElementsByTagName("head")[0];
-
-				/* Register Footer */
-				that._footer = _d.getElementsByTagName("footer")[0];
-
-				trace('Register basic events', 'info');
-				that
-				._registerEvents()
-				._resampleUI();
-
-			});
 		}
 	};
 
