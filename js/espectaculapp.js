@@ -97,20 +97,18 @@
 		},
 
 		ajaxCall : function(params){
-			// Load the view HTML from external file
 			var xmlhttp = new XMLHttpRequest();
 
-			//Load template file with ajax
-		    xmlhttp.onreadystatechange = function() {
-		        if (xmlhttp.readyState == 4 ) {
-		           	if(xmlhttp.status == 200){
-		            	params.success(xmlhttp.responseText);
-		           	}
-		           	else{
-		            	params.error(xmlhttp, xmlhttp.status, 'error');
-		           	}
-		        }
-		    };
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 ) {
+					if(xmlhttp.status == 200){
+						params.success(xmlhttp.responseText);
+					}
+				else{
+						params.error(xmlhttp, xmlhttp.status, 'error');
+					}
+				}
+			};
 
 		    xmlhttp.open(params.method ? params.method : 'GET', params.url, params.asynch ? params.asynch : true);
 		    xmlhttp.send();
@@ -186,7 +184,7 @@
 				this._appendView(scriptTemplate.innerHTML);
 
 			}else{
-				
+
 				// Load the view HTML from external file
 				this.ajaxCall({
 					url : route.templateUrl,
