@@ -140,21 +140,52 @@
 		},
 
 		/**
+		 * Append a new view from an HTML text
+		 * @param  {[type]} viewHTML [description]
+		 * @return {[type]}          [description]
+		 */
+		_appendView : function(viewHTML){
+			var newNode = _d.createElement('div');
+
+			newNode.innerHTML = viewHTML;
+
+			this._viewWrapper.appendChild(newNode.getElementsByTagName('esp-view')[0]);
+		},
+		/**
 		 * Load App template by Route object
 		 * @param  {[type]} route [description]
 		 * @return {[type]}       [description]
 		 */
 		_loadTemplate : function(route){
 			//Check if there is a template <script>
-			var scriptTemplate = _d.getElementById(route.templateUrl);
+			var scriptTemplate = _d.getElementById(route.templateUrl),
+				that = this;
 			
 			if(scriptTemplate){
-				//Insert the HTML
-				this._viewWrapper.innerHTML = scriptTemplate.innerHTML;
+				//Load the view HTML
+				this._appendView(scriptTemplate.innerHTML);
 
 			}else{
-				//TODO Load the external template file
-				console.log('loading external template');
+				// Load the view HTML from external file
+				var xmlhttp = new XMLHttpRequest();
+
+				//Load template file with ajax
+			    xmlhttp.onreadystatechange = function() {
+			        if (xmlhttp.readyState == 4 ) {
+			           	if(xmlhttp.status == 200){
+			               that._appendView(xmlhttp.responseText);
+			           	}
+			           	else if(xmlhttp.status == 400) {
+			              trace('The view template does not exist.', 'error');
+			           	}
+			           	else {
+			              trace('Cannot load view template.', 'error');
+			           	}
+			        }
+			    };
+
+			    xmlhttp.open("GET", route.templateUrl, true);
+			    xmlhttp.send();
 			}
 
 			return this;
