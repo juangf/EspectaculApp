@@ -12,15 +12,22 @@ body{
 	height: 100%;
 }
 
+esp-view-wrapper{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	overflow: hidden;
+	-webkit-backface-visibility: hidden;	
+}
+
 /* View Style */
 esp-view{
 	width: 100%;
 	height: 100%;
 	position: absolute;
-
-	display: none;
 }
 
-esp-view.current{
-	display: block;
+esp-view:not(.current){
+	z-index: 0;
+	display: none;
 }

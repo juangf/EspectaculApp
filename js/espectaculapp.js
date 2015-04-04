@@ -86,6 +86,35 @@
 			return null;
 		},
 
+		_viewsTransition : function(inRoute, outRoute, callBack){
+			var inView = inRoute.viewElement,
+				outView = outRoute ? outRoute.viewElement : null;
+
+			var transition = 'slide';
+
+			var inViewTransEndFn = function(event){
+				event.target.removeEventListener(event.type, inViewTransEndFn);
+				inView.classList.remove(transition);
+				inView.classList.remove('in');
+				
+				callBack(inRoute);
+			};
+			var outViewTransEndFn = function(event){
+				event.target.removeEventListener(event.type, outViewTransEndFn);
+				outView.classList.remove(transition);
+				outView.classList.remove('out');
+				outView.classList.remove('current');
+			};
+
+			inView.addEventListener('webkitAnimationEnd', inViewTransEndFn, false);
+			inView.className = 'current '+transition+' in';
+
+			if(outView){
+				outView.addEventListener('webkitAnimationEnd', outViewTransEndFn, false);
+				outView.className = 'current '+transition+' out';
+			}
+		},
+
 		/**
 		 * [_appNavigation description]
 		 * @param  {[type]} routeId [description]
@@ -93,6 +122,7 @@
 		 */
 		_appNavigation : function(routeUrl) {
 			var that = this;
+
 			if(!this._currentRoute || this._currentRoute.url !== routeUrl){
 				var route = this._getRouteByUrl(routeUrl);
 
@@ -103,23 +133,18 @@
 						this._loadTemplate(route, function(status, viewElement){
 							if(status){
 								route.viewElement = viewElement;
-								route.loaded = true;
+								route.loaded = true;								
 
-								if(that._currentRoute)
-								that._currentRoute.viewElement.classList.remove('current');
-
-								that._currentRoute = route;
-								
-								that._currentRoute.viewElement.classList.add('current');
+								that._viewsTransition(route, that._currentRoute, function(newCurrentRoute){
+									that._currentRoute = newCurrentRoute;
+								});
 							}
 						});
 					}else{
-						if(that._currentRoute)
-						that._currentRoute.viewElement.classList.remove('current');
 
-						that._currentRoute = route;
-						
-						that._currentRoute.viewElement.classList.add('current');
+						that._viewsTransition(route, that._currentRoute, function(newCurrentRoute){
+							that._currentRoute = newCurrentRoute;
+						});
 					}
 
 				}else{
