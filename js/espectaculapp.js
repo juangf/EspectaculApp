@@ -101,9 +101,7 @@
 			};
 			var outViewTransEndFn = function(event){
 				event.target.removeEventListener(event.type, outViewTransEndFn);
-				outView.classList.remove(transition);
-				outView.classList.remove('out');
-				outView.classList.remove('current');
+				outView.className = '';
 			};
 
 			inView.addEventListener('webkitAnimationEnd', inViewTransEndFn, false);
