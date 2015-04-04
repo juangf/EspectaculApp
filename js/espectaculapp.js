@@ -92,14 +92,35 @@
 		 * @return {[type]}         [description]
 		 */
 		_appNavigation : function(routeUrl) {
+			var that = this;
 			if(!this._currentRoute || this._currentRoute.url !== routeUrl){
 				var route = this._getRouteByUrl(routeUrl);
 
 				if(route){
-					this._currentRoute = route;
 
-					//Load the route template
-					this._loadTemplate(route);
+					if(!route.loaded){
+						//Load the route template
+						this._loadTemplate(route, function(status, viewElement){
+							if(status){
+								route.viewElement = viewElement;
+								route.loaded = true;
+
+								if(that._currentRoute)
+								that._currentRoute.viewElement.classList.remove('current');
+
+								that._currentRoute = route;
+								
+								that._currentRoute.viewElement.classList.add('current');
+							}
+						});
+					}else{
+						if(that._currentRoute)
+						that._currentRoute.viewElement.classList.remove('current');
+
+						that._currentRoute = route;
+						
+						that._currentRoute.viewElement.classList.add('current');
+					}
 
 				}else{
 					trace('Cannot find the route "'+routeId+'".', 'error');
@@ -221,29 +242,36 @@
 
 			newNode.innerHTML = viewHTML;
 
-			this._viewWrapper.appendChild(newNode.getElementsByTagName('esp-view')[0]);
+			var viewTag = newNode.getElementsByTagName('esp-view')[0];
+
+			this._viewWrapper.appendChild(viewTag);
+
+			return viewTag;
 		},
 		/**
 		 * Load App template by Route object
 		 * @param  {[type]} route [description]
 		 * @return {[type]}       [description]
 		 */
-		_loadTemplate : function(route){
+		_loadTemplate : function(route, callBack){
 			//Check if there is a template <script>
 			var scriptTemplate = _d.getElementById(route.templateUrl),
 				that = this;
 			
 			if(scriptTemplate){
 				//Load the view HTML
-				this._appendView(scriptTemplate.innerHTML);
+				var viewTag = this._appendView(scriptTemplate.innerHTML);
 
+				if(callBack) callBack(true, viewTag);
 			}else{
 
 				// Load the view HTML from external file
 				this.ajax({
 					url : route.templateUrl,
 					success : function(data){
-						that._appendView(data);
+						var viewTag = that._appendView(data);
+
+						if(callBack) callBack(true, viewTag);
 					},
 					error : function(xhr, status){
 			           	if(status == 400) {
@@ -252,6 +280,8 @@
 			           	else {
 			              trace('Cannot load view template.', 'error');					
 						}
+
+						if(callBack) callBack(false);
 		           	}
 				});
 
