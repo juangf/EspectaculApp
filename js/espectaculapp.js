@@ -39,6 +39,7 @@
 		 * Resample general ui
 		 */
 		_resampleUI : function(){
+			/*
 			if(this._header){
 				_d.getElementsByTagName('body')[0].style.paddingTop = this._header.clientHeight + 'px';
 			} 
@@ -46,6 +47,9 @@
 				_d.getElementsByTagName('body')[0].style.paddingBottom = this._footer.clientHeight + 'px';	
 			}
 			this._resamplePages();
+			*/
+		
+			return this;
 		},
 
 		/**
@@ -58,6 +62,49 @@
 			_w.onresize = function(){
 				that._resampleUI();
 			};
+
+			//On Hash change
+			_w.onhashchange = function () {
+            	that._appNavigation(_w.location.hash.substr(1));
+         	};
+
+			return this;
+		},
+
+		/**
+		 * Find a route by an url
+		 * @param  {[type]} url [description]
+		 * @return {[type]}     [description]
+		 */
+		_getRouteByUrl : function(url){
+			for(var key in this._routing){
+				if(this._routing[key].url === url){
+					return this._routing[key];
+				}
+			}
+
+			return null;
+		},
+
+		/**
+		 * [_appNavigation description]
+		 * @param  {[type]} routeId [description]
+		 * @return {[type]}         [description]
+		 */
+		_appNavigation : function(routeUrl) {
+			if(!this._currentRoute || this._currentRoute.url !== routeUrl){
+				var route = this._getRouteByUrl(routeUrl);
+
+				if(route){
+					this._currentRoute = route;
+
+					//Load the route template
+					this._loadTemplate(route);
+
+				}else{
+					trace('Cannot find the route "'+routeId+'".', 'error');
+				}
+			}
 
 			return this;
 		},
@@ -96,7 +143,12 @@
 			return this;
 		},
 
-		ajaxCall : function(params){
+		/**
+		 * Ajax call
+		 * @param  {[type]} params [description]
+		 * @return {[type]}        [description]
+		 */
+		ajax : function(params){
 			var xmlhttp = new XMLHttpRequest();
 
 			xmlhttp.onreadystatechange = function() {
@@ -112,6 +164,8 @@
 
 		    xmlhttp.open(params.method ? params.method : 'GET', params.url, params.asynch ? params.asynch : true);
 		    xmlhttp.send();
+
+		    return this;
 		},
 
 		/**
@@ -186,7 +240,7 @@
 			}else{
 
 				// Load the view HTML from external file
-				this.ajaxCall({
+				this.ajax({
 					url : route.templateUrl,
 					success : function(data){
 						that._appendView(data);
@@ -214,9 +268,18 @@
 			var that = this;
 
 			// Set the debug flag
-			if(params.debugMode) this._debug = params.debugMode;
+			if(params.debugMode) {
+				//Store the flag
+				this._debug = params.debugMode;
+
+				//Reset the location hash for easy manual window refreshing
+				_w.location.hash = '';
+			}
 
 			trace('Init EspectaculApp.', 'info');
+
+			//Register basic events
+			this._registerEvents();
 
 			//Set the view wrapper
 			this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
@@ -229,21 +292,15 @@
 				//check the "fistRoute" param
 				if(params.firstRoute){
 					if(this._routing.hasOwnProperty(params.firstRoute)){
-						this._currentRoute = this._routing[params.firstRoute];
-
-						//Load the route template
-						this._loadTemplate(this._currentRoute);
+						_w.location = '#'+params.firstRoute;
 					}else{
 						trace('The first route "'+params.firstRoute+'" does not exist.', 'error');
 					}
 				}else{
 					//If the "firstRout2e param is not defined, get the first defined.
 					var routingKeys = Object.keys(this._routing);
-					
-					this._currentRoute = this._routing[routingKeys[0]];
 
-					//Load the route template
-					this._loadTemplate(this._currentRoute);
+					_w.location = '#'+routingKeys[0];
 				}
 			}else{
 				trace('Routing values fault.', 'error');				
