@@ -86,6 +86,13 @@
 			return null;
 		},
 
+		/**
+		 * Transition between two route views
+		 * @param  {[type]} inRoute  [description]
+		 * @param  {[type]} outRoute [description]
+		 * @param  {[type]} callBack [description]
+		 * @return {[type]}          [description]
+		 */
 		_viewsTransition : function(inRoute, outRoute, callBack){
 			var inView = inRoute.viewElement,
 				outView = outRoute ? outRoute.viewElement : null,
@@ -183,6 +190,7 @@
 
 			return this;
 		},
+
 		on : function(target, type, callBack){
 			var types = type.split(' ');
 
@@ -190,6 +198,7 @@
 				target.addEventListener(types[i], callBack, false);	
 			}
 		},
+
 		off : function(target, type, callBack){
 			var types = type.split(' ');
 
@@ -197,15 +206,17 @@
 				target.removeEventListener(types[i], callBack);	
 			}
 		},
+
 		one : function(target, type, callBack){
 			var that = this,
-				newCallBackFn = function(event){
+			newCallBackFn = function(event){
 				that.off(target, type, newCallBackFn);
 				callBack(event);
 			};
 
 			this.on(target, type, newCallBackFn);
 		},
+
 		/**
 		 * Ajax call
 		 * @param  {[type]} params [description]
@@ -229,6 +240,21 @@
 		    xmlhttp.send();
 
 		    return this;
+		},
+
+		/**
+		 * Go to an specified view route
+		 * @param  {[type]} routeId [description]
+		 * @return {[type]}         [description]
+		 */
+		goTo : function(routeId){
+			if(this._routing.hasOwnProperty(routeId)){
+				window.location = '#' + routeId;
+			}else{
+				trace('Cannot route id "'+routeId+'" does not exist.', 'error');					
+			}
+
+			return this;
 		},
 
 		/**
@@ -290,6 +316,7 @@
 
 			return viewTag;
 		},
+
 		/**
 		 * Load App template by Route object
 		 * @param  {[type]} route [description]

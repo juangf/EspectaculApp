@@ -10,6 +10,15 @@
 		<link rel="stylesheet" href="css/animations.css" />
 	</head>
 	<body>
+
+		<!-- Navigation Headers wrapper -->
+  	<esp-nav-wrapper>
+  		<esp-header>
+  			<h1>Holaaaaaaas</h1>
+  		</esp-header>
+  	</esp-nav-wrapper>
+
+  	<!-- Views wrapper -->
 		<esp-view-wrapper></esp-view-wrapper>
 
 		<script id="templates/home.html" type="text/esp-template">
@@ -26,15 +35,16 @@
 			//Initialize EspectaculApp
 			app.init({
 				routing : {
+					'users':{
+						url : 'users',
+						templateUrl: 'templates/users.html',
+						transition: 'slide',
+						header : false
+					},
 					'home':{
 						url : 'home',
 						templateUrl: 'templates/home.html',
 						transition : 'flipleft'
-					},
-					'users':{
-						url : 'users',
-						templateUrl: 'templates/users.html',
-						transition: 'slide'
 					}
 				},
 				firstRoute	: 'home',
