@@ -40,7 +40,7 @@ body{
 	color: #000;
 
 	word-wrap: break-word;
-	
+
 	font-size: 14px;
 	font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
 	line-height: 20px;
@@ -60,6 +60,8 @@ esp-nav-wrapper{
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	background-color: #F00;
+
+	
 }
 
 esp-header .title{
@@ -74,7 +76,6 @@ esp-header .title{
 
 /* App Views wrapper */
 esp-view-wrapper{
-	padding-top: 50px;
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -88,7 +89,6 @@ esp-view-wrapper{
 
 /* App View Style */
 esp-view{
-	background-color: #FFF;
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -100,6 +100,20 @@ esp-view:not(.current){
 }
 
 esp-content{
-	position: absolute;
+	background-color: #FFF;
+
 	padding: 5px;
+
+	width: auto;
+	height: auto;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: absolute;
+
+	top:50px; /*TODO vía programación*/
+}
+esp-content.hasheader{
+	top: 50px;
 }
