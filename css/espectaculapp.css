@@ -7,21 +7,27 @@
 
 /* App body style */
 body{
-	background-color: #FFF;
+	background-color: #000;
 	width: 100%;
 	height: 100%;
 }
 
+/* App Views wrapper */
 esp-view-wrapper{
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	overflow: hidden;
-	-webkit-backface-visibility: hidden;	
+
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-perspective:1000px;	
+	perspective:1000px;
 }
 
-/* View Style */
+/* App View Style */
 esp-view{
+	background-color: #FFF;
 	width: 100%;
 	height: 100%;
 	position: absolute;

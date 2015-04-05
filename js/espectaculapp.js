@@ -88,27 +88,24 @@
 
 		_viewsTransition : function(inRoute, outRoute, callBack){
 			var inView = inRoute.viewElement,
-				outView = outRoute ? outRoute.viewElement : null;
+				outView = outRoute ? outRoute.viewElement : null,
+				transition = inRoute.transition ? inRoute.transition : 'fade';
 
-			var transition = 'slide';
-
-			var inViewTransEndFn = function(event){
-				event.target.removeEventListener(event.type, inViewTransEndFn);
+			this.one(inView, 'webkitAnimationEnd animationEnd', function(event){
 				inView.classList.remove(transition);
 				inView.classList.remove('in');
 				
 				callBack(inRoute);
-			};
-			var outViewTransEndFn = function(event){
-				event.target.removeEventListener(event.type, outViewTransEndFn);
-				outView.className = '';
-			};
+			});
 
-			inView.addEventListener('webkitAnimationEnd', inViewTransEndFn, false);
 			inView.className = 'current '+transition+' in';
 
 			if(outView){
-				outView.addEventListener('webkitAnimationEnd', outViewTransEndFn, false);
+
+				this.one(outView, 'webkitAnimationEnd animationEnd', function(event){
+					outView.className = '';
+				});
+
 				outView.className = 'current '+transition+' out';
 			}
 		},
@@ -186,7 +183,29 @@
 
 			return this;
 		},
+		on : function(target, type, callBack){
+			var types = type.split(' ');
 
+			for(var i=0; i<types.length; i++){
+				target.addEventListener(types[i], callBack, false);	
+			}
+		},
+		off : function(target, type, callBack){
+			var types = type.split(' ');
+
+			for(var i=0; i<types.length; i++){
+				target.removeEventListener(types[i], callBack);	
+			}
+		},
+		one : function(target, type, callBack){
+			var that = this,
+				newCallBackFn = function(event){
+				that.off(target, type, newCallBackFn);
+				callBack(event);
+			};
+
+			this.on(target, type, newCallBackFn);
+		},
 		/**
 		 * Ajax call
 		 * @param  {[type]} params [description]

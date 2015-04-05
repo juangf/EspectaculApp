@@ -7,7 +7,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<!-- CSS development files -->
 		<link rel="stylesheet" href="css/espectaculapp.css" />
-		<link rel="stylesheet" href="css/transitions.css" />
+		<link rel="stylesheet" href="css/animations.css" />
 	</head>
 	<body>
 		<esp-view-wrapper></esp-view-wrapper>
@@ -28,11 +28,13 @@
 				routing : {
 					'home':{
 						url : 'home',
-						templateUrl: 'templates/home.html'
+						templateUrl: 'templates/home.html',
+						transition : 'flipleft'
 					},
 					'users':{
 						url : 'users',
-						templateUrl: 'templates/users.html'
+						templateUrl: 'templates/users.html',
+						transition: 'slide'
 					}
 				},
 				firstRoute	: 'home',
