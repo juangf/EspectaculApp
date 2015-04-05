@@ -102,18 +102,18 @@ esp-view:not(.current){
 esp-content{
 	background-color: #FFF;
 
-	padding: 5px;
-
 	width: auto;
 	height: auto;
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	position: absolute;
-
-	top:50px; /*TODO vía programación*/
+	position: absolute;	
 }
-esp-content.hasheader{
+esp-content.has-header{
 	top: 50px;
+}
+
+esp-content.padding{
+	padding: 8px;
 }

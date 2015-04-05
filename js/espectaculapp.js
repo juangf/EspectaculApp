@@ -12,6 +12,9 @@
 		/* Debug Flag */
 		_debug : false,
 
+		/* App navigation header wrapper */
+		_navWrapper : null,
+
 		/* App view wrapper */
 		_viewWrapper : null,
 
@@ -135,7 +138,18 @@
 						this._loadTemplate(route, function(status, viewElement){
 							if(status){
 								route.viewElement = viewElement;
-								route.loaded = true;								
+								route.loaded = true;	
+
+								//If there is navigation top header, add 'has-header' class to content
+								if(that._navWrapper){
+									var contentElements = viewElement.getElementsByTagName('esp-content');
+
+									if(contentElements.length){
+										contentElements[0].classList.add('has-header');
+									}else{
+										//TODO Raise error
+									}							
+								}							
 
 								that._viewsTransition(route, that._currentRoute, function(newCurrentRoute){
 									that._currentRoute = newCurrentRoute;
@@ -382,6 +396,12 @@
 
 			//Set the view wrapper
 			this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
+
+			//Set the navigation wrapper (if exists)
+			var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');			
+			if(navWrapper.length){
+				this._navWrapper = navWrapper[0];
+			}
 
 			// Work the app routing
 			if(params.routing){
