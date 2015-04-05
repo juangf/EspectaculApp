@@ -147,7 +147,7 @@
 									if(contentElements.length){
 										contentElements[0].classList.add('has-header');
 									}else{
-										//TODO Raise error
+										trace('Cannot find an "esp-content" tag".', 'error');
 									}							
 								}							
 
