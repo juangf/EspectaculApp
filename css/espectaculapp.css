@@ -24,6 +24,11 @@ esp-nav-wrapper{
 	background-color: #F00;
 }
 
+esp-header h1{
+	text-align: center;
+	line-height: 50px;
+}
+
 /* App Views wrapper */
 esp-view-wrapper{
 	padding-top: 50px;
