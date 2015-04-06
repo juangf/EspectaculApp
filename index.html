@@ -32,23 +32,53 @@
 
 		<script src="js/espectaculapp.js"></script>
 		<script>
-			//Initialize EspectaculApp
-			app.init({
+			//Configure EspectaculApp
+			app.config({
 				views : {
 					'users':{
 						url : 'users',
 						templateUrl: 'templates/users.html',
-						transition: 'slide'
+						transition: 'slide',
+						events : {
+							load : function(){
+								console.log('loaded users');
+							},
+							show : function(){
+								console.log('show users');
+							},
+							hide : function(){
+								console.log('hide users');
+							},
+							beforeShow : function(){
+								console.log('before show users');
+							},
+							beforeHide : function(){
+								console.log('before hide users');
+							}
+						}
 					},
 					'home':{
 						url : 'home',
-						templateUrl: 'templates/home.html',
-						transition : 'flipleft'
+						templateUrl: 'templates/home.html'
 					}
 				},
 				firstView	: 'home',
 				debugMode : true /*Debug flag Enabled*/
 			});
+
+			//Other way to set view events
+			app.getView('home')
+			.onShow(function(){
+				console.log('On show home view');
+			})
+			.onHide(function(){
+				console.log('On Hide home view');
+			});
+
+			//Init EspectaculApp
+			app.init();
+
+
 		</script>
 	</body>
 

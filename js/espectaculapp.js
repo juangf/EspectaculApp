@@ -101,10 +101,16 @@
 					outViewElement = outView ? outView.viewElement : null,
 					transition = inView.transition ? inView.transition : 'fade';
 
+			//Call to view beforeShow event
+			if(inView.events.beforeShow) inView.events.beforeShow();
+
 			this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
 				inViewElement.classList.remove(transition);
 				inViewElement.classList.remove('in');
 				
+				//Call to view show event
+				if(inView.events.show) inView.events.show();
+
 				callBack(inView);
 			});
 
@@ -112,8 +118,15 @@
 
 			if(outViewElement){
 
+				//Call to view beforeHide event
+				if(outView.events.beforeHide) outView.events.beforeHide();
+
 				this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
 					outViewElement.className = '';
+
+					//Call to view hide event
+					if(outView.events.hide) outView.events.hide();
+
 				});
 
 				outViewElement.className = 'current '+transition+' out';
@@ -137,8 +150,26 @@
 						//Load the view template
 						this._loadTemplate(view, function(status, viewElement){
 							if(status){
+
 								view.viewElement = viewElement;
 								view.loaded = true;	
+
+								/*var event = new CustomEvent(
+									"load", 
+									{
+										detail: {
+										},
+										bubbles: true,
+										cancelable: true
+									}
+								);*/
+
+								//Call to view loaded event
+								if(view.events.load){
+									/*that.one(view.viewElement, 'load', view.events.load);
+									view.viewElement.dispatchEvent(event);*/
+									view.events.load();
+								}
 
 								//If there is navigation top header, add 'has-header' class to content
 								if(that._navWrapper){
@@ -259,6 +290,16 @@
 		    return this;
 		},
 
+		getView : function(viewId){
+			if(this._views.hasOwnProperty(viewId)){
+				return this._views[viewId];
+			}else{
+				trace('The view id "'+viewId+'" does not exist.', 'error');					
+			}
+
+			return null;		
+		},
+
 		/**
 		 * Go to an specified view
 		 * @param  {[type]} viewId [description]
@@ -377,10 +418,27 @@
 		},
 
 		/**
-		 * Init EspectaculApp
-		 * @param  {Boolean} debug Set the debug mode
+		 * [_addViewMethods description]
+		 * @param {[type]} views [description]
 		 */
-		init : function(params){			
+		_addViewMethods : function(views){
+			for(var key in views){
+				var view = views[key];
+
+				if(!view.events) view.events = {};
+
+				view.onLoad = function(callBack){ view.events.load = callBack; return view };
+				view.onShow = function(callBack){ view.events.show = callBack; return view };
+				view.onHide = function(callBack){ view.events.hide = callBack; return view };
+				view.onBeforeShow = function(callBack){ view.events.beforeShow = callBack; return view };
+				view.onBeforeHide = function(callBack){ view.events.beforeHide = callBack; return view };
+			}
+		},
+
+		/**
+		 * Configure EspectaculApp
+		 */
+		config : function(params){			
 			var that = this;
 
 			// Set the debug flag
@@ -411,23 +469,37 @@
 				//Save internaly
 				this._views = params.views;
 
+				this._addViewMethods(this._views);
+
 				//check the "fistView" param
 				if(params.firstView){
 					if(this._views.hasOwnProperty(params.firstView)){
-						_w.location = '#'+params.firstView;
+						this.firstView = params.firstView;
 					}else{
 						trace('The first view "'+params.firstView+'" does not exist.', 'error');
 					}
-				}else{
-					//If the "firstRout2e param is not defined, get the first defined.
-					var viewsKeys = Object.keys(this._views);
-
-					_w.location = '#'+viewsKeys[0];
 				}
+
 			}else{
 				trace('views values fault.', 'error');				
 			}
 
+		},
+
+		/**
+		 * [init description]
+		 * @return {[type]} [description]
+		 */
+		init : function(){
+			//check the "fistView" param
+			if(this.firstView){
+				_w.location = '#'+this.firstView;
+			}else{
+				//If the "firstRout2e param is not defined, get the first defined.
+				var viewsKeys = Object.keys(this._views);
+
+				_w.location = '#'+viewsKeys[0];
+			}
 		}
 	};
 
