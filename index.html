@@ -13,7 +13,7 @@
 
 		<!-- Navigation Headers wrapper -->
   	<esp-nav-wrapper>
-  		<esp-header>
+  		<esp-header class="current">
   			<div class="title">Title</div>
   		</esp-header>
   	</esp-nav-wrapper>
@@ -34,12 +34,11 @@
 		<script>
 			//Initialize EspectaculApp
 			app.init({
-				routing : {
+				views : {
 					'users':{
 						url : 'users',
 						templateUrl: 'templates/users.html',
-						transition: 'slide',
-						header : false
+						transition: 'slide'
 					},
 					'home':{
 						url : 'home',
@@ -47,7 +46,7 @@
 						transition : 'flipleft'
 					}
 				},
-				firstRoute	: 'home',
+				firstView	: 'home',
 				debugMode : true /*Debug flag Enabled*/
 			});
 		</script>

@@ -18,11 +18,11 @@
 		/* App view wrapper */
 		_viewWrapper : null,
 
-		/* App routing config */
-		_routing : {},
+		/* App views config */
+		_views : {},
 
-		/* App current route */
-		_currentRoute : null,
+		/* App current view */
+		_currentView : null,
 
 		/**
 		 * Resample registered Pages
@@ -68,21 +68,21 @@
 
 			//On Hash change
 			_w.onhashchange = function () {
-            	that._appNavigation(_w.location.hash.substr(1));
-         	};
+				that._appNavigation(_w.location.hash.substr(1));
+			};
 
 			return this;
 		},
 
 		/**
-		 * Find a route by an url
+		 * Find a view by an url
 		 * @param  {[type]} url [description]
 		 * @return {[type]}     [description]
 		 */
-		_getRouteByUrl : function(url){
-			for(var key in this._routing){
-				if(this._routing[key].url === url){
-					return this._routing[key];
+		_getViewByUrl : function(url){
+			for(var key in this._views){
+				if(this._views[key].url === url){
+					return this._views[key];
 				}
 			}
 
@@ -90,55 +90,55 @@
 		},
 
 		/**
-		 * Transition between two route views
-		 * @param  {[type]} inRoute  [description]
-		 * @param  {[type]} outRoute [description]
+		 * Transition between two views
+		 * @param  {[type]} inView  [description]
+		 * @param  {[type]} outView [description]
 		 * @param  {[type]} callBack [description]
 		 * @return {[type]}          [description]
 		 */
-		_viewsTransition : function(inRoute, outRoute, callBack){
-			var inView = inRoute.viewElement,
-				outView = outRoute ? outRoute.viewElement : null,
-				transition = inRoute.transition ? inRoute.transition : 'fade';
+		_viewsTransition : function(inView, outView, callBack){
+			var inViewElement = inView.viewElement,
+					outViewElement = outView ? outView.viewElement : null,
+					transition = inView.transition ? inView.transition : 'fade';
 
-			this.one(inView, 'webkitAnimationEnd animationEnd', function(event){
-				inView.classList.remove(transition);
-				inView.classList.remove('in');
+			this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
+				inViewElement.classList.remove(transition);
+				inViewElement.classList.remove('in');
 				
-				callBack(inRoute);
+				callBack(inView);
 			});
 
-			inView.className = 'current '+transition+' in';
+			inViewElement.className = 'current '+transition+' in';
 
-			if(outView){
+			if(outViewElement){
 
-				this.one(outView, 'webkitAnimationEnd animationEnd', function(event){
-					outView.className = '';
+				this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
+					outViewElement.className = '';
 				});
 
-				outView.className = 'current '+transition+' out';
+				outViewElement.className = 'current '+transition+' out';
 			}
 		},
 
 		/**
 		 * [_appNavigation description]
-		 * @param  {[type]} routeId [description]
+		 * @param  {[type]} viewId [description]
 		 * @return {[type]}         [description]
 		 */
-		_appNavigation : function(routeUrl) {
+		_appNavigation : function(viewUrl) {
 			var that = this;
 
-			if(!this._currentRoute || this._currentRoute.url !== routeUrl){
-				var route = this._getRouteByUrl(routeUrl);
+			if(!this._currentView || this._currentView.url !== viewUrl){
+				var view = this._getViewByUrl(viewUrl);
 
-				if(route){
+				if(view){
 
-					if(!route.loaded){
-						//Load the route template
-						this._loadTemplate(route, function(status, viewElement){
+					if(!view.loaded){
+						//Load the view template
+						this._loadTemplate(view, function(status, viewElement){
 							if(status){
-								route.viewElement = viewElement;
-								route.loaded = true;	
+								view.viewElement = viewElement;
+								view.loaded = true;	
 
 								//If there is navigation top header, add 'has-header' class to content
 								if(that._navWrapper){
@@ -151,20 +151,23 @@
 									}							
 								}							
 
-								that._viewsTransition(route, that._currentRoute, function(newCurrentRoute){
-									that._currentRoute = newCurrentRoute;
+								that._viewsTransition(view, that._currentView, function(newCurrentView){
+									that._currentView = newCurrentView;
 								});
+
+							}else{
+								trace('Cannot load the view template "'+view.url+'".', 'error');
 							}
 						});
 					}else{
 
-						that._viewsTransition(route, that._currentRoute, function(newCurrentRoute){
-							that._currentRoute = newCurrentRoute;
+						that._viewsTransition(view, that._currentView, function(newCurrentView){
+							that._currentView = newCurrentView;
 						});
 					}
 
 				}else{
-					trace('Cannot find the route "'+routeId+'".', 'error');
+					trace('Cannot find the view "'+viewUrl+'".', 'error');
 				}
 			}
 
@@ -257,15 +260,15 @@
 		},
 
 		/**
-		 * Go to an specified view route
-		 * @param  {[type]} routeId [description]
+		 * Go to an specified view
+		 * @param  {[type]} viewId [description]
 		 * @return {[type]}         [description]
 		 */
-		goTo : function(routeId){
-			if(this._routing.hasOwnProperty(routeId)){
-				window.location = '#' + routeId;
+		goTo : function(viewId){
+			if(this._views.hasOwnProperty(viewId)){
+				window.location = '#' + viewId;
 			}else{
-				trace('Cannot route id "'+routeId+'" does not exist.', 'error');					
+				trace('The view id "'+viewId+'" does not exist.', 'error');					
 			}
 
 			return this;
@@ -332,13 +335,13 @@
 		},
 
 		/**
-		 * Load App template by Route object
-		 * @param  {[type]} route [description]
+		 * Load App template by View object
+		 * @param  {[type]} view [description]
 		 * @return {[type]}       [description]
 		 */
-		_loadTemplate : function(route, callBack){
+		_loadTemplate : function(view, callBack){
 			//Check if there is a template <script>
-			var scriptTemplate = _d.getElementById(route.templateUrl),
+			var scriptTemplate = _d.getElementById(view.templateUrl),
 				that = this;
 			
 			if(scriptTemplate){
@@ -350,7 +353,7 @@
 
 				// Load the view HTML from external file
 				this.ajax({
-					url : route.templateUrl,
+					url : view.templateUrl,
 					success : function(data){
 						var viewTag = that._appendView(data);
 
@@ -403,26 +406,26 @@
 				this._navWrapper = navWrapper[0];
 			}
 
-			// Work the app routing
-			if(params.routing){
+			// Work the app views
+			if(params.views){
 				//Save internaly
-				this._routing = params.routing;
+				this._views = params.views;
 
-				//check the "fistRoute" param
-				if(params.firstRoute){
-					if(this._routing.hasOwnProperty(params.firstRoute)){
-						_w.location = '#'+params.firstRoute;
+				//check the "fistView" param
+				if(params.firstView){
+					if(this._views.hasOwnProperty(params.firstView)){
+						_w.location = '#'+params.firstView;
 					}else{
-						trace('The first route "'+params.firstRoute+'" does not exist.', 'error');
+						trace('The first view "'+params.firstView+'" does not exist.', 'error');
 					}
 				}else{
 					//If the "firstRout2e param is not defined, get the first defined.
-					var routingKeys = Object.keys(this._routing);
+					var viewsKeys = Object.keys(this._views);
 
-					_w.location = '#'+routingKeys[0];
+					_w.location = '#'+viewsKeys[0];
 				}
 			}else{
-				trace('Routing values fault.', 'error');				
+				trace('views values fault.', 'error');				
 			}
 
 		}

@@ -73,6 +73,10 @@ esp-header .title{
 	
 	text-align: center;
 }
+esp-nav-wrapper esp-header:not(.current){
+	z-index: 0;
+	display: none;
+}
 
 /* App Views wrapper */
 esp-view-wrapper{
