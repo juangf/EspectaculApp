@@ -39,6 +39,7 @@
 						url : 'users',
 						templateUrl: 'templates/users.html',
 						transition: 'slide',
+						/* Predefine events */
 						events : {
 							load : function(){
 								console.log('loaded users');
@@ -62,18 +63,15 @@
 						templateUrl: 'templates/home.html'
 					}
 				},
-				firstView	: 'home',
+				firstView	: 'users',
 				debugMode : true /*Debug flag Enabled*/
 			});
 
-			//Other way to set view events
-			app.getView('home')
-			.onShow(function(){
-				console.log('On show home view');
-			})
-			.onHide(function(){
-				console.log('On Hide home view');
+			/* Post define events */
+			app.on(app.getView('home'), 'hide', function(e){
+				console.log('Home hidden');
 			});
+			
 
 			//Init EspectaculApp
 			app.init();

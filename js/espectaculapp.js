@@ -8,6 +8,92 @@
 	function trace(message, type, indentNum){
 		app.trace(message, type, indentNum);
 	}
+	function AppView(name){
+		this._events = {};
+		this._name = name;
+		this._url = '';
+		this._transition = 'fade';
+		this._templateUrl = '';
+		this._loaded = false;
+		this._element = null;
+
+		this.addEventListener = function(eventName, callBack){
+			var events = this._events,
+      		callBacks = events[eventName] = events[eventName] || [];
+  		callBacks.push(callBack);
+
+  		return true;
+		};
+		this.removeEventListener = function(eventName, callBack){
+			var callBacks = this._events[eventName];
+
+			for (var i = 0, l = callBacks.length; i < l; i++) {
+			    if(callBacks[i].toString() === callBack.toString()){
+			    	view._events[eventName].splice(i, 1);	
+			    	return true;
+			    }					    
+			}
+			return false;
+		};
+	  this.raiseEvent = function(eventName, args) {
+      var callBacks = this._events[eventName];
+
+      if(callBacks)
+      for (var i = 0, l = callBacks.length; i < l; i++) {
+          callBacks[i].apply(null, args);
+      }
+      return true;
+	  };
+
+	  this.setTransition = function(trans){
+	  	this._transition = trans;
+	  	return this;
+	  };
+
+	  this.getTransition = function(){
+	  	return this._transition;
+	  };
+
+	  this.setTemplateUrl = function(turl){
+	  	this._templateUrl = turl;
+	  	return this;
+	  };
+
+	  this.getTemplateUrl = function(){
+	  	return this._templateUrl;
+	  };
+
+	  this.setElement = function(element){
+	  	this._element = element;
+	  	return this;
+	  };
+
+	  this.getElement = function(){
+	  	return this._element;
+	  };
+
+	  this.getName = function(){
+	  	return this._name;
+	  };
+
+	  this.setUrl = function(url){
+	  	this._url = url;
+	  	return this;
+	  };
+
+	  this.getUrl = function(){
+	  	return this._url;
+	  };
+
+	  this.setIsLoaded = function(val){
+	  	this._loaded = val;
+	  	return this;
+	  };
+
+	  this.isLoaded = function(){
+	  	return this._loaded;
+	  };
+	}
 	_w.app = {
 		/* Debug Flag */
 		_debug : false,
@@ -23,6 +109,9 @@
 
 		/* App current view */
 		_currentView : null,
+
+		/* App first view */
+		_firstView : null,
 
 		/**
 		 * Resample registered Pages
@@ -81,8 +170,9 @@
 		 */
 		_getViewByUrl : function(url){
 			for(var key in this._views){
-				if(this._views[key].url === url){
-					return this._views[key];
+
+				if(this.getView(key).getUrl() === url){
+					return this.getView(key);
 				}
 			}
 
@@ -97,19 +187,19 @@
 		 * @return {[type]}          [description]
 		 */
 		_viewsTransition : function(inView, outView, callBack){
-			var inViewElement = inView.viewElement,
-					outViewElement = outView ? outView.viewElement : null,
-					transition = inView.transition ? inView.transition : 'fade';
+			var inViewElement = inView.getElement(),
+					outViewElement = outView ? outView.getElement() : null,
+					transition = inView.getTransition() ? inView.getTransition() : 'fade';
 
 			//Call to view beforeShow event
-			if(inView.events.beforeShow) inView.events.beforeShow();
+			inView.raiseEvent('beforeShow');
 
 			this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
 				inViewElement.classList.remove(transition);
 				inViewElement.classList.remove('in');
 				
 				//Call to view show event
-				if(inView.events.show) inView.events.show();
+				inView.raiseEvent('show');
 
 				callBack(inView);
 			});
@@ -119,13 +209,13 @@
 			if(outViewElement){
 
 				//Call to view beforeHide event
-				if(outView.events.beforeHide) outView.events.beforeHide();
+				outView.raiseEvent('beforeHide')
 
 				this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
 					outViewElement.className = '';
 
 					//Call to view hide event
-					if(outView.events.hide) outView.events.hide();
+					outView.raiseEvent('hide');
 
 				});
 
@@ -146,33 +236,18 @@
 
 				if(view){
 
-					if(!view.loaded){
+					if(!view.isLoaded()){
 						//Load the view template
 						this._loadTemplate(view, function(status, viewElement){
 							if(status){
 
-								view.viewElement = viewElement;
-								view.loaded = true;	
-
-								/*var event = new CustomEvent(
-									"load", 
-									{
-										detail: {
-										},
-										bubbles: true,
-										cancelable: true
-									}
-								);*/
-
-								//Call to view loaded event
-								if(view.events.load){
-									/*that.one(view.viewElement, 'load', view.events.load);
-									view.viewElement.dispatchEvent(event);*/
-									view.events.load();
-								}
+								view
+								.setElement(viewElement)
+								.setIsLoaded(true)
+								.raiseEvent('load');
 
 								//If there is navigation top header, add 'has-header' class to content
-								if(that._navWrapper){
+								if(that.getNavWrapper()){
 									var contentElements = viewElement.getElementsByTagName('esp-content');
 
 									if(contentElements.length){
@@ -182,8 +257,8 @@
 									}							
 								}							
 
-								that._viewsTransition(view, that._currentView, function(newCurrentView){
-									that._currentView = newCurrentView;
+								that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+									that.setCurrentView(newCurrentView);
 								});
 
 							}else{
@@ -192,8 +267,8 @@
 						});
 					}else{
 
-						that._viewsTransition(view, that._currentView, function(newCurrentView){
-							that._currentView = newCurrentView;
+						that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+							that.setCurrentView(newCurrentView);
 						});
 					}
 
@@ -290,6 +365,42 @@
 		    return this;
 		},
 
+		getViews : function(){
+			return this._views;
+		},
+
+		setViews : function(views){
+			this._views = views;
+			return this;
+		},
+
+		setCurrentView : function(view){
+			this._currentView = view;
+			return this;
+		},
+
+		getCurrentView : function(){
+			return this._currentView;
+		},
+
+		setFirstView : function(view){
+			this._firstView = view;
+			return this;
+		},
+
+		getFirstView : function(){
+			return this._firstView;
+		},
+
+		setNavWrapper : function(w){
+			this._navWrapper = w;
+			return this;
+		},
+
+		getNavWrapper : function(){
+			return this._navWrapper;
+		},
+
 		getView : function(viewId){
 			if(this._views.hasOwnProperty(viewId)){
 				return this._views[viewId];
@@ -382,7 +493,7 @@
 		 */
 		_loadTemplate : function(view, callBack){
 			//Check if there is a template <script>
-			var scriptTemplate = _d.getElementById(view.templateUrl),
+			var scriptTemplate = _d.getElementById(view.getTemplateUrl()),
 				that = this;
 			
 			if(scriptTemplate){
@@ -394,7 +505,7 @@
 
 				// Load the view HTML from external file
 				this.ajax({
-					url : view.templateUrl,
+					url : view.getTemplateUrl(),
 					success : function(data){
 						var viewTag = that._appendView(data);
 
@@ -406,10 +517,10 @@
 			           	}
 			           	else {
 			              trace('Cannot load view template.', 'error');					
-						}
+									}
 
 						if(callBack) callBack(false);
-		           	}
+		      }
 				});
 
 			}
@@ -418,20 +529,42 @@
 		},
 
 		/**
-		 * [_addViewMethods description]
+		 * [_prepareViews description]
 		 * @param {[type]} views [description]
 		 */
-		_addViewMethods : function(views){
-			for(var key in views){
-				var view = views[key];
+		_prepareViews : function(viewsData){
+			for(var key in viewsData){
+				var viewData = viewsData[key],
+						events = viewData.events,
+						view = new AppView(key);
 
-				if(!view.events) view.events = {};
+				if(viewData.url)
+					view.setUrl(viewData.url);
+				else{
+					trace('The view "'+view.getName()+'" needs an url.', 'error');
+					return false;
+				}
 
-				view.onLoad = function(callBack){ view.events.load = callBack; return view };
-				view.onShow = function(callBack){ view.events.show = callBack; return view };
-				view.onHide = function(callBack){ view.events.hide = callBack; return view };
-				view.onBeforeShow = function(callBack){ view.events.beforeShow = callBack; return view };
-				view.onBeforeHide = function(callBack){ view.events.beforeHide = callBack; return view };
+				if(viewData.templateUrl)
+					view.setTemplateUrl(viewData.templateUrl);
+				else{
+					trace('The view "'+view.getName()+'" needs a template url.', 'error');
+					return false;
+				}
+
+				if(viewData.transition)
+				view.setTransition(viewData.transition);
+
+				if(events){
+					if(events.load) this.on(view, 'load', events.load);
+					if(events.show) this.on(view, 'show', events.show);
+					if(events.hide) this.on(view, 'hide', events.hide);
+					if(events.beforeShow) this.on(view, 'beforeShow', events.beforeShow);
+					if(events.beforeHide) this.on(view, 'beforeHide', events.beforeHide);
+				}
+
+				this._views[key] = view;
+
 			}
 		},
 
@@ -450,7 +583,7 @@
 				_w.location.hash = '';
 			}
 
-			trace('Init EspectaculApp.', 'info');
+			trace('Configure EspectaculApp.', 'info');
 
 			//Register basic events
 			this._registerEvents();
@@ -459,22 +592,21 @@
 			this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
 
 			//Set the navigation wrapper (if exists)
-			var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');			
+			var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');	
+
 			if(navWrapper.length){
-				this._navWrapper = navWrapper[0];
+				this.setNavWrapper(navWrapper[0]);
 			}
 
 			// Work the app views
 			if(params.views){
-				//Save internaly
-				this._views = params.views;
-
-				this._addViewMethods(this._views);
+				//Prepare the system views
+				this._prepareViews(params.views);
 
 				//check the "fistView" param
 				if(params.firstView){
-					if(this._views.hasOwnProperty(params.firstView)){
-						this.firstView = params.firstView;
+					if(this.getViews().hasOwnProperty(params.firstView)){
+						this.setFirstView(this.getView([params.firstView]));
 					}else{
 						trace('The first view "'+params.firstView+'" does not exist.', 'error');
 					}
@@ -491,15 +623,17 @@
 		 * @return {[type]} [description]
 		 */
 		init : function(){
-			//check the "fistView" param
-			if(this.firstView){
-				_w.location = '#'+this.firstView;
-			}else{
-				//If the "firstRout2e param is not defined, get the first defined.
-				var viewsKeys = Object.keys(this._views);
+			trace('Init EspectaculApp.', 'info');
 
-				_w.location = '#'+viewsKeys[0];
+			//check the "fistView" param
+			if(!this.getFirstView()){
+				//If the "firstRout2e param is not defined, get the first defined.
+				var viewsKeys = Object.keys(this.getViews());
+
+				this.setFirstView(this.getView([viewsKeys[0]]));
 			}
+
+			_w.location = '#'+this.getFirstView().getUrl();
 		}
 	};
 
