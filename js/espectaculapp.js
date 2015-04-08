@@ -8,6 +8,28 @@
 	function trace(message, type, indentNum){
 		app.trace(message, type, indentNum);
 	}
+	function AppHeader(title){
+		this._title = title;
+		this._element = null;
+
+	  this.setElement = function(element){
+	  	this._element = element;
+	  	return this;
+	  };
+
+	  this.getElement = function(){
+	  	return this._element;
+	  };
+
+	  this.setTitle = function(title){
+	  	this._title = title;
+	  	return this;
+	  };
+
+	  this.getTitle = function(){
+	  	return this._title;
+	  };
+	}
 	function AppView(name){
 		this._events = {};
 		this._name = name;
@@ -16,6 +38,8 @@
 		this._templateUrl = '';
 		this._loaded = false;
 		this._element = null;
+
+		this._header = null;
 
 		this.addEventListener = function(eventName, callBack){
 			var events = this._events,
@@ -43,6 +67,15 @@
           callBacks[i].apply(null, args);
       }
       return true;
+	  };
+
+	  this.setHeader = function(header){
+	  	this._header = header;
+	  	return this;
+	  };
+
+	  this.getHeader = function(){
+	  	return this._header;
 	  };
 
 	  this.setTransition = function(trans){
@@ -128,32 +161,10 @@
 		},
 
 		/**
-		 * Resample general ui
-		 */
-		_resampleUI : function(){
-			/*
-			if(this._header){
-				_d.getElementsByTagName('body')[0].style.paddingTop = this._header.clientHeight + 'px';
-			} 
-			if(this._footer){
-				_d.getElementsByTagName('body')[0].style.paddingBottom = this._footer.clientHeight + 'px';	
-			}
-			this._resamplePages();
-			*/
-		
-			return this;
-		},
-
-		/**
 		 * Register system events
 		 */
 		_registerEvents : function(){
 			var that = this;
-
-			//On Window resize
-			_w.onresize = function(){
-				that._resampleUI();
-			};
 
 			//On Hash change
 			_w.onhashchange = function () {
@@ -206,6 +217,10 @@
 
 			inViewElement.className = 'current '+transition+' in';
 
+			//In header
+			if(inView.getHeader())
+			inView.getHeader().getElement().classList.add('current');
+
 			if(outViewElement){
 
 				//Call to view beforeHide event
@@ -220,6 +235,10 @@
 				});
 
 				outViewElement.className = 'current '+transition+' out';
+
+				//out header
+				if(outView.getHeader())
+				outView.getHeader().getElement().classList.remove('current');
 			}
 		},
 
@@ -230,6 +249,8 @@
 		 */
 		_appNavigation : function(viewUrl) {
 			var that = this;
+
+			if(viewUrl==='') return this;
 
 			if(!this._currentView || this._currentView.url !== viewUrl){
 				var view = this._getViewByUrl(viewUrl);
@@ -252,10 +273,18 @@
 
 									if(contentElements.length){
 										contentElements[0].classList.add('has-header');
+
+										var title = view.getElement().getAttribute('view-title'),
+												header = new AppHeader(title);
+
+										header.setElement(that._appendHeader(title));
+
+										view.setHeader(header)
+
 									}else{
 										trace('Cannot find an "esp-content" tag".', 'error');
 									}							
-								}							
+								}	
 
 								that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
 									that.setCurrentView(newCurrentView);
@@ -486,6 +515,16 @@
 			return viewTag;
 		},
 
+		_appendHeader : function(title){
+			var newNode = _d.createElement('esp-header');
+
+			newNode.innerHTML = '<div class="title">'+title+'</div>';
+			
+			this.getNavWrapper().appendChild(newNode);
+
+			return newNode;
+		},
+
 		/**
 		 * Load App template by View object
 		 * @param  {[type]} view [description]
@@ -555,6 +594,7 @@
 				if(viewData.transition)
 				view.setTransition(viewData.transition);
 
+				//if there are predefined events in the config
 				if(events){
 					if(events.load) this.on(view, 'load', events.load);
 					if(events.show) this.on(view, 'show', events.show);
@@ -578,9 +618,6 @@
 			if(params.debugMode) {
 				//Store the flag
 				this._debug = params.debugMode;
-
-				//Reset the location hash for easy manual window refreshing
-				_w.location.hash = '';
 			}
 
 			trace('Configure EspectaculApp.', 'info');
@@ -625,6 +662,11 @@
 		init : function(){
 			trace('Init EspectaculApp.', 'info');
 
+			if(this._debug){
+				//Reset the location hash for easy manual window refreshing
+				_w.location.hash = '';
+			}
+
 			//check the "fistView" param
 			if(!this.getFirstView()){
 				//If the "firstRout2e param is not defined, get the first defined.
@@ -632,8 +674,16 @@
 
 				this.setFirstView(this.getView([viewsKeys[0]]));
 			}
-
-			_w.location = '#'+this.getFirstView().getUrl();
+		
+			if(this._debug){
+				var that = this;
+				setTimeout(function(){
+					_w.location = '#'+that.getFirstView().getUrl();
+				},0);
+			}else{
+				_w.location = '#'+this.getFirstView().getUrl();
+			}
+						
 		}
 	};
 

@@ -98,7 +98,9 @@ esp-view{
 	position: absolute;
 }
 
-esp-view:not(.current){
+esp-view:not(.current),
+esp-header:not(.current)
+{
 	z-index: 0;
 	display: none;
 }
