@@ -1,5 +1,4 @@
 _w.app = {
-
 	/**
 	 * Register system events
 	 */

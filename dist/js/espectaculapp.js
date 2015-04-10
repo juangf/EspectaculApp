@@ -1,7 +1,6 @@
 (function(_w, _d){
 "use strict";
 _w.app = {
-
 	/**
 	 * Register system events
 	 */
