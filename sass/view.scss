@@ -9,8 +9,8 @@ esp-view{
 		z-index: 0;
 		display: none;
 	}
-
 	esp-content{
+		-webkit-overflow-scrolling: touch;
 		background-color: #FFF;
 
 		width: auto;

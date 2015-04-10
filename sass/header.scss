@@ -1,5 +1,6 @@
 /* App Header */
 esp-header{
+
 	.title{
 		position: absolute;
 
@@ -9,6 +10,7 @@ esp-header{
 		
 		text-align: center;
 	}
+
 	&:not(.current)
 	{
 		z-index: 0;
