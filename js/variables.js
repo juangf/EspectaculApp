@@ -1,4 +1,3 @@
-_w.app = _w.app || {};
 
 /* Debug Flag */
 _w.app._debug = false;

@@ -1,1 +1,686 @@
-!function(e,t){"use strict";function i(e){this._title=e,this._element=null,this.setElement=function(e){return this._element=e,this},this.getElement=function(){return this._element},this.setTitle=function(e){return this._title=e,this},this.getTitle=function(){return this._title}}function n(e){this._events={},this._name=e,this._url="",this._transition="fade",this._templateUrl="",this._loaded=!1,this._element=null,this._header=null,this.addEventListener=function(e,t){var i=this._events,n=i[e]=i[e]||[];return n.push(t),!0},this.removeEventListener=function(e,t){for(var i=this._events[e],n=0,r=i.length;r>n;n++)if(i[n].toString()===t.toString())return view._events[e].splice(n,1),!0;return!1},this.raiseEvent=function(e,t){var i=this._events[e];if(i)for(var n=0,r=i.length;r>n;n++)i[n].apply(null,t);return!0},this.setHeader=function(e){return this._header=e,this},this.getHeader=function(){return this._header},this.setTransition=function(e){return this._transition=e,this},this.getTransition=function(){return this._transition},this.setTemplateUrl=function(e){return this._templateUrl=e,this},this.getTemplateUrl=function(){return this._templateUrl},this.setElement=function(e){return this._element=e,this},this.getElement=function(){return this._element},this.getName=function(){return this._name},this.setUrl=function(e){return this._url=e,this},this.getUrl=function(){return this._url},this.setIsLoaded=function(e){return this._loaded=e,this},this.isLoaded=function(){return this._loaded}}function r(e,t,i){app.trace(e,t,i)}e.app={_registerEvents:function(){var t=this;return e.onhashchange=function(){t._appNavigation(e.location.hash.substr(1))},this},_getViewByUrl:function(e){for(var t in this._views)if(this.getView(t).getUrl()===e)return this.getView(t);return null},_viewsTransition:function(e,t,i){var n=e.getElement(),r=t?t.getElement():null,s=e.getTransition()?e.getTransition():"fade";e.raiseEvent("beforeShow"),this.one(n,"webkitAnimationEnd animationEnd",function(){n.classList.remove(s),n.classList.remove("in"),e.raiseEvent("show"),i(e)}),n.className="current "+s+" in",e.getHeader()&&e.getHeader().getElement().classList.add("current"),r&&(t.raiseEvent("beforeHide"),this.one(r,"webkitAnimationEnd animationEnd",function(){r.className="",t.raiseEvent("hide")}),r.className="current "+s+" out",t.getHeader()&&t.getHeader().getElement().classList.remove("current"))},_appNavigation:function(e){var t=this;if(""===e)return this;if(!this._currentView||this._currentView.url!==e){var n=this._getViewByUrl(e);n?n.isLoaded()?t._viewsTransition(n,t.getCurrentView(),function(e){t.setCurrentView(e)}):this._loadTemplate(n,function(e,s){if(e){if(n.setElement(s).setIsLoaded(!0).raiseEvent("load"),t.getNavWrapper()){var a=s.getElementsByTagName("esp-content");if(a.length){a[0].classList.add("has-header");var o=n.getElement().getAttribute("view-title"),h=new i(o);h.setElement(t._appendHeader(o)),n.setHeader(h)}else r('Cannot find an "esp-content" tag".',"error")}t._viewsTransition(n,t.getCurrentView(),function(e){t.setCurrentView(e)})}else r('Cannot load the view template "'+n.url+'".',"error")}):r('Cannot find the view "'+e+'".',"error")}return this},_injectDependencies:function(e){for(var i=["js/Page.js"],n=0,s=t.getElementsByTagName("body")[0],a=0;a<i.length;a++){var o=t.createElement("script");o.src=i[a],r('Injecting "'+o.src+'"',"info",1),e&&(o.onload=function(){++n===i.length&&e()}),s.appendChild(o)}return this},getViews:function(){return this._views},setViews:function(e){return this._views=e,this},setCurrentView:function(e){return this._currentView=e,this},getCurrentView:function(){return this._currentView},setFirstView:function(e){return this._firstView=e,this},getFirstView:function(){return this._firstView},setNavWrapper:function(e){return this._navWrapper=e,this},getNavWrapper:function(){return this._navWrapper},getView:function(e){return this._views.hasOwnProperty(e)?this._views[e]:(r('The view id "'+e+'" does not exist.',"error"),null)},goTo:function(e){return this._views.hasOwnProperty(e)?window.location="#"+e:r('The view id "'+e+'" does not exist.',"error"),this},_checkTagAttribute:function(e,t){return null!==e.getAttribute(t)?"true"===e.getAttribute(t)||""===e.getAttribute(t):!1},trace:function(e,t,i){if(i){for(var n="",r=0;i>r;r++)n+=" ";e=n+"└──> "+e}if(this._debug)switch(t){case"info":console.info(e);break;case"error":console.error(e);break;default:console.log(e)}return this},_appendView:function(e){var i=t.createElement("div");i.innerHTML=e;var n=i.getElementsByTagName("esp-view")[0];return this._viewWrapper.appendChild(n),n},_appendHeader:function(e){var i=t.createElement("esp-header");return i.innerHTML='<div class="title">'+e+"</div>",this.getNavWrapper().appendChild(i),i},_loadTemplate:function(e,i){var n=t.getElementById(e.getTemplateUrl()),s=this;if(n){var a=this._appendView(n.innerHTML);i&&i(!0,a)}else this.ajax({url:e.getTemplateUrl(),success:function(e){var t=s._appendView(e);i&&i(!0,t)},error:function(e,t){400==t?r("The view template does not exist.","error"):r("Cannot load view template.","error"),i&&i(!1)}});return this},_prepareViews:function(e){for(var t in e){var i=e[t],s=i.events,a=new n(t);if(!i.url)return r('The view "'+a.getName()+'" needs an url.',"error"),!1;if(a.setUrl(i.url),!i.templateUrl)return r('The view "'+a.getName()+'" needs a template url.',"error"),!1;a.setTemplateUrl(i.templateUrl),i.transition&&a.setTransition(i.transition),s&&(s.load&&this.on(a,"load",s.load),s.show&&this.on(a,"show",s.show),s.hide&&this.on(a,"hide",s.hide),s.beforeShow&&this.on(a,"beforeShow",s.beforeShow),s.beforeHide&&this.on(a,"beforeHide",s.beforeHide)),this._views[t]=a}},config:function(e){e.debugMode&&(this._debug=e.debugMode),r("Configure EspectaculApp.","info"),this._registerEvents(),this._viewWrapper=t.getElementsByTagName("esp-view-wrapper")[0];var i=t.getElementsByTagName("esp-nav-wrapper");i.length&&this.setNavWrapper(i[0]),e.views?(this._prepareViews(e.views),e.firstView&&(this.getViews().hasOwnProperty(e.firstView)?this.setFirstView(this.getView([e.firstView])):r('The first view "'+e.firstView+'" does not exist.',"error"))):r("views values fault.","error")},init:function(){if(r("Init EspectaculApp.","info"),this._debug&&(e.location.hash=""),!this.getFirstView()){var t=Object.keys(this.getViews());this.setFirstView(this.getView([t[0]]))}if(this._debug){var i=this;setTimeout(function(){e.location="#"+i.getFirstView().getUrl()},0)}else e.location="#"+this.getFirstView().getUrl()}},e.app=e.app||{},e.app.ajax=function(e){var t=new XMLHttpRequest;return t.onreadystatechange=function(){4==t.readyState&&(200==t.status?e.success(t.responseText):e.error(t,t.status,"error"))},t.open(e.method?e.method:"GET",e.url,e.asynch?e.asynch:!0),t.send(),this},e.app=e.app||{},e.app.on=function(e,t,i){for(var n=t.split(" "),r=0;r<n.length;r++)e.addEventListener(n[r],i,!1)},e.app.off=function(e,t,i){for(var n=t.split(" "),r=0;r<n.length;r++)e.removeEventListener(n[r],i)},e.app.one=function(e,t,i){var n=this,r=function(s){n.off(e,t,r),i(s)};this.on(e,t,r)},e.app=e.app||{},e.app._debug=!1,e.app._navWrapper=null,e.app._viewWrapper=null,e.app._views={},e.app._currentView=null,e.app._firstView=null}(window,document);
+(function(_w, _d){
+"use strict";
+_w.app = {
+
+	/**
+	 * Register system events
+	 */
+	_registerEvents : function(){
+		var that = this;
+
+		//On Hash change
+		_w.onhashchange = function () {
+			that._appNavigation(_w.location.hash.substr(1));
+		};
+
+		return this;
+	},
+
+	/**
+	 * Find a view by an url
+	 * @param  {[type]} url [description]
+	 * @return {[type]}     [description]
+	 */
+	_getViewByUrl : function(url){
+		for(var key in this._views){
+
+			if(this.getView(key).getUrl() === url){
+				return this.getView(key);
+			}
+		}
+
+		return null;
+	},
+
+	/**
+	 * Transition between two views
+	 * @param  {[type]} inView  [description]
+	 * @param  {[type]} outView [description]
+	 * @param  {[type]} callBack [description]
+	 * @return {[type]}          [description]
+	 */
+	_viewsTransition : function(inView, outView, callBack){
+		var inViewElement = inView.getElement(),
+				outViewElement = outView ? outView.getElement() : null,
+				transition = inView.getTransition() ? inView.getTransition() : 'fade';
+
+		//Call to view beforeShow event
+		inView.raiseEvent('beforeShow');
+
+		this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
+			inViewElement.classList.remove(transition);
+			inViewElement.classList.remove('in');
+			
+			//Call to view show event
+			inView.raiseEvent('show');
+
+			callBack(inView);
+		});
+
+		inViewElement.className = 'current '+transition+' in';
+
+		//In header
+		if(inView.getHeader())
+		inView.getHeader().getElement().classList.add('current');
+
+		if(outViewElement){
+
+			//Call to view beforeHide event
+			outView.raiseEvent('beforeHide')
+
+			this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
+				outViewElement.className = '';
+
+				//Call to view hide event
+				outView.raiseEvent('hide');
+
+			});
+
+			outViewElement.className = 'current '+transition+' out';
+
+			//out header
+			if(outView.getHeader())
+			outView.getHeader().getElement().classList.remove('current');
+		}
+	},
+
+	/**
+	 * [_appNavigation description]
+	 * @param  {[type]} viewId [description]
+	 * @return {[type]}         [description]
+	 */
+	_appNavigation : function(viewUrl) {
+		var that = this;
+
+		if(viewUrl==='') return this;
+
+		if(!this._currentView || this._currentView.url !== viewUrl){
+			var view = this._getViewByUrl(viewUrl);
+
+			if(view){
+
+				if(!view.isLoaded()){
+					//Load the view template
+					this._loadTemplate(view, function(status, viewElement){
+						if(status){
+
+							view
+							.setElement(viewElement)
+							.setIsLoaded(true)
+							.raiseEvent('load');
+
+							//If there is navigation top header, add 'has-header' class to content
+							if(that.getNavWrapper()){
+								var contentElements = viewElement.getElementsByTagName('esp-content');
+
+								if(contentElements.length){
+									contentElements[0].classList.add('has-header');
+
+									var title = view.getElement().getAttribute('view-title'),
+											header = new AppHeader(title);
+
+									header.setElement(that._appendHeader(title));
+
+									view.setHeader(header)
+
+								}else{
+									trace('Cannot find an "esp-content" tag".', 'error');
+								}							
+							}	
+
+							that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+								that.setCurrentView(newCurrentView);
+							});
+
+						}else{
+							trace('Cannot load the view template "'+view.url+'".', 'error');
+						}
+					});
+				}else{
+
+					that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+						that.setCurrentView(newCurrentView);
+					});
+				}
+
+			}else{
+				trace('Cannot find the view "'+viewUrl+'".', 'error');
+			}
+		}
+
+		return this;
+	},
+
+	/**
+	 * Inject the system dependencies
+	 * @param  {function} callBack A callback function
+	 */
+	_injectDependencies : function(callBack){
+		var dependencies = [
+			"js/Page.js"
+		],			
+		loadedDependenciesNum = 0,
+		bodyTag = _d.getElementsByTagName('body')[0];
+
+		//Load each dependency
+		for(var i=0; i<dependencies.length; i++){
+			var script = _d.createElement('script');
+
+			script.src = dependencies[i];
+
+			trace('Injecting "'+script.src+'"', 'info', 1);
+			
+			if(callBack){
+				script.onload = function(){
+					//If all the dependencies are loaded --> callback
+					if(++loadedDependenciesNum === dependencies.length){
+						callBack();
+					}
+				}
+			}
+			
+			bodyTag.appendChild(script);
+		}
+
+		return this;
+	},
+
+
+
+	getViews : function(){
+		return this._views;
+	},
+
+	setViews : function(views){
+		this._views = views;
+		return this;
+	},
+
+	setCurrentView : function(view){
+		this._currentView = view;
+		return this;
+	},
+
+	getCurrentView : function(){
+		return this._currentView;
+	},
+
+	setFirstView : function(view){
+		this._firstView = view;
+		return this;
+	},
+
+	getFirstView : function(){
+		return this._firstView;
+	},
+
+	setNavWrapper : function(w){
+		this._navWrapper = w;
+		return this;
+	},
+
+	getNavWrapper : function(){
+		return this._navWrapper;
+	},
+
+	getView : function(viewId){
+		if(this._views.hasOwnProperty(viewId)){
+			return this._views[viewId];
+		}else{
+			trace('The view id "'+viewId+'" does not exist.', 'error');					
+		}
+
+		return null;		
+	},
+
+	/**
+	 * Go to an specified view
+	 * @param  {[type]} viewId [description]
+	 * @return {[type]}         [description]
+	 */
+	goTo : function(viewId){
+		if(this._views.hasOwnProperty(viewId)){
+			window.location = '#' + viewId;
+		}else{
+			trace('The view id "'+viewId+'" does not exist.', 'error');					
+		}
+
+		return this;
+	},
+
+	/**
+	 * Check a tag attribute as flag
+	 * @param  {DOM Element} element 
+	 * @param  {String} attributeName 
+	 * @return {Boolean}
+	 */
+	_checkTagAttribute : function(element, attributeName){
+		return element.getAttribute(attributeName)!==null ? (element.getAttribute(attributeName)==='true' || element.getAttribute(attributeName)==='') : false;
+	},
+
+	/**
+	 * Console log helper
+	 * @param  {String} message   Console message
+	 * @param  {String} type      Message Type ('info' | 'error' | 'warn')
+	 * @param  {Integer} indentNum Message indentation
+	 */
+	trace : function(message, type, indentNum){
+		if(indentNum){
+			var indent = "";
+
+			for(var i=0; i<indentNum; i++){
+				indent += " ";
+			}
+
+			message = indent + '└──> ' + message;
+		}
+
+		if(this._debug){
+			switch(type){
+				case "info":
+					console.info(message);
+					break;
+				case "error":
+					console.error(message);
+					break;
+				default:
+					console.log(message);
+			}				
+		}
+
+		return this;
+	},
+
+	/**
+	 * Append a new view from an HTML text
+	 * @param  {[type]} viewHTML [description]
+	 * @return {[type]}          [description]
+	 */
+	_appendView : function(viewHTML){
+		var newNode = _d.createElement('div');
+
+		newNode.innerHTML = viewHTML;
+
+		var viewTag = newNode.getElementsByTagName('esp-view')[0];
+
+		this._viewWrapper.appendChild(viewTag);
+
+		return viewTag;
+	},
+
+	_appendHeader : function(title){
+		var newNode = _d.createElement('esp-header');
+
+		newNode.innerHTML = '<div class="title">'+title+'</div>';
+		
+		this.getNavWrapper().appendChild(newNode);
+
+		return newNode;
+	},
+
+	/**
+	 * Load App template by View object
+	 * @param  {[type]} view [description]
+	 * @return {[type]}       [description]
+	 */
+	_loadTemplate : function(view, callBack){
+		//Check if there is a template <script>
+		var scriptTemplate = _d.getElementById(view.getTemplateUrl()),
+			that = this;
+		
+		if(scriptTemplate){
+			//Load the view HTML
+			var viewTag = this._appendView(scriptTemplate.innerHTML);
+
+			if(callBack) callBack(true, viewTag);
+		}else{
+
+			// Load the view HTML from external file
+			this.ajax({
+				url : view.getTemplateUrl(),
+				success : function(data){
+					var viewTag = that._appendView(data);
+
+					if(callBack) callBack(true, viewTag);
+				},
+				error : function(xhr, status){
+		           	if(status == 400) {
+		              trace('The view template does not exist.', 'error');
+		           	}
+		           	else {
+		              trace('Cannot load view template.', 'error');					
+								}
+
+					if(callBack) callBack(false);
+	      }
+			});
+
+		}
+
+		return this;
+	},
+
+	/**
+	 * [_prepareViews description]
+	 * @param {[type]} views [description]
+	 */
+	_prepareViews : function(viewsData){
+		for(var key in viewsData){
+			var viewData = viewsData[key],
+					events = viewData.events,
+					view = new AppView(key);
+
+			if(viewData.url)
+				view.setUrl(viewData.url);
+			else{
+				trace('The view "'+view.getName()+'" needs an url.', 'error');
+				return false;
+			}
+
+			if(viewData.templateUrl)
+				view.setTemplateUrl(viewData.templateUrl);
+			else{
+				trace('The view "'+view.getName()+'" needs a template url.', 'error');
+				return false;
+			}
+
+			if(viewData.transition)
+			view.setTransition(viewData.transition);
+
+			//if there are predefined events in the config
+			if(events){
+				if(events.load) this.on(view, 'load', events.load);
+				if(events.show) this.on(view, 'show', events.show);
+				if(events.hide) this.on(view, 'hide', events.hide);
+				if(events.beforeShow) this.on(view, 'beforeShow', events.beforeShow);
+				if(events.beforeHide) this.on(view, 'beforeHide', events.beforeHide);
+			}
+
+			this._views[key] = view;
+
+		}
+	},
+
+	/**
+	 * Configure EspectaculApp
+	 */
+	config : function(params){			
+		var that = this;
+
+		// Set the debug flag
+		if(params.debugMode) {
+			//Store the flag
+			this._debug = params.debugMode;
+		}
+
+		trace('Configure EspectaculApp.', 'info');
+
+		//Register basic events
+		this._registerEvents();
+
+		//Set the view wrapper
+		this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
+
+		//Set the navigation wrapper (if exists)
+		var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');	
+
+		if(navWrapper.length){
+			this.setNavWrapper(navWrapper[0]);
+		}
+
+		// Work the app views
+		if(params.views){
+			//Prepare the system views
+			this._prepareViews(params.views);
+
+			//check the "fistView" param
+			if(params.firstView){
+				if(this.getViews().hasOwnProperty(params.firstView)){
+					this.setFirstView(this.getView([params.firstView]));
+				}else{
+					trace('The first view "'+params.firstView+'" does not exist.', 'error');
+				}
+			}
+
+		}else{
+			trace('views values fault.', 'error');				
+		}
+
+	},
+
+	/**
+	 * [init description]
+	 * @return {[type]} [description]
+	 */
+	init : function(){
+		trace('Init EspectaculApp.', 'info');
+
+		if(this._debug){
+			//Reset the location hash for easy manual window refreshing
+			_w.location.hash = '';
+		}
+
+		//check the "fistView" param
+		if(!this.getFirstView()){
+			//If the "firstRout2e param is not defined, get the first defined.
+			var viewsKeys = Object.keys(this.getViews());
+
+			this.setFirstView(this.getView([viewsKeys[0]]));
+		}
+	
+		if(this._debug){
+			var that = this;
+			setTimeout(function(){
+				_w.location = '#'+that.getFirstView().getUrl();
+			},0);
+		}else{
+			_w.location = '#'+this.getFirstView().getUrl();
+		}
+					
+	}
+};
+
+_w.app = _w.app || {};
+
+_w.app.ajax = function(params){
+	var xmlhttp = new XMLHttpRequest();
+
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 ) {
+			if(xmlhttp.status == 200){
+				params.success(xmlhttp.responseText);
+			}
+		else{
+				params.error(xmlhttp, xmlhttp.status, 'error');
+			}
+		}
+	};
+
+    xmlhttp.open(params.method ? params.method : 'GET', params.url, params.asynch ? params.asynch : true);
+    xmlhttp.send();
+
+    return this;
+};
+/*! 
+ * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
+ * Juan García Fernández (@juan_gf) 
+ * AppHeader Class
+ */
+function AppHeader(title){
+	this._title = title;
+	this._element = null;
+
+  this.setElement = function(element){
+  	this._element = element;
+  	return this;
+  };
+
+  this.getElement = function(){
+  	return this._element;
+  };
+
+  this.setTitle = function(title){
+  	this._title = title;
+  	return this;
+  };
+
+  this.getTitle = function(){
+  	return this._title;
+  };
+}
+/*! 
+ * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
+ * Juan García Fernández (@juan_gf) 
+ * AppView Class
+ */
+function AppView(name){
+this._events = {};
+this._name = name;
+this._url = '';
+this._transition = 'fade';
+this._templateUrl = '';
+this._loaded = false;
+this._element = null;
+
+this._header = null;
+
+this.addEventListener = function(eventName, callBack){
+	var events = this._events,
+		callBacks = events[eventName] = events[eventName] || [];
+	callBacks.push(callBack);
+
+	return true;
+};
+this.removeEventListener = function(eventName, callBack){
+	var callBacks = this._events[eventName];
+
+	for (var i = 0, l = callBacks.length; i < l; i++) {
+	    if(callBacks[i].toString() === callBack.toString()){
+	    	view._events[eventName].splice(i, 1);	
+	    	return true;
+	    }					    
+	}
+	return false;
+};
+this.raiseEvent = function(eventName, args) {
+var callBacks = this._events[eventName];
+
+if(callBacks)
+for (var i = 0, l = callBacks.length; i < l; i++) {
+  callBacks[i].apply(null, args);
+}
+return true;
+};
+
+this.setHeader = function(header){
+	this._header = header;
+	return this;
+};
+
+this.getHeader = function(){
+	return this._header;
+};
+
+this.setTransition = function(trans){
+	this._transition = trans;
+	return this;
+};
+
+this.getTransition = function(){
+	return this._transition;
+};
+
+this.setTemplateUrl = function(turl){
+	this._templateUrl = turl;
+	return this;
+};
+
+this.getTemplateUrl = function(){
+	return this._templateUrl;
+};
+
+this.setElement = function(element){
+	this._element = element;
+	return this;
+};
+
+this.getElement = function(){
+	return this._element;
+};
+
+this.getName = function(){
+	return this._name;
+};
+
+this.setUrl = function(url){
+	this._url = url;
+	return this;
+};
+
+this.getUrl = function(){
+	return this._url;
+};
+
+this.setIsLoaded = function(val){
+	this._loaded = val;
+	return this;
+};
+
+this.isLoaded = function(){
+	return this._loaded;
+};
+}
+_w.app = _w.app || {};
+
+_w.app.on = function(target, type, callBack){
+	var types = type.split(' ');
+
+	for(var i=0; i<types.length; i++){
+		target.addEventListener(types[i], callBack, false);	
+	}
+};
+
+_w.app.off = function(target, type, callBack){
+	var types = type.split(' ');
+
+	for(var i=0; i<types.length; i++){
+		target.removeEventListener(types[i], callBack);	
+	}
+};
+
+_w.app.one = function(target, type, callBack){
+	var that = this,
+	newCallBackFn = function(event){
+		that.off(target, type, newCallBackFn);
+		callBack(event);
+	};
+
+	this.on(target, type, newCallBackFn);
+};
+/*! 
+ * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
+ * Juan García Fernández (@juan_gf) 
+ * Global Functions
+ */
+function trace(message, type, indentNum){
+	app.trace(message, type, indentNum);
+}
+
+/* Debug Flag */
+_w.app._debug = false;
+
+/* App navigation header wrapper */
+_w.app._navWrapper = null;
+
+/* App view wrapper */
+_w.app._viewWrapper = null;
+
+/* App views config */
+_w.app._views = {};
+
+/* App current view */
+_w.app._currentView = null;
+
+/* App first view */
+_w.app._firstView = null;
+})(window, document);
