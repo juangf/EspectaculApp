@@ -1,0 +1,32 @@
+/* App View Style */
+esp-view{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+
+	&:not(.current)
+	{
+		z-index: 0;
+		display: none;
+	}
+
+	esp-content{
+		background-color: #FFF;
+
+		width: auto;
+		height: auto;
+		top: 0px;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		position: absolute;	
+		
+		&.has-header{
+			top: 50px;
+		}
+
+		&.padding{
+			padding: 8px;
+		}
+	}
+}
