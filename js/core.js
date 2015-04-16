@@ -10,6 +10,15 @@ _w.app = {
 			that._appNavigation(_w.location.hash.substr(1));
 		};
 
+		//Touching control system
+		this._registerTouchEvents();
+
+		/*_w.onclick = function(e) {
+			e.preventDefault();
+    		e.stopPropagation();
+			console.log('------------------- TOUCH ---------------');
+		};*/
+
 		return this;
 	},
 

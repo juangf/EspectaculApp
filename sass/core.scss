@@ -9,6 +9,22 @@
 	position: absolute;
 }
 
+esp-finger{
+	left: 0px;
+	top: 0px;
+	position: absolute;
+	z-index: 1000;
+	width: 70px;
+	height: 70px;
+	margin-left: -35px;
+	margin-top: -35px;
+
+	border-radius: 50%;
+	background-color: #000;
+	display: block;
+
+}
+
 /* Scroll bar */
 /*::-webkit-scrollbar {
     width: 12px;

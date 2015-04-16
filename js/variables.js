@@ -16,3 +16,6 @@ _w.app._currentView = null;
 
 /* App first view */
 _w.app._firstView = null;
+
+/* App is in views transition */
+_w.app._inTransition = false;

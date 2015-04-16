@@ -1,5 +1,3 @@
-_w.app = _w.app || {};
-
 _w.app.ajax = function(params){
 	var xmlhttp = new XMLHttpRequest();
 

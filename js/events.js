@@ -1,5 +1,3 @@
-_w.app = _w.app || {};
-
 _w.app.on = function(target, type, callBack){
 	var types = type.split(' ');
 
