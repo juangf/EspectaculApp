@@ -18,7 +18,7 @@ var gulp = require('gulp'),
 gulp.task('concat', function() {
     gulp.src(['js/core.js','js/*.js'])
         .pipe(concat('espectaculapp.js'))
-        .pipe(wrap('(function(_w, _d){\n"use strict";\n<%= contents %>\n})(window, document);'))
+        .pipe(wrap('"use strict";(function(_w, _d){<%= contents %>})(window, document);'))
         .pipe(gulp.dest('dist/js/'));
         /*.pipe(notify({ message: 'Js Concat successfully' }));*/
 });
