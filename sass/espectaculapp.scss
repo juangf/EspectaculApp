@@ -76,6 +76,13 @@ esp-view-wrapper{
 	perspective:1000px;
 }
 
+disable-touch{
+	position: absolute;
+	z-index: 99999;
+	width: 100%;
+	height: 100%;
+}
+
 @import 'core';
 @import 'header';
 @import 'view';

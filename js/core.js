@@ -38,6 +38,20 @@ _w.app = {
 		return null;
 	},
 
+	_noTouch : function(val){
+		var bodyTag = _d.getElementsByTagName('body')[0];
+
+		if(val){		
+			var disableNode = _d.createElement('disable-touch');
+			bodyTag.appendChild(disableNode);
+		}else{
+			var disableNode = _d.getElementsByTagName('disable-touch')[0];
+			bodyTag.removeChild(disableNode);
+		}		
+
+		return this;
+	},
+
 	/**
 	 * Transition between two views
 	 * @param  {[type]} inView  [description]
@@ -104,6 +118,8 @@ _w.app = {
 			var view = this._getViewByUrl(viewUrl);
 
 			if(view){
+				//Disable user touching
+				this._noTouch(true);
 
 				if(!view.isLoaded()){
 					//Load the view template
@@ -132,10 +148,13 @@ _w.app = {
 								}else{
 									trace('Cannot find an "esp-content" tag".', 'error');
 								}							
-							}	
+							}								
 
-							that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
-								that.setCurrentView(newCurrentView);
+							that
+							._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+								that
+								.setCurrentView(newCurrentView)
+								._noTouch(false);
 							});
 
 						}else{
@@ -145,7 +164,9 @@ _w.app = {
 				}else{
 
 					that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
-						that.setCurrentView(newCurrentView);
+						that
+						.setCurrentView(newCurrentView)
+						._noTouch(false);
 					});
 				}
 
