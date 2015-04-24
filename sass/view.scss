@@ -9,6 +9,11 @@ esp-view{
 		z-index: 0;
 		display: none;
 	}
+
+	esp-header{
+		display: block;
+	}
+
 	esp-content{
 		background-color: #FFF;
 
@@ -19,13 +24,16 @@ esp-view{
 		left: 0px;
 		right: 0px;
 		position: absolute;	
-		
-		&.has-header{
-			top: 50px;
-		}
 
 		&.padding{
 			padding: 8px;
+		}
+	}
+	&:not(.fullscreen){
+		esp-content{
+			&.has-header{
+				top: $header-height
+			}
 		}
 	}
 }

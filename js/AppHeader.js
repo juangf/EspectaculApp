@@ -18,6 +18,13 @@ function AppHeader(title){
 
   this.setTitle = function(title){
   	this._title = title;
+
+    var titleElement = this._element.getElementsByClassName('title');
+    
+    if(titleElement.length){
+      this._element.getElementsByClassName('title')[0].innerHTML = title;
+    }
+
   	return this;
   };
 

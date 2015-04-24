@@ -17,12 +17,14 @@
 
 		<script id="templates/home.html" type="text/esp-template">
 			<esp-view view-title="Home">
+				<!--esp-header><div class="title">Esto es una mierda!!</div> ikiiiii</esp-header-->
 				<esp-content class="padding overflow-scroll">
 					<p>Contenido de la vista HOME</p>
 					<p><a href="#users">Ir a la página de usuarios</a></p>
 					<p>
 						
 					</p>
+					<p><a href="#users" id="test">Ir a la página de usuarios 2</a></p>
 				</esp-content>
 			</esp-view>
 		</script>
@@ -64,11 +66,17 @@
 				debugMode : true /*Debug flag Enabled*/
 			});
 
+				var fnClick = function(e){
+					e.preventDefault();
+					app.goTo('users');
+				};
+
 			/* Post define events */
-			app.on(app.getView('home'), 'hide', function(e){
-				console.log('Home hidden');
+			/*
+			app.on(app.getView('home'), 'show', function(e){
+
 			});
-			
+			*/		
 
 			//Init EspectaculApp
 			app.init();

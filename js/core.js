@@ -61,8 +61,10 @@ _w.app = {
 	 */
 	_viewsTransition : function(inView, outView, callBack){
 		var inViewElement = inView.getElement(),
-				outViewElement = outView ? outView.getElement() : null,
-				transition = inView.getTransition() ? inView.getTransition() : 'fade';
+			inViewIsFullscreen = inViewElement.classList.contains('fullscreen'),
+			outViewElement = outView ? outView.getElement() : null,
+			outViewIsFullscreen = outViewElement ? outViewElement.classList.contains('fullscreen') : false,
+			transition = inView.getTransition() ? inView.getTransition() : 'fade';
 
 		//Call to view beforeShow event
 		inView.raiseEvent('beforeShow');
@@ -77,7 +79,7 @@ _w.app = {
 			callBack(inView);
 		});
 
-		inViewElement.className = 'current '+transition+' in';
+		inViewElement.className = 'current ' + transition +' in' + (inViewIsFullscreen ? ' fullscreen' : '');
 
 		//In header
 		if(inView.getHeader())
@@ -89,14 +91,14 @@ _w.app = {
 			outView.raiseEvent('beforeHide')
 
 			this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
-				outViewElement.className = '';
+				outViewElement.className = outViewIsFullscreen ? 'fullscreen' : '';
 
 				//Call to view hide event
 				outView.raiseEvent('hide');
 
 			});
 
-			outViewElement.className = 'current '+transition+' out';
+			outViewElement.className = 'current '+transition+' out' + (outViewIsFullscreen ? ' fullscreen' : '');
 
 			//out header
 			if(outView.getHeader())
@@ -139,9 +141,21 @@ _w.app = {
 									contentElements[0].classList.add('has-header');
 
 									var title = view.getElement().getAttribute('view-title'),
-											header = new AppHeader(title);
+										header = new AppHeader(title);
 
-									header.setElement(that._appendHeader(title));
+									//Check if the view has an personalized header
+									var headerElement = viewElement.getElementsByTagName('esp-header');
+
+									//If the view has its own header, put it and set the title
+									if(headerElement.length){ 
+										header.setElement(that._appendHeaderNode(headerElement[0]));
+
+										if(title){
+											header.setTitle(title);										
+										}
+									}else{
+										header.setElement(that._appendHeader(title ? title : ''));
+									}
 
 									view.setHeader(header)
 
@@ -343,6 +357,12 @@ _w.app = {
 		this.getNavWrapper().appendChild(newNode);
 
 		return newNode;
+	},
+
+	_appendHeaderNode : function(headerNode){		
+		this.getNavWrapper().appendChild(headerNode);
+
+		return headerNode;
 	},
 
 	/**
