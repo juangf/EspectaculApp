@@ -1,4 +1,4 @@
-"use strict";(function(_w, _d){_w.app = {
+"use strict";(function(_w, _d){_w.esp = _w.s = {
 	/**
 	 * Register system events
 	 */
@@ -527,7 +527,7 @@
 	}
 };
 
-_w.app.ajax = function(params){
+_w.esp.ajax = function(params){
 	var xmlhttp = new XMLHttpRequest();
 
 	xmlhttp.onreadystatechange = function() {
@@ -682,7 +682,7 @@ this.isLoaded = function(){
 	return this._loaded;
 };
 }
-_w.app.on = function(target, type, callBack){
+_w.esp.on = function(target, type, callBack){
 	var types = type.split(' ');
 
 	for(var i=0; i<types.length; i++){
@@ -690,7 +690,7 @@ _w.app.on = function(target, type, callBack){
 	}
 };
 
-_w.app.off = function(target, type, callBack){
+_w.esp.off = function(target, type, callBack){
 	var types = type.split(' ');
 
 	for(var i=0; i<types.length; i++){
@@ -698,7 +698,7 @@ _w.app.off = function(target, type, callBack){
 	}
 };
 
-_w.app.one = function(target, type, callBack){
+_w.esp.one = function(target, type, callBack){
 	var that = this,
 	newCallBackFn = function(event){
 		that.off(target, type, newCallBackFn);
@@ -713,13 +713,13 @@ _w.app.one = function(target, type, callBack){
  * Global Functions
  */
 function trace(message, type, indentNum){
-	app.trace(message, type, indentNum);
+	esp.trace(message, type, indentNum);
 }
-_w.app._touches = {};
+_w.esp._touches = {};
 
-_w.app._drawTouches = false;
+_w.esp._drawTouches = false;
 
-_w.app._registerTouchEvents = function(){
+_w.esp._registerTouchEvents = function(){
 	var that = this,
 	removeTouchFn = function(e){			
 		for(var i=0; i<e.changedTouches.length; i++){
@@ -784,31 +784,31 @@ _w.app._registerTouchEvents = function(){
 	
 };
 
-_w.app.getTouches = function(){
+_w.esp.getTouches = function(){
 	return this._touches;
 };
 
-_w.app.drawTouches = function(val){
+_w.esp.drawTouches = function(val){
 	this._drawTouches = val ? true : false;
 };
 
 /* Debug Flag */
-_w.app._debug = false;
+_w.esp._debug = false;
 
 /* App navigation header wrapper */
-_w.app._navWrapper = null;
+_w.esp._navWrapper = null;
 
 /* App view wrapper */
-_w.app._viewWrapper = null;
+_w.esp._viewWrapper = null;
 
 /* App views config */
-_w.app._views = {};
+_w.esp._views = {};
 
 /* App current view */
-_w.app._currentView = null;
+_w.esp._currentView = null;
 
 /* App first view */
-_w.app._firstView = null;
+_w.esp._firstView = null;
 
 /* App is in views transition */
-_w.app._inTransition = false;})(window, document);
+_w.esp._inTransition = false;})(window, document);

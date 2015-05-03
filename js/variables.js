@@ -1,21 +1,21 @@
 
 /* Debug Flag */
-_w.app._debug = false;
+_w.esp._debug = false;
 
 /* App navigation header wrapper */
-_w.app._navWrapper = null;
+_w.esp._navWrapper = null;
 
 /* App view wrapper */
-_w.app._viewWrapper = null;
+_w.esp._viewWrapper = null;
 
 /* App views config */
-_w.app._views = {};
+_w.esp._views = {};
 
 /* App current view */
-_w.app._currentView = null;
+_w.esp._currentView = null;
 
 /* App first view */
-_w.app._firstView = null;
+_w.esp._firstView = null;
 
 /* App is in views transition */
-_w.app._inTransition = false;
+_w.esp._inTransition = false;

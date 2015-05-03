@@ -32,7 +32,7 @@
 		<script src="dist/js/espectaculapp.js"></script>
 		<script>
 			//Configure EspectaculApp
-			app.config({
+			s.config({
 				views : {
 					'users':{
 						url : 'users',
@@ -68,18 +68,18 @@
 
 				var fnClick = function(e){
 					e.preventDefault();
-					app.goTo('users');
+					s.goTo('users');
 				};
 
 			/* Post define events */
 			/*
-			app.on(app.getView('home'), 'show', function(e){
+			esp.on(app.getView('home'), 'show', function(e){
 
 			});
 			*/		
 
 			//Init EspectaculApp
-			app.init();
+			s.init();
 
 
 		</script>

@@ -4,5 +4,5 @@
  * Global Functions
  */
 function trace(message, type, indentNum){
-	app.trace(message, type, indentNum);
+	esp.trace(message, type, indentNum);
 }

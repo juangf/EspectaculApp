@@ -1,4 +1,4 @@
-_w.app = {
+_w.esp = _w.s = {
 	/**
 	 * Register system events
 	 */

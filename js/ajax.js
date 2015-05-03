@@ -1,4 +1,4 @@
-_w.app.ajax = function(params){
+_w.esp.ajax = function(params){
 	var xmlhttp = new XMLHttpRequest();
 
 	xmlhttp.onreadystatechange = function() {

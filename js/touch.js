@@ -1,8 +1,8 @@
-_w.app._touches = {};
+_w.esp._touches = {};
 
-_w.app._drawTouches = false;
+_w.esp._drawTouches = false;
 
-_w.app._registerTouchEvents = function(){
+_w.esp._registerTouchEvents = function(){
 	var that = this,
 	removeTouchFn = function(e){			
 		for(var i=0; i<e.changedTouches.length; i++){
@@ -67,10 +67,10 @@ _w.app._registerTouchEvents = function(){
 	
 };
 
-_w.app.getTouches = function(){
+_w.esp.getTouches = function(){
 	return this._touches;
 };
 
-_w.app.drawTouches = function(val){
+_w.esp.drawTouches = function(val){
 	this._drawTouches = val ? true : false;
 };

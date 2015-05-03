@@ -1,4 +1,4 @@
-_w.app.on = function(target, type, callBack){
+_w.esp.on = function(target, type, callBack){
 	var types = type.split(' ');
 
 	for(var i=0; i<types.length; i++){
@@ -6,7 +6,7 @@ _w.app.on = function(target, type, callBack){
 	}
 };
 
-_w.app.off = function(target, type, callBack){
+_w.esp.off = function(target, type, callBack){
 	var types = type.split(' ');
 
 	for(var i=0; i<types.length; i++){
@@ -14,7 +14,7 @@ _w.app.off = function(target, type, callBack){
 	}
 };
 
-_w.app.one = function(target, type, callBack){
+_w.esp.one = function(target, type, callBack){
 	var that = this,
 	newCallBackFn = function(event){
 		that.off(target, type, newCallBackFn);
