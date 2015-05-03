@@ -13,6 +13,8 @@ esp-header{
 		line-height: $header-height;
 		
 		text-align: center;
+
+		font-weight: bold;
 	}
 
 	&:not(.current)

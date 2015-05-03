@@ -17,7 +17,7 @@
 
 		<script id="templates/home.html" type="text/esp-template">
 			<esp-view view-title="Home">
-				<!--esp-header><div class="title">Esto es una mierda!!</div> ikiiiii</esp-header-->
+				<!--esp-header><div class="title">Esto es una prueba</div></esp-header-->
 				<esp-content class="padding overflow-scroll">
 					<p>Contenido de la vista HOME</p>
 					<p><a href="#users">Ir a la página de usuarios</a></p>
@@ -37,9 +37,9 @@
 					'users':{
 						url : 'users',
 						templateUrl: 'templates/users.html',
-						transition: 'slide',
+						transition: 'slide'
 						/* Predefine events */
-						events : {
+						/*events : {
 							load : function(){
 								console.log('loaded users');
 							},
@@ -55,21 +55,16 @@
 							beforeHide : function(){
 								console.log('before hide users');
 							}
-						}
+						}*/
 					},
 					'home':{
 						url : 'home',
 						templateUrl: 'templates/home.html'
 					}
 				},
-				firstView	: 'home',
+				firstView	: 'users',
 				debugMode : true /*Debug flag Enabled*/
 			});
-
-				var fnClick = function(e){
-					e.preventDefault();
-					s.goTo('users');
-				};
 
 			/* Post define events */
 			/*

@@ -63,7 +63,9 @@ esp-nav-wrapper{
 
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
-	background-color: #F00;	
+	background-color: #bad6f5;
+
+	z-index: 1;
 }
 
 /* App Views wrapper */
