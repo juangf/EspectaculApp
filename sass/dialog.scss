@@ -1,0 +1,26 @@
+/* App Dialog Style */
+$dialogBgSpeed : .1s;
+$dialogBgOpacity : .4;
+
+esp-dialog{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+
+}
+
+esp-dialog-bg{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	z-index: 100;
+	opacity: 0;
+
+	-webkit-transition: opacity $dialogBgSpeed linear;
+	transition: opacity $dialogBgSpeed linear;
+
+	&.in{
+		opacity: $dialogBgOpacity;
+	}
+}
