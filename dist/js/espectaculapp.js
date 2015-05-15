@@ -683,6 +683,7 @@ this.isLoaded = function(){
 };
 }
 _w.esp.dialog = {
+	_isOpen : false,
 	_showBackground : function(){
 		var bodyTag = _d.getElementsByTagName('body')[0],
 			dialogBg = _d.createElement('esp-dialog-bg');
@@ -710,14 +711,19 @@ _w.esp.dialog = {
 	},
 
 	show : function(){
-		this._showBackground();
+		if(!this._isOpen){
+			this._showBackground();
+			this._isOpen = true;
+		}		
 
 		return this;
 	},
 
 	hide : function(){
-		this._hideBackground();
-
+		if(this._isOpen){
+			this._hideBackground();
+			this._isOpen = false;
+		}
 		return this;
 	}
 };
