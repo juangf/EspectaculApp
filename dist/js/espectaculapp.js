@@ -532,7 +532,7 @@ _w.esp.ajax = function(params){
 
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 ) {
-			if(xmlhttp.status == 200){
+			if(xmlhttp.status == 200 || xmlhttp.status == 0 /* Local file */){
 				params.success(xmlhttp.responseText);
 			}
 		else{
