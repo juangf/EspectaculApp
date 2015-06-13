@@ -2,11 +2,46 @@
 $dialogBgSpeed : .1s;
 $dialogBgOpacity : .4;
 
-esp-dialog{
+$dialogWrapperPadding : 20px;
+$dialogMinHeight : 100px;
+$dialogMaxWidth : 380px;
+
+$dialogSpeed : .1s;
+$dialogBgColor : white;
+$dialogShadowColor : black;
+
+esp-dialog-wrapper{
 	width: 100%;
 	height: 100%;
 	position: absolute;
+	z-index: 101;
 
+	display: flex;
+	flex-direction: row;	 
+	align-items: center;
+
+	padding: $dialogWrapperPadding;
+
+	opacity: 0;
+	
+	&.in{
+		opacity: 1;
+	}
+
+	-webkit-transition: opacity $dialogSpeed linear;
+	transition: opacity $dialogSpeed linear;
+
+	esp-dialog{		
+		min-height: $dialogMinHeight;
+		width: 100%;
+		background-color: $dialogBgColor;
+			
+		max-width: $dialogMaxWidth;
+
+		box-shadow: 0px 0px 10px $dialogShadowColor;
+
+		margin: auto;
+	}
 }
 
 esp-dialog-bg{
@@ -23,4 +58,9 @@ esp-dialog-bg{
 	&.in{
 		opacity: $dialogBgOpacity;
 	}
+
+
+	display: flex;
+	flex-direction: column;
+	justify-content:space-between;
 }
