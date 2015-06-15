@@ -40,13 +40,31 @@ _w.esp.dialog = {
 		var bodyTag = _d.getElementsByTagName('body')[0],
 			dialogWrapper = _d.createElement('esp-dialog-wrapper'),
 			dialog = _d.createElement('esp-dialog'),
-			title = _d.createElement('esp-dialog-title');
+			title = _d.createElement('esp-dialog-title'),
+			content = _d.createElement('esp-dialog-content'),
+			controls = _d.createElement('esp-dialog-controls');
 
+		var option1 = _d.createElement('esp-dialog-option');
+		option1.innerText = 'OK';
+
+		var option2 = _d.createElement('esp-dialog-option');
+		option2.innerText = 'Cancel';
 
 		//Set the title
 		title.innerText = params.title;
 
+		//Set the content
+		content.innerHTML = params.content;
+
+		controls.appendChild(option1);
+		controls.appendChild(option2);
+
 		dialog.appendChild(title);
+		dialog.appendChild(content);
+		dialog.appendChild(controls);
+
+
+
 		dialogWrapper.appendChild(dialog);
 		bodyTag.appendChild(dialogWrapper);
 
