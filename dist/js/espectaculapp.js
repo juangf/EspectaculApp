@@ -723,8 +723,14 @@ _w.esp.dialog = {
 	_showDialog : function(params){
 		var bodyTag = _d.getElementsByTagName('body')[0],
 			dialogWrapper = _d.createElement('esp-dialog-wrapper'),
-			dialog = _d.createElement('esp-dialog');
+			dialog = _d.createElement('esp-dialog'),
+			title = _d.createElement('esp-dialog-title');
 
+
+		//Set the title
+		title.innerText = params.title;
+
+		dialog.appendChild(title);
 		dialogWrapper.appendChild(dialog);
 		bodyTag.appendChild(dialogWrapper);
 
@@ -771,7 +777,7 @@ _w.esp.dialog = {
 		return this;
 	},
 
-	hide : function(){
+	close : function(){
 		
 		if(this._isOpen){
 			var that = this;

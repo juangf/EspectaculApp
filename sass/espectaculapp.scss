@@ -1,5 +1,6 @@
 $header-height: 50px;
-
+$headerBgColor: #bad6f5;
+$headerColor: black;
 
 /* Style Reseting */
 *{
@@ -52,6 +53,10 @@ body{
 	-webkit-backface-visibility: hidden;
 	-webkit-user-drag: none;
 	-ms-content-zooming: none;
+
+	.dialog-open{
+		
+	}
 }
 
 /* App Navigation headers wrapper */
@@ -63,7 +68,8 @@ esp-nav-wrapper{
 
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
-	background-color: #bad6f5;
+	background-color: $headerBgColor;
+	color: $headerColor;
 
 	z-index: 1;
 }
