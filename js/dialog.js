@@ -36,7 +36,7 @@ _w.esp.dialog = {
 		return this;
 	},
 
-	_showDialog : function(){
+	_showDialog : function(params){
 		var bodyTag = _d.getElementsByTagName('body')[0],
 			dialogWrapper = _d.createElement('esp-dialog-wrapper'),
 			dialog = _d.createElement('esp-dialog');
@@ -51,12 +51,13 @@ _w.esp.dialog = {
 		return this;
 	},
 
-	_hideDialog : function(){
+	_hideDialog : function(callBack){
 		var bodyTag = _d.getElementsByTagName('body')[0],
 			dialogWrapper = _d.getElementsByTagName('esp-dialog-wrapper')[0];
 
 		_w.esp.one(dialogWrapper, 'webkitTransitionEnd transitionEnd', function(event){
 			bodyTag.removeChild(dialogWrapper);
+			callBack();
 		});
 
 		dialogWrapper.classList.remove('in');
@@ -77,11 +78,8 @@ _w.esp.dialog = {
 			this._showBackground();
 			this._isOpen = true;
 
-			this
-			._showDialog();
+			this._showDialog(params);
 
-
-		//If yes, add the new dialog to the queue
 		}else{
 			this._queue.push(params);
 		}
@@ -90,15 +88,20 @@ _w.esp.dialog = {
 	},
 
 	hide : function(){
+		
 		if(this._isOpen){
-			
-			this._hideDialog();	
+			var that = this;
 
-			if(this._queue.length < 1){				
-				this._hideBackground();
-				this._isOpen = false;
-			}
+			this._hideDialog(function(){
+				if(that._queue.length < 1){
+					that._hideBackground();
+					that._isOpen = false;
+				}else{
+					that._showDialog(that._queue.shift());
+				}
+			});
 		}
+
 		return this;
 	}
 };
