@@ -29,6 +29,7 @@
 			</esp-view>
 		</script>
 
+		<script src="js/libs/handlebars-v3.0.3.js"></script>
 		<script src="dist/js/espectaculapp.js"></script>
 		<script>
 			//Configure EspectaculApp
@@ -37,9 +38,9 @@
 					'users':{
 						url : 'users',
 						templateUrl: 'templates/users.html',
-						transition: 'slide'
+						transition: 'slide',
 						/* Predefine events */
-						/*events : {
+						events : {
 							load : function(){
 								console.log('loaded users');
 							},
@@ -55,7 +56,12 @@
 							beforeHide : function(){
 								console.log('before hide users');
 							}
-						}*/
+						},
+						templateData : function(){
+							return {
+								'users':'Dídaaaaaaaaac <b>hola</b>'
+							}
+						},
 					},
 					'home':{
 						url : 'home',
@@ -63,6 +69,7 @@
 					}
 				},
 				firstView	: 'users',
+				handlebarsTemplates : true,
 				debugMode : true /*Debug flag Enabled*/
 			});
 
@@ -76,7 +83,7 @@
 			//Init EspectaculApp
 			s.init();
 
-			s.dialog.show({'title':'Hola', 'content':'content test'});
+			//s.dialog.show({'title':'Hola', 'content':'content test'});
 
 		</script>
 	</body>

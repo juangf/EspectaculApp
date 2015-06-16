@@ -14,6 +14,8 @@ this._element = null;
 
 this._header = null;
 
+this._templateData = null;
+
 this.addEventListener = function(eventName, callBack){
 	var events = this._events,
 		callBacks = events[eventName] = events[eventName] || [];
@@ -40,6 +42,15 @@ for (var i = 0, l = callBacks.length; i < l; i++) {
   callBacks[i].apply(null, args);
 }
 return true;
+};
+
+this.setTemplateData = function(templateData){
+	this._templateData = templateData;
+	return this;
+};
+
+this.getTemplateData = function(){
+	return this._templateData;
 };
 
 this.setHeader = function(header){

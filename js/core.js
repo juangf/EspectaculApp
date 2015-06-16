@@ -127,6 +127,12 @@ _w.esp = _w.s = {
 					//Load the view template
 					this._loadTemplate(view, function(status, viewElement){
 						if(status){
+							var templateData = view.getTemplateData();
+
+							if(templateData){
+								var template = Handlebars.compile(viewElement.innerHTML);
+								viewElement.innerHTML = template(view.getTemplateData());
+							}
 
 							view
 							.setElement(viewElement)
@@ -411,11 +417,11 @@ _w.esp = _w.s = {
 	 * [_prepareViews description]
 	 * @param {[type]} views [description]
 	 */
-	_prepareViews : function(viewsData){
+	_prepareViews : function(viewsData, handlebarsTemplates){
 		for(var key in viewsData){
 			var viewData = viewsData[key],
-					events = viewData.events,
-					view = new AppView(key);
+				events = viewData.events,
+				view = new AppView(key);
 
 			if(viewData.url)
 				view.setUrl(viewData.url);
@@ -441,6 +447,11 @@ _w.esp = _w.s = {
 				if(events.hide) this.on(view, 'hide', events.hide);
 				if(events.beforeShow) this.on(view, 'beforeShow', events.beforeShow);
 				if(events.beforeHide) this.on(view, 'beforeHide', events.beforeHide);
+			}
+
+			//If there is template data
+			if(handlebarsTemplates && viewData.templateData){
+				view.setTemplateData(viewData.templateData());
 			}
 
 			this._views[key] = view;
@@ -478,7 +489,7 @@ _w.esp = _w.s = {
 		// Work the app views
 		if(params.views){
 			//Prepare the system views
-			this._prepareViews(params.views);
+			this._prepareViews(params.views, params.handlebarsTemplates ? params.handlebarsTemplates : false);
 
 			//check the "fistView" param
 			if(params.firstView){
