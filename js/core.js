@@ -39,14 +39,18 @@ _w.esp = _w.s = {
 	},
 
 	_noTouch : function(val){
-		var bodyTag = _d.getElementsByTagName('body')[0];
+		var bodyTag = _d.getElementsByTagName('body')[0],
+			disableNode = _d.getElementsByTagName('disable-touch');
 
-		if(val){		
-			var disableNode = _d.createElement('disable-touch');
-			bodyTag.appendChild(disableNode);
-		}else{
-			var disableNode = _d.getElementsByTagName('disable-touch')[0];
-			bodyTag.removeChild(disableNode);
+		if(val){
+			if( !disableNode.length ){
+				var disableNode = _d.createElement('disable-touch');
+				bodyTag.appendChild(disableNode);
+			}
+		}else{			
+			if( disableNode.length ){
+				bodyTag.removeChild(disableNode[0]);
+			}
 		}		
 
 		return this;
