@@ -885,6 +885,10 @@ _w.esp.loading = {
 
 			bodyTag.appendChild(loading);
 
+			setTimeout(function(){
+				loading.classList.add('in');
+			},0);
+			
 		}
 		return this;
 	},
@@ -895,7 +899,13 @@ _w.esp.loading = {
 			var bodyTag = _d.getElementsByTagName('body')[0],
 				loading = _d.getElementsByTagName('esp-loading')[0];
 
-			bodyTag.removeChild(loading);
+
+			_w.esp.one(loading, 'webkitTransitionEnd transitionEnd', function(event){
+				bodyTag.removeChild(loading);
+			});
+
+			loading.classList.remove('in');
+			
 		}
 		return this;
 	}
