@@ -19,3 +19,6 @@ _w.esp._firstView = null;
 
 /* App is in views transition */
 _w.esp._inTransition = false;
+
+/* User Handlebars to compile templates */
+_w.esp._handlebars = true;

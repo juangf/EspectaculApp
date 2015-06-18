@@ -131,11 +131,16 @@ _w.esp = _w.s = {
 					//Load the view template
 					this._loadTemplate(view, function(status, viewElement){
 						if(status){
-							var templateData = view.getTemplateData();
+							if(that._handlebars){
+								view
+								.raiseEvent('beforeRenderTemplate');
+								
+								var templateData = view.getTemplateData();
 
-							if(templateData){
-								var template = Handlebars.compile(viewElement.innerHTML);
-								viewElement.innerHTML = template(view.getTemplateData());
+								if(templateData){
+									var template = Handlebars.compile(viewElement.innerHTML);
+									viewElement.innerHTML = template(view.getTemplateData());
+								}
 							}
 
 							view
@@ -486,6 +491,12 @@ _w.esp = _w.s = {
 		//Set the navigation wrapper (if exists)
 		var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');	
 
+		//Set if we must use handlebars
+		this._handlebars = params.handlebarsTemplates!==undefined ? params.handlebarsTemplates : true;
+
+		console.log(this._handlebars);
+
+
 		if(navWrapper.length){
 			this.setNavWrapper(navWrapper[0]);
 		}
@@ -493,7 +504,7 @@ _w.esp = _w.s = {
 		// Work the app views
 		if(params.views){
 			//Prepare the system views
-			this._prepareViews(params.views, params.handlebarsTemplates ? params.handlebarsTemplates : false);
+			this._prepareViews(params.views, this._handlebars);
 
 			//check the "fistView" param
 			if(params.firstView){
