@@ -566,8 +566,12 @@ _w.esp.ajax = function(params){
 			}
 		}
 	};
-
     xmlhttp.open(params.method ? params.method : 'GET', params.url, params.asynch ? params.asynch : true);
+	if(params.headers){
+		for (var key in params.headers) {
+		    xmlhttp.setRequestHeader(key, params.headers[key]);
+		}
+	}
     xmlhttp.send();
 
     return this;
