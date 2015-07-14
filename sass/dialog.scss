@@ -15,6 +15,7 @@ $dialogTitleColor : $headerColor;
 
 $dialogOptionBorderColor : #BBB;
 $dialogOptionHeight : 50px;
+$dialogOptionActiveBgColor : #EEE;
 
 esp-dialog-wrapper{
 	width: 100%;
@@ -78,6 +79,10 @@ esp-dialog-wrapper{
 				border-top: 1px solid $dialogOptionBorderColor;
 				flex-grow: 1;			
 				flex-basis: 0;
+
+				&:active{
+					background-color: $dialogOptionActiveBgColor;
+				};
 			}
 			esp-dialog-option:not(:last-child){
 				border-right: 1px solid $dialogOptionBorderColor;

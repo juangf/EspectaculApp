@@ -777,33 +777,48 @@ _w.esp.dialog = {
 	},
 
 	_showDialog : function(params){
-		var bodyTag = _d.getElementsByTagName('body')[0],
+		var that = this,
+			bodyTag = _d.getElementsByTagName('body')[0],
 			dialogWrapper = _d.createElement('esp-dialog-wrapper'),
 			dialog = _d.createElement('esp-dialog'),
 			title = _d.createElement('esp-dialog-title'),
 			content = _d.createElement('esp-dialog-content'),
 			controls = _d.createElement('esp-dialog-controls');
 
-		var option1 = _d.createElement('esp-dialog-option');
-		option1.innerText = 'OK';
+		//If there is no buttons defined, put a default closing dialog button
+		if(!params.buttons){
+			params.buttons = [
+				{
+					title : 'OK',
+					/*onPress: optional function parameter */
+				}
+			];
+		}
 
-		var option2 = _d.createElement('esp-dialog-option');
-		option2.innerText = 'Cancel';
+		//Process the buttons (MAX 3 buttons)
+		for(var i=0; i<params.buttons.length && i<3; i++){
+			var button = params.buttons[i],
+				option = _d.createElement('esp-dialog-option');
+
+			//Set the button title
+			option.innerText = button.title;			
+
+			//Set the Press button event: FIXME: Should be a TAP event
+			s.one(option, 'touchstart', button.onPress ? button.onPress : function(){that.close()});
+
+			controls.appendChild(option);
+		}
 
 		//Set the title
 		title.innerText = params.title;
 
 		//Set the content
-		content.innerHTML = params.content;
+		content.innerHTML = params.content;		
 
-		controls.appendChild(option1);
-		controls.appendChild(option2);
-
+		//Append dialog parts
 		dialog.appendChild(title);
 		dialog.appendChild(content);
 		dialog.appendChild(controls);
-
-
 
 		dialogWrapper.appendChild(dialog);
 		bodyTag.appendChild(dialogWrapper);
