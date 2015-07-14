@@ -294,6 +294,10 @@ _w.esp = _w.s = {
 		return this._navWrapper;
 	},
 
+	getViewWrapper : function(){
+		return this._viewWrapper;
+	},
+
 	getView : function(viewId){
 		if(this._views.hasOwnProperty(viewId)){
 			return this._views[viewId];

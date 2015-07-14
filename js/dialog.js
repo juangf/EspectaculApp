@@ -64,7 +64,7 @@ _w.esp.dialog = {
 			option.innerText = button.title;			
 
 			//Set the Press button event: FIXME: Should be a TAP event
-			s.one(option, 'touchstart', button.onPress ? button.onPress : function(){that.close()});
+			_w.esp.one(option, 'touchstart', button.onPress ? button.onPress : function(){that.close()});
 
 			controls.appendChild(option);
 		}
@@ -85,6 +85,13 @@ _w.esp.dialog = {
 
 		setTimeout(function(){
 			dialogWrapper.classList.add('in');
+
+			_w.esp.getViewWrapper().classList.add('blur');
+
+			if(_w.esp.getNavWrapper()){
+				_w.esp.getNavWrapper().classList.add('blur');
+			}
+
 		},0);
 
 		return this;
@@ -99,7 +106,7 @@ _w.esp.dialog = {
 			callBack();
 		});
 
-		dialogWrapper.classList.remove('in');
+		dialogWrapper.classList.remove('in');		
 
 		return this;
 	},
@@ -133,8 +140,17 @@ _w.esp.dialog = {
 
 			this._hideDialog(function(){
 				if(that._queue.length < 1){
+
 					that._hideBackground();
+
+					_w.esp.getViewWrapper().classList.remove('blur');
+
+					if(_w.esp.getNavWrapper()){
+						_w.esp.getNavWrapper().classList.remove('blur');
+					}
+
 					that._isOpen = false;
+
 				}else{
 					that._showDialog(that._queue.shift());
 				}

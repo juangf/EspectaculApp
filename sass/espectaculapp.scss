@@ -1,6 +1,10 @@
+@import 'mixins';
+
 $header-height: 50px;
 $headerBgColor: #bad6f5;
 $headerColor: black;
+
+$blurSpeed : .1s;
 
 /* Style Reseting */
 *{
@@ -72,6 +76,12 @@ esp-nav-wrapper{
 	color: $headerColor;
 
 	z-index: 1;
+
+	/*@include vendor-prefix(transition, filter $blurSpeed linear);*/
+
+	&.blur{
+		@include vendor-prefix(filter, blur(3px));
+	}
 }
 
 /* App Views wrapper */
@@ -85,6 +95,10 @@ esp-view-wrapper{
 	backface-visibility: hidden;
 	-webkit-perspective:1000px;	
 	perspective:1000px;
+
+	&.blur{
+		@include vendor-prefix(filter, blur(3px));
+	}
 }
 
 disable-touch{
