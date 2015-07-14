@@ -14,6 +14,9 @@ _w.esp._views = {};
 /* App current view */
 _w.esp._currentView = null;
 
+/* App Previous view */
+_w.esp._previousView = null;
+
 /* App first view */
 _w.esp._firstView = null;
 

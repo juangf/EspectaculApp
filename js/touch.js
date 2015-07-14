@@ -53,7 +53,7 @@ _w.esp._registerTouchEvents = function(){
 
 			touch.color = color;
 
-			if(that._drawTouches){
+			if(that._drawTouches){ 
 				var touchElement = _d.getElementById('esp-finger-'+touch.identifier);
 
 				//touchElement.style.cssText  = 'left:'+touch.clientX+'px; top:'+touch.clientY+'px';

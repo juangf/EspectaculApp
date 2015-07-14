@@ -181,6 +181,9 @@ _w.esp = _w.s = {
 
 							that
 							._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+								//Set te previous view value
+								that.setPreviousView(that.getCurrentView());
+
 								that
 								.setCurrentView(newCurrentView)
 								._noTouch(false);
@@ -193,6 +196,9 @@ _w.esp = _w.s = {
 				}else{
 
 					that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+						//Set te previous view value
+						that.setPreviousView(that.getCurrentView());
+
 						that
 						.setCurrentView(newCurrentView)
 						._noTouch(false);
@@ -259,6 +265,15 @@ _w.esp = _w.s = {
 
 	getCurrentView : function(){
 		return this._currentView;
+	},
+
+	setPreviousView : function(view){
+		this._previousView = view;
+		return this;
+	},
+
+	getPreviousView : function(){
+		return this._previousView;
 	},
 
 	setFirstView : function(view){

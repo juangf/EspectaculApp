@@ -92,9 +92,9 @@ _w.esp.dialog = {
 	show : function(params){
 		/*
 			Parameters Object properties:
-			title - mandatory
+			title 	- mandatory
 			content - mandatory
-
+			okOnly 	- optional
 		*/
 
 		//If is not displaying a dialog

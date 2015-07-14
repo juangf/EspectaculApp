@@ -181,6 +181,9 @@
 
 							that
 							._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+								//Set te previous view value
+								that.setPreviousView(that.getCurrentView());
+
 								that
 								.setCurrentView(newCurrentView)
 								._noTouch(false);
@@ -193,6 +196,9 @@
 				}else{
 
 					that._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
+						//Set te previous view value
+						that.setPreviousView(that.getCurrentView());
+
 						that
 						.setCurrentView(newCurrentView)
 						._noTouch(false);
@@ -259,6 +265,15 @@
 
 	getCurrentView : function(){
 		return this._currentView;
+	},
+
+	setPreviousView : function(view){
+		this._previousView = view;
+		return this;
+	},
+
+	getPreviousView : function(){
+		return this._previousView;
 	},
 
 	setFirstView : function(view){
@@ -813,9 +828,9 @@ _w.esp.dialog = {
 	show : function(params){
 		/*
 			Parameters Object properties:
-			title - mandatory
+			title 	- mandatory
 			content - mandatory
-
+			okOnly 	- optional
 		*/
 
 		//If is not displaying a dialog
@@ -976,7 +991,7 @@ _w.esp._registerTouchEvents = function(){
 
 			touch.color = color;
 
-			if(that._drawTouches){
+			if(that._drawTouches){ 
 				var touchElement = _d.getElementById('esp-finger-'+touch.identifier);
 
 				//touchElement.style.cssText  = 'left:'+touch.clientX+'px; top:'+touch.clientY+'px';
@@ -1012,6 +1027,9 @@ _w.esp._views = {};
 
 /* App current view */
 _w.esp._currentView = null;
+
+/* App Previous view */
+_w.esp._previousView = null;
 
 /* App first view */
 _w.esp._firstView = null;
