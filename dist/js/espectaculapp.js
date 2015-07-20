@@ -679,13 +679,14 @@ this.removeEventListener = function(eventName, callBack){
 	return false;
 };
 this.raiseEvent = function(eventName, args) {
-var callBacks = this._events[eventName];
+	var callBacks = this._events[eventName];
 
-if(callBacks)
-for (var i = 0, l = callBacks.length; i < l; i++) {
-  callBacks[i].apply(null, args);
-}
-return true;
+	if(callBacks)
+	for (var i = 0, l = callBacks.length; i < l; i++) {
+  		callBacks[i].apply(null, args);
+	}
+
+	return true;
 };
 
 this.setTemplateData = function(templateData){
