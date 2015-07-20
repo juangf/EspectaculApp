@@ -23,9 +23,12 @@ esp-dialog-wrapper{
 	position: absolute;
 	z-index: 101;
 
-	display: flex;
-	flex-direction: row;	 
-	align-items: center;
+	/*display: flex;*/
+	/*flex-direction: row;*/
+	/*align-items: center;*/
+	@include vendor-prefix-value(display, flex); 
+	@include vendor-prefix(flex-direction, row);
+	@include vendor-prefix(align-items, center);
 
 	padding: $dialogWrapperPadding;
 
@@ -35,8 +38,9 @@ esp-dialog-wrapper{
 		opacity: 1;
 	}
 
-	-webkit-transition: opacity $dialogSpeed linear;
-	transition: opacity $dialogSpeed linear;
+	/*-webkit-transition: opacity $dialogSpeed linear;
+	transition: opacity $dialogSpeed linear;*/
+	@include vendor-prefix(transition, opacity .18s  $dialogSpeed linear);
 
 	esp-dialog{		
 		/*min-height: $dialogMinHeight;*/
@@ -68,17 +72,22 @@ esp-dialog-wrapper{
 		}
 
 		esp-dialog-controls{
-			display: flex;
+			/*display: flex;
   			flex-direction: row;
-  			align-items: stretch;
+  			align-items: stretch;*/
+			@include vendor-prefix-value(display, flex);
+			@include vendor-prefix(flex-direction, row);
+			@include vendor-prefix(align-items, stretch);
 
 			esp-dialog-option{
 				height: $dialogOptionHeight;
 				line-height: $dialogOptionHeight;
 	  			text-align: center;
 				border-top: 1px solid $dialogOptionBorderColor;
-				flex-grow: 1;			
-				flex-basis: 0;
+				/*flex-grow: 1;
+				flex-basis: 0;*/
+				@include vendor-prefix(flex-grow, 1);
+				@include vendor-prefix(flex-basis, 0);
 
 				&:active{
 					background-color: $dialogOptionActiveBgColor;
@@ -108,7 +117,10 @@ esp-dialog-bg{
 	}
 
 
-	display: flex;
+	/*display: flex;
 	flex-direction: column;
-	justify-content:space-between;
+	justify-content:space-between;*/
+	@include vendor-prefix-value(display, flex); 
+	@include vendor-prefix(flex-direction, column);
+	@include vendor-prefix(justify-content, space-between);
 }

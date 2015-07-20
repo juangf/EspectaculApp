@@ -3,6 +3,11 @@
     #{$vendor}#{$name}: #{$value};
   }
 }
+@mixin vendor-prefix-value($name, $value) {
+  @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+    #{$name}: #{$vendor}#{$value};
+  }
+}
 @function black($opacity){
     @return rgba(0,0,0,$opacity)
 }
