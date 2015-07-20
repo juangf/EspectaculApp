@@ -25,8 +25,13 @@
 						
 					</p>
 					<p><a href="#users" id="test">Ir a la página de usuarios 2</a></p>
-					<br/><br/>
-					<p><a href="javascript:s.dialog.show({title:'Título del diálogo', content:'Soy el contenido del diálogo'});">Diálogo</a></</p>
+					<br/>
+					<p><a href="javascript:s.dialog.show({title:'Título del diálogo', content:'Soy el contenido del diálogo'});">Diálogo</a>
+					</p>
+					<br/>
+					<p>
+						<a href="#" id="test-tap">Test TAP event</a>
+					</p>
 				</esp-content>
 			</esp-view>
 		</script>
@@ -70,22 +75,22 @@
 						templateUrl: 'templates/home.html',
 					}
 				},
-				firstView	: 'users',
+				firstView	: 'home',
 				handlebarsTemplates : true,
 				debugMode : true /*Debug flag Enabled*/
 			});
 
 			/* Post define events */
-			/*
-			esp.on(app.getView('home'), 'show', function(e){
-
+			
+			esp.on(s.getView('home'), 'show', function(e){
+				s.on(document.getElementById('test-tap'), 'tap', function(){
+					alert('TAP');
+				});
 			});
-			*/
+			
 
 			//Init EspectaculApp
 			s.init();
-
-			//s.dialog.show({'title':'Hola', 'content':'content test'});
 
 		</script>
 	</body>

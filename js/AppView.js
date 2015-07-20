@@ -110,4 +110,14 @@ this.setIsLoaded = function(val){
 this.isLoaded = function(){
 	return this._loaded;
 };
+
+this.unload = function(){
+	var viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
+
+	viewWrapper.removeChild(this._element);
+
+	this._element = null;
+	this._loaded = false;
+}; 
+
 }

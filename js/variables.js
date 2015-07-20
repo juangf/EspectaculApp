@@ -25,3 +25,6 @@ _w.esp._inTransition = false;
 
 /* User Handlebars to compile templates */
 _w.esp._handlebars = true;
+
+/* User specified transition demand */
+_w.esp._userTransition = null;

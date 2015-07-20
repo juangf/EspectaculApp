@@ -70,11 +70,22 @@ _w.esp = _w.s = {
 			outViewIsFullscreen = outViewElement ? outViewElement.classList.contains('fullscreen') : false,
 			transition = inView.getTransition() ? inView.getTransition() : 'fade';
 
+		//If the user put an specified transition on the goTo
+		if(this._userTransition){
+			transition = this._userTransition;
+			this._userTransition = null;
+		}
+
 		//Call to view beforeShow event
 		inView.raiseEvent('beforeShow');
 
 		this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
-			inViewElement.classList.remove(transition);
+			var transitionClasses = transition.split(' ');
+
+			for (var i = 0; i < transitionClasses.length; i++) {
+				inViewElement.classList.remove(transitionClasses[i]);
+			}
+			
 			inViewElement.classList.remove('in');
 			
 			//Call to view show event
@@ -313,8 +324,10 @@ _w.esp = _w.s = {
 	 * @param  {[type]} viewId [description]
 	 * @return {[type]}         [description]
 	 */
-	goTo : function(viewId){
+	goTo : function(viewId, transition){
 		if(this._views.hasOwnProperty(viewId)){
+			if(transition) this._userTransition = transition;
+
 			window.location = '#' + viewId;
 		}else{
 			trace('The view id "'+viewId+'" does not exist.', 'error');					

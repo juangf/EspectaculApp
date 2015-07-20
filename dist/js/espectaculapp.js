@@ -70,11 +70,22 @@
 			outViewIsFullscreen = outViewElement ? outViewElement.classList.contains('fullscreen') : false,
 			transition = inView.getTransition() ? inView.getTransition() : 'fade';
 
+		//If the user put an specified transition on the goTo
+		if(this._userTransition){
+			transition = this._userTransition;
+			this._userTransition = null;
+		}
+
 		//Call to view beforeShow event
 		inView.raiseEvent('beforeShow');
 
 		this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
-			inViewElement.classList.remove(transition);
+			var transitionClasses = transition.split(' ');
+
+			for (var i = 0; i < transitionClasses.length; i++) {
+				inViewElement.classList.remove(transitionClasses[i]);
+			}
+			
 			inViewElement.classList.remove('in');
 			
 			//Call to view show event
@@ -313,8 +324,10 @@
 	 * @param  {[type]} viewId [description]
 	 * @return {[type]}         [description]
 	 */
-	goTo : function(viewId){
+	goTo : function(viewId, transition){
 		if(this._views.hasOwnProperty(viewId)){
+			if(transition) this._userTransition = transition;
+
 			window.location = '#' + viewId;
 		}else{
 			trace('The view id "'+viewId+'" does not exist.', 'error');					
@@ -741,6 +754,16 @@ this.setIsLoaded = function(val){
 this.isLoaded = function(){
 	return this._loaded;
 };
+
+this.unload = function(){
+	var viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
+
+	viewWrapper.removeChild(this._element);
+
+	this._element = null;
+	this._loaded = false;
+}; 
+
 }
 _w.esp.dialog = {
 	_queue : [],	
@@ -1077,4 +1100,7 @@ _w.esp._firstView = null;
 _w.esp._inTransition = false;
 
 /* User Handlebars to compile templates */
-_w.esp._handlebars = true;})(window, document);
+_w.esp._handlebars = true;
+
+/* User specified transition demand */
+_w.esp._userTransition = null;})(window, document);
