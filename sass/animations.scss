@@ -369,10 +369,9 @@
 .slideup.out {
 	-webkit-animation-name: fadeout;
 	
-	-moz-animation-name: fadein;
-	
-	animation-name: fadein;
-	
+	-moz-animation-name: fadeout;
+
+	animation-name: fadeout;
 }
 .slideup.in {
 	-webkit-transform: translateY(0);
@@ -391,7 +390,6 @@
 	-moz-animation-name: fadein;
 	
 	animation-name: fadein;
-	
 }
 .slideup.out.reverse {
 	-webkit-transform: translateY(100%);
