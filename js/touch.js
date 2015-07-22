@@ -4,7 +4,7 @@ _w.esp._drawTouches = false;
 
 _w.esp._registerTouchEvents = function(){
 	var that = this,
-	removeTouchFn = function(e){			
+	removeTouchFn = function(e){
 		for(var i=0; i<e.changedTouches.length; i++){
 			var touch = e.changedTouches[i];
 
@@ -44,7 +44,7 @@ _w.esp._registerTouchEvents = function(){
 			}
 
 			that._touches[touch.identifier] = touch;
-		}
+		}		
 	};
 	_w.ontouchmove = function(e){
 		for(var i=0; i<e.changedTouches.length; i++){
