@@ -39,7 +39,7 @@ this.raiseEvent = function(eventName, args) {
 
 	if(callBacks)
 	for (var i = 0, l = callBacks.length; i < l; i++) {
-  		callBacks[i].apply(null, args);
+  		callBacks[i].apply(this, args);
 	}
 
 	return true;

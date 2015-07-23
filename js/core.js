@@ -324,7 +324,7 @@ _w.esp = _w.s = {
 	 * @param  {[type]} viewId [description]
 	 * @return {[type]}         [description]
 	 */
-	goTo : function(viewId, transition){
+	goTo : function(viewId, transition){		
 		if(this._views.hasOwnProperty(viewId)){
 			if(transition) this._userTransition = transition;
 

@@ -75,13 +75,15 @@
 						templateUrl: 'templates/home.html',
 					}
 				},
-				firstView	: 'home',
+				firstView	: 'users',
 				handlebarsTemplates : true,
 				debugMode : true /*Debug flag Enabled*/
 			});
 
 			/* Post define events */
 			esp.on(s.getView('home'), 'show', function(e){
+				console.log('THIS',this);
+				
 				s.on(document.getElementById('test-tap'), 'tap', function(){
 					alert('TAP');
 				});
