@@ -8,6 +8,10 @@ esp-view{
 	{
 		z-index: 0;
 		display: none;
+
+		&.visible{
+			display: block;
+		}
 	}
 
 	esp-header{
@@ -27,6 +31,10 @@ esp-view{
 
 		&.padding{
 			padding: 8px;
+		}
+
+		&.transparent{
+			background-color: transparent !important;
 		}
 	}
 	&:not(.fullscreen){

@@ -68,7 +68,7 @@ _w.esp = _w.s = {
 			inViewIsFullscreen = inViewElement.classList.contains('fullscreen'),
 			outViewElement = outView ? outView.getElement() : null,
 			outViewIsFullscreen = outViewElement ? outViewElement.classList.contains('fullscreen') : false,
-			transition = inView.getTransition() ? inView.getTransition() : 'fade';
+			transition = inView.getTransition() ? inView.getTransition() : 'fade';			
 
 		//If the user put an specified transition on the goTo
 		if(this._userTransition){
@@ -101,12 +101,21 @@ _w.esp = _w.s = {
 		inView.getHeader().getElement().classList.add('current');
 
 		if(outViewElement){
-
+			var that = this;
 			//Call to view beforeHide event
 			outView.raiseEvent('beforeHide')
 
 			this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
-				outViewElement.className = outViewIsFullscreen ? 'fullscreen' : '';
+				var className = outViewIsFullscreen ? 'fullscreen' : '';
+				
+				//If the user wants to mantain visible the outer view
+				if(that._previousViewStayVisible){					
+					className+=' visible';
+
+					that._previousViewStayVisible = false;
+				}
+
+				outViewElement.className = className; 
 
 				//Call to view hide event
 				outView.raiseEvent('hide');
@@ -324,9 +333,10 @@ _w.esp = _w.s = {
 	 * @param  {[type]} viewId [description]
 	 * @return {[type]}         [description]
 	 */
-	goTo : function(viewId, transition){		
+	goTo : function(viewId, transition, stayVisible){		
 		if(this._views.hasOwnProperty(viewId)){
 			if(transition) this._userTransition = transition;
+			if(stayVisible) this._previousViewStayVisible = stayVisible;
 
 			window.location = '#' + viewId;
 		}else{

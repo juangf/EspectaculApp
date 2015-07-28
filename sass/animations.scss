@@ -43,6 +43,18 @@
     from { opacity: 1; }
     to { opacity: 0; }
 }
+@-webkit-keyframes noAnim {
+    from { opacity: 1; }
+    to { opacity: 1; }
+}
+@-moz-keyframes noAnim {
+    from { opacity: 1; }
+    to { opacity: 1; }
+}
+@keyframes noAnim {
+    from { opacity: 1; }
+    to { opacity: 1; }
+}
 .fade.out {
 	opacity: 0;
 	-webkit-animation-duration: 0.3s;
@@ -61,6 +73,39 @@
 	
 	animation-name: fadein;
 }
+
+.fade-no-hide.out {
+	-webkit-animation-duration: 0.3s;
+	-webkit-animation-name: noAnim;
+	-moz-animation-duration: 0.3s;
+	-moz-animation-name: noAnim;
+	animation-duration: 0.3s;
+	animation-name: noAnim;
+}
+.fade-no-hide.in {
+	opacity: 1;
+	
+	-webkit-animation-name: fadein;
+	
+	-moz-animation-name: fadein;
+	
+	animation-name: fadein;
+}
+.fade-no-hide.in.reverse {
+	-webkit-animation-name: noAnim;
+	-moz-animation-name: noAnim;
+	animation-name: noAnim;
+
+	z-index: 0 !important;
+}
+.fade-no-hide.out.reverse {		
+	-webkit-animation-name: fadeout;
+	-moz-animation-name: fadeout;
+	animation-name: fadeout;
+
+	z-index: 10 !important;
+}
+
 .pop {
 	-webkit-transform-origin: 50% 50%;
 	-moz-transform-origin: 50% 50%;
