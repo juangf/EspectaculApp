@@ -333,10 +333,13 @@
 	 * @param  {[type]} viewId [description]
 	 * @return {[type]}         [description]
 	 */
-	goTo : function(viewId, transition, stayVisible){		
+	goTo : function(viewId, options){
+		//transition, stayVisible
 		if(this._views.hasOwnProperty(viewId)){
-			if(transition) this._userTransition = transition;
-			if(stayVisible) this._previousViewStayVisible = stayVisible;
+			if(options){
+				if(options.transition) this._userTransition = options.transition;
+				if(options.stayVisible) this._previousViewStayVisible = options.stayVisible;
+			}
 
 			window.location = '#' + viewId;
 		}else{
