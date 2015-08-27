@@ -36,6 +36,16 @@
 			</esp-view>
 		</script>
 
+		<script id="templates/zoom.html" type="text/esp-template">
+			<esp-view view-title="Zoom">
+				<esp-content>
+					<esp-zoom>
+						<img src="http://popchassid.com/wp-content/uploads/2013/05/Earth-the-universe-stars-435.jpg">
+					</esp-zoom>
+				</esp-content>
+			</esp-view>
+		</script>
+
 		<script src="js/libs/handlebars-v3.0.3.js"></script>
 		<script src="dist/js/espectaculapp.js"></script>
 		<script>
@@ -73,9 +83,13 @@
 					'home':{
 						url : 'home',
 						templateUrl: 'templates/home.html',
+					},
+					'zoom':{
+						url : 'zoom',
+						templateUrl: 'templates/zoom.html',
 					}
 				},
-				firstView	: 'users',
+				firstView	: 'zoom',
 				handlebarsTemplates : true,
 				debugMode : true /*Debug flag Enabled*/
 			});

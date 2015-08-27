@@ -121,4 +121,8 @@ this.unload = function(){
 	this._loaded = false;
 }; 
 
+this.prepareCustomTags = function(){
+	console.log('prepareCustomTags');
+}
+
 }

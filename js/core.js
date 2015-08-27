@@ -151,6 +151,8 @@ _w.esp = _w.s = {
 					//Load the view template
 					this._loadTemplate(view, function(status, viewElement){
 						if(status){
+
+							//If the system is allowed to use Handlebars templates
 							if(that._handlebars){
 								view
 								.raiseEvent('beforeRenderTemplate');
@@ -197,8 +199,12 @@ _w.esp = _w.s = {
 								}else{
 									trace('Cannot find an "esp-content" tag".', 'error');
 								}							
-							}								
+							}
 
+							//Prepare Custom Tags
+							view.prepareCustomTags();
+
+							//Run the views transitions
 							that
 							._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
 								//Set te previous view value

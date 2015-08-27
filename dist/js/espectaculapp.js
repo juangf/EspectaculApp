@@ -151,6 +151,8 @@
 					//Load the view template
 					this._loadTemplate(view, function(status, viewElement){
 						if(status){
+
+							//If the system is allowed to use Handlebars templates
 							if(that._handlebars){
 								view
 								.raiseEvent('beforeRenderTemplate');
@@ -197,8 +199,12 @@
 								}else{
 									trace('Cannot find an "esp-content" tag".', 'error');
 								}							
-							}								
+							}
 
+							//Prepare Custom Tags
+							view.prepareCustomTags();
+
+							//Run the views transitions
 							that
 							._viewsTransition(view, that.getCurrentView(), function(newCurrentView){
 								//Set te previous view value
@@ -778,6 +784,10 @@ this.unload = function(){
 	this._loaded = false;
 }; 
 
+this.prepareCustomTags = function(){
+	console.log('prepareCustomTags');
+}
+
 }
 _w.esp.dialog = {
 	_queue : [],	
@@ -1209,4 +1219,8 @@ _w.esp._handlebars = true;
 _w.esp._userTransition = null;
 
 /* User specified stay visible previous view on change */
-_w.esp._previousViewStayVisible = false;})(window, document);
+_w.esp._previousViewStayVisible = false;
+_w.esp.zoom = {
+
+};
+})(window, document);
