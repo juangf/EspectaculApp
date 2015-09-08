@@ -77,7 +77,7 @@ _w.esp = _w.s = {
 		}
 
 		//Call to view beforeShow event
-		inView.raiseEvent('beforeShow');
+		inView.raiseEvent('beforeShow', inView._params);
 
 		this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event){
 			var transitionClasses = transition.split(' ');
@@ -89,7 +89,7 @@ _w.esp = _w.s = {
 			inViewElement.classList.remove('in');
 			
 			//Call to view show event
-			inView.raiseEvent('show');
+			inView.raiseEvent('show', inView._params);
 
 			callBack(inView);
 		});
@@ -103,7 +103,7 @@ _w.esp = _w.s = {
 		if(outViewElement){
 			var that = this;
 			//Call to view beforeHide event
-			outView.raiseEvent('beforeHide')
+			outView.raiseEvent('beforeHide', outView._params);
 
 			this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event){
 				var className = outViewIsFullscreen ? 'fullscreen' : '';
@@ -118,9 +118,11 @@ _w.esp = _w.s = {
 				outViewElement.className = className; 
 
 				//Call to view hide event
-				outView.raiseEvent('hide');
+				outView.raiseEvent('hide', outView._params);
 
-			});
+				//Reset params
+				outView._params = null;
+			}); 
 
 			outViewElement.className = 'current '+transition+' out' + (outViewIsFullscreen ? ' fullscreen' : '');
 
@@ -155,7 +157,7 @@ _w.esp = _w.s = {
 							//If the system is allowed to use Handlebars templates
 							if(that._handlebars){
 								view
-								.raiseEvent('beforeRenderTemplate');
+								.raiseEvent('beforeRenderTemplate', view._params);
 								
 								var templateData = view.getTemplateData();
 
@@ -168,7 +170,7 @@ _w.esp = _w.s = {
 							view
 							.setElement(viewElement)
 							.setIsLoaded(true)
-							.raiseEvent('load');
+							.raiseEvent('load', view._params);
 
 							//If there is navigation top header, add 'has-header' class to content
 							if(that.getNavWrapper()){
@@ -343,8 +345,16 @@ _w.esp = _w.s = {
 		//transition, stayVisible
 		if(this._views.hasOwnProperty(viewId)){
 			if(options){
+				//Set the wanted user transition
 				if(options.transition) this._userTransition = options.transition;
+
+				//Set to mantain the current view visible
 				if(options.stayVisible) this._previousViewStayVisible = options.stayVisible;
+
+				//Set the params object available in view event
+				if(options.params) {
+					this.getView(viewId)._params = {params: options.params};
+				}
 			}
 
 			window.location = '#' + viewId;

@@ -16,6 +16,8 @@ this._header = null;
 
 this._templateData = null;
 
+this._params = null;
+
 this.addEventListener = function(eventName, callBack){
 	var events = this._events,
 		callBacks = events[eventName] = events[eventName] || [];
@@ -39,7 +41,7 @@ this.raiseEvent = function(eventName, args) {
 
 	if(callBacks)
 	for (var i = 0, l = callBacks.length; i < l; i++) {
-  		callBacks[i].apply(this, args);
+  		callBacks[i].apply(this, [args]);
 	}
 
 	return true;
