@@ -1,7 +1,7 @@
 _w.esp._events = {
-	touchStartEventName : window.navigator.msPointerEnabled ? 'pointerdown' : 'touchstart',
-	touchMoveEventName : window.navigator.msPointerEnabled ? 'pointermove' : 'touchmove',
-	touchEndEventName : window.navigator.msPointerEnabled ? 'pointerup' : 'touchend',	
+	touchStartEventName : window.navigator.msPointerEnabled ? 'MSPointerDown' : 'touchstart',
+	touchMoveEventName : window.navigator.msPointerEnabled ? 'MSPointerMove' : 'touchmove',
+	touchEndEventName : window.navigator.msPointerEnabled ? 'MSPointerUp' : 'touchend',	
 	tap : {
 		current : null,
 		onTouchStart : function(e){
@@ -37,8 +37,8 @@ _w.esp._events = {
 				
 				if(that.current && touch.identifier === that.current.id){
 					if( 
-						(time - that.current.time)<300 &&
-						pointsDistance(that.current.point, {x:touch.clientX, y:touch.clientY}) < 4
+						(time - that.current.time)<300 /* 300ms */ &&
+						pointsDistance(that.current.point, {x:touch.clientX, y:touch.clientY}) < 4 /* 4px */
 					){ 
 						that.current = null;
 						return true;
