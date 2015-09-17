@@ -7,6 +7,12 @@
 		<meta name="format-detection" content="telephone=no">
 		<!-- CSS development files -->
 		<link rel="stylesheet" href="dist/css/espectaculapp.css" />
+
+		<style>
+		  *{
+		    -ms-touch-action: none; /* Direct all pointer events to JavaScript code. */
+		  }
+		</style>
 	</head>
 	<body>
 		<!-- Navigation Headers wrapper -->
@@ -82,6 +88,7 @@
 					},
 					'home':{
 						url : 'home',
+						transition: 'slideup',
 						templateUrl: 'templates/home.html',
 					},
 					'zoom':{
@@ -89,7 +96,7 @@
 						templateUrl: 'templates/zoom.html',
 					}
 				},
-				firstView	: 'zoom',
+				firstView	: 'home',
 				handlebarsTemplates : true,
 				debugMode : true /*Debug flag Enabled*/
 			});
@@ -101,12 +108,17 @@
 				s.on(document.getElementById('test-tap'), 'tap', function(){
 					alert('TAP');
 				});
+
 			});
-			s.drawTouches(true);
+			//s.drawTouches(true);
 
 			//Init EspectaculApp
 			s.init();
 
+			/*if(navigator.userAgent.match(/Windows Phone/i)){
+	    		alert('Is a windows phone!');
+			}*/
+			//alert(window.navigator.msPointerEnabled);
 		</script>
 	</body>
 

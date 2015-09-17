@@ -1,4 +1,7 @@
 _w.esp._events = {
+	touchStartEventName : window.navigator.msPointerEnabled ? 'pointerdown' : 'touchstart',
+	touchMoveEventName : window.navigator.msPointerEnabled ? 'pointermove' : 'touchmove',
+	touchEndEventName : window.navigator.msPointerEnabled ? 'pointerup' : 'touchend',	
 	tap : {
 		current : null,
 		onTouchStart : function(e){
@@ -61,10 +64,10 @@ _w.esp.on = function(targetList, type, callBack){
 		for(var i=0; i<types.length; i++){
 
 			if(types[i]==='tap'){
-				//Prepare tap event code				
-				target.addEventListener('touchstart', this._events.tap.onTouchStart, false);
+				//Prepare tap event code
+				target.addEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart, false);
 
-				target.addEventListener('touchend', function(e){					
+				target.addEventListener(this._events.touchEndEventName, function(e){					
 					if(that._events.tap.onTouchEnd(e)){
 						callBack.apply(this, e);
 					}
@@ -90,8 +93,9 @@ _w.esp.off = function(targetList, type, callBack){
 
 		for(var i=0; i<types.length; i++){
 			if(types[i]==='tap'){
-				target.removeEventListener('touchstart', this._events.tap.onTouchStart);
-				target.removeEventListener('touchend', function(e){
+				//Remove tap event
+				target.removeEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart);
+				target.removeEventListener(this._events.touchEndEventName, function(e){
 					if(that._events.tap.onTouchEnd(e)){
 						callBack.apply(this, e);
 					}
