@@ -866,8 +866,8 @@ _w.esp.dialog = {
 			//Set the button title
 			option.innerText = button.title;			
 
-			//Set the Press button event: FIXME: Should be a TAP event
-			_w.esp.one(option, 'touchstart', button.onPress ? button.onPress : function(){that.close()});
+			//Set the Press button event
+			_w.esp.one(option, 'tap', button.onPress ? button.onPress : function(){that.close()});
 
 			controls.appendChild(option);
 		}
