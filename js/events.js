@@ -6,7 +6,7 @@ _w.esp._events = {
 		current : null,
 		onTouchStart : function(e){
 			var that = _w.esp._events.tap,
-				touch = e.changedTouches[0];
+				touch = window.navigator.msPointerEnabled ? {clientX:e.layerX, clientY:e.layerY} : e.changedTouches[0];
 
 			that.current = {
 				id : touch.identifier,
@@ -32,8 +32,10 @@ _w.esp._events = {
 				  return Math.sqrt( xs + ys );
 				};
 
-			for(var i=0; i<e.changedTouches.length; i++){
-				var touch = e.changedTouches[i];
+			var touchPoints = window.navigator.msPointerEnabled ? [{clientX:e.layerX, clientY:e.layerY}] : e.changedTouches;
+
+			for(var i=0; i<touchPoints.length; i++){
+				var touch = touchPoints[i];
 				
 				if(that.current && touch.identifier === that.current.id){
 					if( 
@@ -45,6 +47,7 @@ _w.esp._events = {
 					}
 				}
 			}
+
 			return false;
 		}
 	}
