@@ -1,4 +1,53 @@
 _w.esp = _w.s = {
+
+	_events : {},
+
+	/**
+	 * Custom addEventListener
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	addEventListener : function(eventName, callBack){
+		var events = this._events,
+			callBacks = events[eventName] = events[eventName] || [];
+		callBacks.push(callBack);
+
+		return true;
+	},
+
+	/**
+	 * Custom removeEventListener
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	removeEventListener : function(eventName, callBack){
+		var callBacks = this._events[eventName];
+
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+		    if(callBacks[i].toString() === callBack.toString()){
+	    		view._events[eventName].splice(i, 1);	
+	    		return true;
+	    	}					    
+		}
+		return false;
+	},
+
+	/**
+	 * Custom raiseEvent
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	raiseEvent : function(eventName, args) {
+		var callBacks = this._events[eventName];
+
+		if(callBacks)
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+	  		callBacks[i].apply(this, [args]);
+		}
+
+		return true;
+	},
+
 	/**
 	 * Register system events
 	 */

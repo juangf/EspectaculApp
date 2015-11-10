@@ -57,9 +57,12 @@ _w.esp.on = function(targetList, type, callBack){
 	var that = this,
 		types = type.split(' ');
 	
-	if(Object.prototype.toString.call( 'a' ) !== '[object Array]'){
-		targetList = [].concat(targetList);
+	if(Object.prototype.toString.call( targetList ) === '[object HTMLCollection]'){
+		targetList = Array.prototype.slice.call(targetList);
 	}
+	else if(Object.prototype.toString.call( targetList ) !== '[object Array]'){
+		targetList = [].concat(targetList);
+	}	
 	
 	for(var j=0; j<targetList.length; j++){
 		var target = targetList[j];	
@@ -87,9 +90,12 @@ _w.esp.on = function(targetList, type, callBack){
 _w.esp.off = function(targetList, type, callBack){
 	var types = type.split(' ');
 
-	if(Object.prototype.toString.call( 'a' ) !== '[object Array]'){
-		targetList = [].concat(targetList);
+	if(Object.prototype.toString.call( targetList ) === '[object HTMLCollection]'){
+		targetList = Array.prototype.slice.call(targetList);
 	}
+	else if(Object.prototype.toString.call( targetList ) !== '[object Array]'){
+		targetList = [].concat(targetList);
+	}	
 
 	for(var j=0; j<targetList.length; j++){
 		var target = targetList[j];	

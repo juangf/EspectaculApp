@@ -1,4 +1,53 @@
 "use strict";(function(_w, _d){_w.esp = _w.s = {
+
+	_events : {},
+
+	/**
+	 * Custom addEventListener
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	addEventListener : function(eventName, callBack){
+		var events = this._events,
+			callBacks = events[eventName] = events[eventName] || [];
+		callBacks.push(callBack);
+
+		return true;
+	},
+
+	/**
+	 * Custom removeEventListener
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	removeEventListener : function(eventName, callBack){
+		var callBacks = this._events[eventName];
+
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+		    if(callBacks[i].toString() === callBack.toString()){
+	    		view._events[eventName].splice(i, 1);	
+	    		return true;
+	    	}					    
+		}
+		return false;
+	},
+
+	/**
+	 * Custom raiseEvent
+	 * @param {[type]} eventName [description]
+	 * @param {[type]} callBack  [description]
+	 */
+	raiseEvent : function(eventName, args) {
+		var callBacks = this._events[eventName];
+
+		if(callBacks)
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+	  		callBacks[i].apply(this, [args]);
+		}
+
+		return true;
+	},
+
 	/**
 	 * Register system events
 	 */
@@ -677,128 +726,137 @@ function AppHeader(title){
  * AppView Class
  */
 function AppView(name){
-this._events = {};
-this._name = name;
-this._url = '';
-this._transition = 'fade';
-this._templateUrl = '';
-this._loaded = false;
-this._element = null;
 
-this._header = null;
+	this._events = {};
 
-this._templateData = null;
+	this._name = name;
 
-this._params = null;
+	this._url = '';
 
-this.addEventListener = function(eventName, callBack){
-	var events = this._events,
-		callBacks = events[eventName] = events[eventName] || [];
-	callBacks.push(callBack);
+	this._transition = 'fade';
 
-	return true;
-};
-this.removeEventListener = function(eventName, callBack){
-	var callBacks = this._events[eventName];
+	this._templateUrl = '';
 
-	for (var i = 0, l = callBacks.length; i < l; i++) {
-	    if(callBacks[i].toString() === callBack.toString()){
-	    	view._events[eventName].splice(i, 1);	
-	    	return true;
-	    }					    
-	}
-	return false;
-};
-this.raiseEvent = function(eventName, args) {
-	var callBacks = this._events[eventName];
-
-	if(callBacks)
-	for (var i = 0, l = callBacks.length; i < l; i++) {
-  		callBacks[i].apply(this, [args]);
-	}
-
-	return true;
-};
-
-this.setTemplateData = function(templateData){
-	this._templateData = templateData;
-	return this;
-};
-
-this.getTemplateData = function(){
-	return this._templateData;
-};
-
-this.setHeader = function(header){
-	this._header = header;
-	return this;
-};
-
-this.getHeader = function(){
-	return this._header;
-};
-
-this.setTransition = function(trans){
-	this._transition = trans;
-	return this;
-};
-
-this.getTransition = function(){
-	return this._transition;
-};
-
-this.setTemplateUrl = function(turl){
-	this._templateUrl = turl;
-	return this;
-};
-
-this.getTemplateUrl = function(){
-	return this._templateUrl;
-};
-
-this.setElement = function(element){
-	this._element = element;
-	return this;
-};
-
-this.getElement = function(){
-	return this._element;
-};
-
-this.getName = function(){
-	return this._name;
-};
-
-this.setUrl = function(url){
-	this._url = url;
-	return this;
-};
-
-this.getUrl = function(){
-	return this._url;
-};
-
-this.setIsLoaded = function(val){
-	this._loaded = val;
-	return this;
-};
-
-this.isLoaded = function(){
-	return this._loaded;
-};
-
-this.unload = function(){
-	var viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
-
-	viewWrapper.removeChild(this._element);
+	this._loaded = false;
 
 	this._element = null;
-	this._loaded = false;
-}; 
 
-this.prepareCustomTags = function(){
-	console.log('prepareCustomTags');
-}
+	this._header = null;
+
+	this._templateData = null;
+
+	this._params = null;
+
+	this.addEventListener = function(eventName, callBack){
+		var events = this._events,
+			callBacks = events[eventName] = events[eventName] || [];
+		callBacks.push(callBack);
+
+		return true;
+	};
+
+	this.removeEventListener = function(eventName, callBack){
+		var callBacks = this._events[eventName];
+
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+		    if(callBacks[i].toString() === callBack.toString()){
+		    	view._events[eventName].splice(i, 1);	
+		    	return true;
+		    }					    
+		}
+		return false;
+	};
+
+	this.raiseEvent = function(eventName, args) {
+		var callBacks = this._events[eventName];
+
+		if(callBacks)
+		for (var i = 0, l = callBacks.length; i < l; i++) {
+	  		callBacks[i].apply(this, [args]);
+		}
+
+		return true;
+	};
+
+	this.setTemplateData = function(templateData){
+		this._templateData = templateData;
+		return this;
+	};
+
+	this.getTemplateData = function(){
+		return this._templateData;
+	};
+
+	this.setHeader = function(header){
+		this._header = header;
+		return this;
+	};
+
+	this.getHeader = function(){
+		return this._header;
+	};
+
+	this.setTransition = function(trans){
+		this._transition = trans;
+		return this;
+	};
+
+	this.getTransition = function(){
+		return this._transition;
+	};
+
+	this.setTemplateUrl = function(turl){
+		this._templateUrl = turl;
+		return this;
+	};
+
+	this.getTemplateUrl = function(){
+		return this._templateUrl;
+	};
+
+	this.setElement = function(element){
+		this._element = element;
+		return this;
+	};
+
+	this.getElement = function(){
+		return this._element;
+	};
+
+	this.getName = function(){
+		return this._name;
+	};
+
+	this.setUrl = function(url){
+		this._url = url;
+		return this;
+	};
+
+	this.getUrl = function(){
+		return this._url;
+	};
+
+	this.setIsLoaded = function(val){
+		this._loaded = val;
+		return this;
+	};
+
+	this.isLoaded = function(){
+		return this._loaded;
+	};
+
+	this.unload = function(){
+		var viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
+
+		viewWrapper.removeChild(this._element);
+
+		this._element = null;
+		this._loaded = false;
+	}; 
+
+	this.prepareCustomTags = function(){
+		console.log('prepareCustomTags');
+	};
 
 }
 _w.esp.dialog = {
@@ -1022,9 +1080,12 @@ _w.esp.on = function(targetList, type, callBack){
 	var that = this,
 		types = type.split(' ');
 	
-	if(Object.prototype.toString.call( 'a' ) !== '[object Array]'){
-		targetList = [].concat(targetList);
+	if(Object.prototype.toString.call( targetList ) === '[object HTMLCollection]'){
+		targetList = Array.prototype.slice.call(targetList);
 	}
+	else if(Object.prototype.toString.call( targetList ) !== '[object Array]'){
+		targetList = [].concat(targetList);
+	}	
 	
 	for(var j=0; j<targetList.length; j++){
 		var target = targetList[j];	
@@ -1052,9 +1113,12 @@ _w.esp.on = function(targetList, type, callBack){
 _w.esp.off = function(targetList, type, callBack){
 	var types = type.split(' ');
 
-	if(Object.prototype.toString.call( 'a' ) !== '[object Array]'){
-		targetList = [].concat(targetList);
+	if(Object.prototype.toString.call( targetList ) === '[object HTMLCollection]'){
+		targetList = Array.prototype.slice.call(targetList);
 	}
+	else if(Object.prototype.toString.call( targetList ) !== '[object Array]'){
+		targetList = [].concat(targetList);
+	}	
 
 	for(var j=0; j<targetList.length; j++){
 		var target = targetList[j];	
