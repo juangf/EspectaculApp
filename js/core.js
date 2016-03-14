@@ -604,8 +604,8 @@ _w.esp = _w.s = {
 		//Set if we must use handlebars
 		this._handlebars = params.handlebarsTemplates!==undefined ? params.handlebarsTemplates : true;
 
-		console.log(this._handlebars);
-
+		//Set if we have to simulate touch event
+		this._simulateTouch = params.handlebarsTemplates!==undefined ? params.simulateTouch : false;
 
 		if(navWrapper.length){
 			this.setNavWrapper(navWrapper[0]);

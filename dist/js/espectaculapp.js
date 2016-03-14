@@ -604,8 +604,8 @@
 		//Set if we must use handlebars
 		this._handlebars = params.handlebarsTemplates!==undefined ? params.handlebarsTemplates : true;
 
-		console.log(this._handlebars);
-
+		//Set if we have to simulate touch event
+		this._simulateTouch = params.handlebarsTemplates!==undefined ? params.simulateTouch : false;
 
 		if(navWrapper.length){
 			this.setNavWrapper(navWrapper[0]);
@@ -1092,7 +1092,12 @@ _w.esp.on = function(targetList, type, callBack){
 		
 		for(var i=0; i<types.length; i++){
 
+			if (_w.esp._simulateTouch && types[i]==='tap') {
+				types[i] = 'click';
+			}
+
 			if(types[i]==='tap'){
+
 				//Prepare tap event code
 				target.addEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart, false);
 
@@ -1124,6 +1129,11 @@ _w.esp.off = function(targetList, type, callBack){
 		var target = targetList[j];	
 
 		for(var i=0; i<types.length; i++){
+
+			if (_w.esp._simulateTouch && types[i]==='tap') {
+				types[i] = 'click';
+			}
+			
 			if(types[i]==='tap'){
 				//Remove tap event
 				target.removeEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart);
@@ -1298,11 +1308,16 @@ _w.esp._inTransition = false;
 /* User Handlebars to compile templates */
 _w.esp._handlebars = true;
 
+/* Listen to 'click' events in the 'tap' event */
+_w.esp._simulateTouch = false;
+
 /* User specified transition demand */
 _w.esp._userTransition = null;
 
 /* User specified stay visible previous view on change */
 _w.esp._previousViewStayVisible = false;
+
+
 _w.esp.zoom = {
 
 };

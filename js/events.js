@@ -69,7 +69,12 @@ _w.esp.on = function(targetList, type, callBack){
 		
 		for(var i=0; i<types.length; i++){
 
+			if (_w.esp._simulateTouch && types[i]==='tap') {
+				types[i] = 'click';
+			}
+
 			if(types[i]==='tap'){
+
 				//Prepare tap event code
 				target.addEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart, false);
 
@@ -101,6 +106,11 @@ _w.esp.off = function(targetList, type, callBack){
 		var target = targetList[j];	
 
 		for(var i=0; i<types.length; i++){
+
+			if (_w.esp._simulateTouch && types[i]==='tap') {
+				types[i] = 'click';
+			}
+			
 			if(types[i]==='tap'){
 				//Remove tap event
 				target.removeEventListener(this._events.touchStartEventName, this._events.tap.onTouchStart);

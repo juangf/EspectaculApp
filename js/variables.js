@@ -26,8 +26,12 @@ _w.esp._inTransition = false;
 /* User Handlebars to compile templates */
 _w.esp._handlebars = true;
 
+/* Listen to 'click' events in the 'tap' event */
+_w.esp._simulateTouch = false;
+
 /* User specified transition demand */
 _w.esp._userTransition = null;
 
 /* User specified stay visible previous view on change */
 _w.esp._previousViewStayVisible = false;
+
