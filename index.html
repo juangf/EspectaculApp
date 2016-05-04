@@ -57,6 +57,14 @@
 		<script src="js/libs/handlebars-v3.0.3.js"></script>
 		<script src="dist/js/espectaculapp.js"></script>
 		<script>
+			//Handlebars helper
+			Handlebars.registerHelper('iteratorTimes', function(n, block) {
+			    var accum = '';
+			    for(var i = 0; i < n; ++i)
+			        accum += block.fn(i);
+			    return accum;
+			});
+
 			//Configure EspectaculApp
 			s.config({
 				views : {
@@ -98,7 +106,7 @@
 						templateUrl: 'templates/zoom.html',
 					}
 				},
-				firstView	: 'home',
+				firstView	: 'users',
 				handlebarsTemplates : true,
 				simulateTouch: false, /* Simulate touch in TAP events */
 				debugMode : true /*Debug flag Enabled*/

@@ -1,6 +1,11 @@
 <esp-view view-title="Users">
-	<esp-content class="padding">
-		<p>{{users}}</p>
-		<p><a href="#home">Ir a la página HOME</a></p>
+	<esp-content class="_padding">
+		
+		<!--p><a href="#home">Ir a la página HOME</a></p-->
+		<esp-list>
+			{{#iteratorTimes 20}}
+			<esp-li>Element {{this}}</esp-li>
+			{{/iteratorTimes}}
+		</esp-list>
 	</esp-content>
 </esp-view>

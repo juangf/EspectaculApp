@@ -1,0 +1,25 @@
+/* App List */
+
+esp-list{
+	display: block;
+
+	/* overflow-scroll */
+	overflow-x: hidden;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	/* end overflow-scroll */
+
+	esp-li{
+		display: block;
+		padding: 16px;		
+
+	    border-width: 1px;
+	    border-style: solid;
+	    margin: -1px;
+	}
+}
