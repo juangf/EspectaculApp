@@ -58,9 +58,27 @@
 		<script src="dist/js/espectaculapp.js"></script>
 		<script>
 			//Handlebars helper
-			Handlebars.registerHelper('iteratorTimes', function(n, block) {
+			/*
+				{{#times 10}}
+				    <span>{{this}}</span>
+				{{/times}}
+			 */
+			Handlebars.registerHelper('times', function(n, block) {
 			    var accum = '';
 			    for(var i = 0; i < n; ++i)
+			        accum += block.fn(i);
+			    return accum;
+			});
+
+			//Handlebars 'for' helper
+			/*
+				{{#for 0 10 2}}
+				    <span>{{this}}</span>
+				{{/for}}
+			 */
+			Handlebars.registerHelper('for', function(from, to, incr, block) {
+			    var accum = '';
+			    for(var i = from; i < to; i += incr)
 			        accum += block.fn(i);
 			    return accum;
 			});

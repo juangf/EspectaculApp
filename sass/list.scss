@@ -1,5 +1,8 @@
 /* App List */
 
+$list-item-border-color: #777;
+$list-item-padding: 16px;
+
 esp-list{
 	display: block;
 
@@ -16,10 +19,11 @@ esp-list{
 
 	esp-li{
 		display: block;
-		padding: 16px;		
+		padding: $list-item-padding;		
 
 	    border-width: 1px;
 	    border-style: solid;
+	    border-color: $list-item-border-color;
 	    margin: -1px;
 	}
 }
