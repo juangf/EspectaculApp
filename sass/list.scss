@@ -36,10 +36,22 @@ esp-list{
 		overflow: hidden;
 		text-align: center;
 
+		font-size: 26px;
+
 		@include vendor-prefix(box-shadow, inset 0 -3px 3px #CCC);
 
 		&.closeAnim{
 			@include vendor-prefix(transition, height 0.2s ease-out);
 		}
+
+		i{
+			transform: rotateZ(0deg);
+			@include vendor-prefix(transition, transform 0.2s ease-out);
+		}
+		&.refresh > i{
+			transform: rotateZ(180deg);
+			
+		}
+
 	}
 }
