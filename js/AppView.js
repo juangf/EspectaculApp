@@ -163,14 +163,22 @@ function AppView(name){
 
 							trace('Pull to refresh detected.', '', 2);
 
+							var ptrLoadingBox = _d.createElement('esp-list-ptr-loading-box');
+
+							ptrLoadingBox.innerText = 'Pull to refresh';
+
+							list.insertBefore(ptrLoadingBox, list.firstChild);
+
 							list.addEventListener("touchstart", function(e){
 								if(list.scrollTop===0){
 									
 									that._pullToRequest.listTop = list.getBoundingClientRect().top;
 									that._pullToRequest.touchTop = e.touches[0].clientY;
-									that._pullToRequest.loadingBox = list.getElementsByTagName('esp-list-ptr-loading-box')[0];
 
+									that._pullToRequest.loadingBox = ptrLoadingBox;
 									that._pullToRequest.loadingBox.classList.remove('closeAnim');
+
+
 								}
 							});
 
