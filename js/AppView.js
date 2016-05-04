@@ -25,6 +25,13 @@ function AppView(name){
 
 	this._params = null;
 
+	this._pullToRequest = {
+		listTop : 0,
+		touchTop : 0,
+		loadingBox : null,
+		PTR_MAX_BOX_HEIGHT : 100
+	};
+
 	this.addEventListener = function(eventName, callBack){
 		var events = this._events,
 			callBacks = events[eventName] = events[eventName] || [];
@@ -144,15 +151,54 @@ function AppView(name){
 
 			switch(tag){
 				case 'esp-list':
-					var lists = this._element.getElementsByTagName(tag);
+					var lists = this._element.getElementsByTagName(tag),
+						that = this;
 
 					for(var j=0; j<lists.length; j++){
 						var list = lists[j];
 
 						trace('<'+tag+'>', '', 1);						
 
-						if (list.getAttribute('pull-to-refresh')){
+						if ( list.getAttribute('pull-to-refresh') ){
+
 							trace('Pull to refresh detected.', '', 2);
+
+							list.addEventListener("touchstart", function(e){
+								if(list.scrollTop===0){
+									
+									that._pullToRequest.listTop = list.getBoundingClientRect().top;
+									that._pullToRequest.touchTop = e.touches[0].clientY;
+									that._pullToRequest.loadingBox = list.getElementsByTagName('esp-list-ptr-loading-box')[0];
+
+									that._pullToRequest.loadingBox.classList.remove('closeAnim');
+								}
+							});
+
+							list.addEventListener("touchmove", function(e){
+
+								if( that._pullToRequest.loadingBox ){
+
+									var ptrBoxHeight = e.touches[0].clientY-that._pullToRequest.touchTop;
+
+									if( ptrBoxHeight <= that._pullToRequest.PTR_MAX_BOX_HEIGHT ){
+										that._pullToRequest.loadingBox.style.height = ptrBoxHeight+'px';
+									}else{
+										that._pullToRequest.loadingBox.style.height = that._pullToRequest.PTR_MAX_BOX_HEIGHT+'px';										
+									}
+
+									that._pullToRequest.loadingBox.style.lineHeight = that._pullToRequest.loadingBox.style.height;
+								}
+
+							});
+
+							list.addEventListener("touchend", function(e){
+								if( that._pullToRequest.loadingBox ){
+
+									that._pullToRequest.loadingBox.classList.add('closeAnim');
+									that._pullToRequest.loadingBox.style.height = '';
+									that._pullToRequest.loadingBox = null;									
+								}
+							});
 						}
 					}
 

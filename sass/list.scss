@@ -26,4 +26,20 @@ esp-list{
 	    border-color: $list-item-border-color;
 	    margin: -1px;
 	}
+
+	esp-list-ptr-loading-box{
+		display: block;
+		position: relative;
+		height: 0px;
+		background-color: #EEE;
+
+		overflow: hidden;
+		text-align: center;
+
+		@include vendor-prefix(box-shadow, inset 0 -3px 3px #CCC);
+
+		&.closeAnim{
+			@include vendor-prefix(transition, height 0.2s ease-out);
+		}
+	}
 }

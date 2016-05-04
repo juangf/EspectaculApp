@@ -3,6 +3,7 @@
 		
 		<!--p><a href="#home">Ir a la página HOME</a></p-->
 		<esp-list id="user-list" pull-to-refresh="true">
+			<esp-list-ptr-loading-box>Pull to refresh</esp-list-ptr-loading-box>
 			{{#times 20}}
 			<esp-li>Element {{this}}</esp-li>
 			{{/times}}
