@@ -2,10 +2,11 @@
 	<esp-content class="_padding">
 		
 		<!--p><a href="#home">Ir a la página HOME</a></p-->
-		<esp-list>
+		<esp-list id="user-list" pull-to-refresh="true">
 			{{#times 20}}
 			<esp-li>Element {{this}}</esp-li>
 			{{/times}}
 		</esp-list>
+
 	</esp-content>
 </esp-view>

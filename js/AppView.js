@@ -133,7 +133,34 @@ function AppView(name){
 	}; 
 
 	this.prepareCustomTags = function(){
-		console.log('prepareCustomTags');
+		trace('Preparing view "'+this._name+'" custom tags.', 'info');
+
+		//Custom tags list
+		var tags = ['esp-list'];
+		
+		//Check for custom tags in the view
+		for(var i=0; i<tags.length; i++){
+			var tag = tags[i];			
+
+			switch(tag){
+				case 'esp-list':
+					var lists = this._element.getElementsByTagName(tag);
+
+					for(var j=0; j<lists.length; j++){
+						var list = lists[j];
+
+						trace('<'+tag+'>', '', 1);						
+
+						if (list.getAttribute('pull-to-refresh')){
+							trace('Pull to refresh detected.', '', 2);
+						}
+					}
+
+				break;
+			}
+		}
+
+	
 	};
 
 }
