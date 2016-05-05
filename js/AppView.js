@@ -141,7 +141,7 @@ function AppView(name){
 	};
 
 	this.prepareSystemTags = function(){
-		trace('Preparing view "'+this._name+'" custom tags.', 'info');
+		trace('Preparing view "'+this._name+'" system tags.', 'info');
 
 		//Custom tags list
 		var tags = ['esp-list'];

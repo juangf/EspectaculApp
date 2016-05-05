@@ -30,7 +30,7 @@ function AppList(element){
 			list.insertBefore(ptrLoadingBox, list.firstChild);
 
 			list.addEventListener("touchstart", function(e){
-				if(list.scrollTop===0){
+				if( list.scrollTop === 0 ){
 
 					that._pullToRefresh.listTop = list.getBoundingClientRect().top;
 					that._pullToRefresh.touchTop = e.touches[0].clientY;
@@ -44,32 +44,33 @@ function AppList(element){
 			});
 
 			list.addEventListener("touchmove", function(e){
-				if( that._pullToRefresh.loadingBox ){
 
-					if( that._pullToRefresh.lastTouchTop > e.touches[0].clientY ){
+				if( that._pullToRefresh.loadingBox ){
+					var touch = e.touches[0];
+
+					if( that._pullToRefresh.lastTouchTop > touch.clientY ){
 						e.preventDefault();
 					}
 
-					that._pullToRefresh.lastTouchTop = e.touches[0].clientY;
+					that._pullToRefresh.lastTouchTop = touch.clientY;
 
-					var ptrBoxHeight = e.touches[0].clientY-that._pullToRefresh.touchTop;
+					var ptrBoxHeight = touch.clientY - that._pullToRefresh.touchTop;
 
-					that._pullToRefresh.loadingBox.style.height = ptrBoxHeight+'px';
-
-					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){										
+					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){								
 
 						if(that._pullToRefresh.loadingBox.classList.contains('refresh')){
 							that._pullToRefresh.loadingBox.classList.remove('refresh');
 						}
 
 					}else{
-						//that._pullToRefresh.loadingBox.style.height = that._pullToRefresh.PTR_MAX_BOX_HEIGHT+'px';
-
+						
 						if(!that._pullToRefresh.loadingBox.classList.contains('refresh')){
 							that._pullToRefresh.loadingBox.classList.add('refresh');
 						}
 
 					}
+
+					that._pullToRefresh.loadingBox.style.height = ptrBoxHeight+'px';
 
 					that._pullToRefresh.loadingBox.style.lineHeight = that._pullToRefresh.loadingBox.style.height;
 				}
