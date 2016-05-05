@@ -98,6 +98,10 @@
 							},
 							show : function(){
 								console.log('show users');
+
+								s.on(document.getElementById('user-list'), 'pullToRefresh', function(){
+									console.log('FUNCIONA!');
+								});
 							},
 							hide : function(){
 								console.log('hide users');

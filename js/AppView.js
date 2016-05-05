@@ -25,12 +25,9 @@ function AppView(name){
 
 	this._params = null;
 
-	this._pullToRequest = {
-		listTop : 0,
-		touchTop : 0,
-		loadingBox : null,
-		PTR_MAX_BOX_HEIGHT : 100
-	};
+	this.systemTags = {
+		lists : []
+	}
 
 	this.addEventListener = function(eventName, callBack){
 		var events = this._events,
@@ -139,98 +136,38 @@ function AppView(name){
 		this._loaded = false;
 	}; 
 
+	this.getSystemTags = function(){
+		return this.systemTags;
+	};
+
 	this.prepareCustomTags = function(){
 		trace('Preparing view "'+this._name+'" custom tags.', 'info');
 
 		//Custom tags list
 		var tags = ['esp-list'];
 		
+		
 		//Check for custom tags in the view
 		for(var i=0; i<tags.length; i++){
 			var tag = tags[i];			
 
 			switch(tag){
+
 				case 'esp-list':
-					var lists = this._element.getElementsByTagName(tag),
-						that = this;
+					var lists = this._element.getElementsByTagName(tag);
 
 					for(var j=0; j<lists.length; j++){
-						var list = lists[j];
+						trace('<'+tag+'>', '', 1);
 
-						trace('<'+tag+'>', '', 1);						
+						var listObj = new AppList(lists[j]);
 
-						if ( list.getAttribute('pull-to-refresh') ){
+						this.systemTags.lists.push( listObj );
 
-							trace('Pull to refresh detected.', '', 2);
-
-							var ptrLoadingBox = _d.createElement('esp-list-ptr-loading-box');
-
-							ptrLoadingBox.innerHTML = '<i class="fa fa-arrow-down"></i>';
-
-							list.insertBefore(ptrLoadingBox, list.firstChild);
-
-							list.addEventListener("touchstart", function(e){
-								if(list.scrollTop===0){
-									
-									//Reset the native scrolling
-									_w.scrollTo(0,0);
-
-									that._pullToRequest.listTop = list.getBoundingClientRect().top;
-									that._pullToRequest.touchTop = e.touches[0].clientY;
-
-									that._pullToRequest.loadingBox = ptrLoadingBox;
-
-									if(that._pullToRequest.loadingBox.classList.contains('closeAnim')){
-										that._pullToRequest.loadingBox.classList.remove('closeAnim');	
-									}									
-								}
-							});
-
-							list.addEventListener("touchmove", function(e){
-
-								if( that._pullToRequest.loadingBox ){
-
-									var ptrBoxHeight = e.touches[0].clientY-that._pullToRequest.touchTop;
-
-									that._pullToRequest.loadingBox.style.height = ptrBoxHeight+'px';
-
-									if( ptrBoxHeight <= that._pullToRequest.PTR_MAX_BOX_HEIGHT ){										
-
-										if(that._pullToRequest.loadingBox.classList.contains('refresh')){
-											that._pullToRequest.loadingBox.classList.remove('refresh');
-										}
-									}else{
-										//that._pullToRequest.loadingBox.style.height = that._pullToRequest.PTR_MAX_BOX_HEIGHT+'px';
-
-										if(!that._pullToRequest.loadingBox.classList.contains('refresh')){
-											that._pullToRequest.loadingBox.classList.add('refresh');
-										}
-									}
-
-									that._pullToRequest.loadingBox.style.lineHeight = that._pullToRequest.loadingBox.style.height;
-								}
-
-							});
-
-							list.addEventListener("touchend", function(e){
-								if( that._pullToRequest.loadingBox ){
-
-									if(that._pullToRequest.loadingBox.classList.contains('refresh')){
-										that._pullToRequest.loadingBox.classList.remove('refresh');
-									}
-
-									that._pullToRequest.loadingBox.classList.add('closeAnim');
-									that._pullToRequest.loadingBox.style.height = '';
-									that._pullToRequest.loadingBox = null;
-								}
-							});
-						}
 					}
 
 				break;
 			}
 		}
-
 	
 	};
 

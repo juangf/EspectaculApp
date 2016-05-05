@@ -725,6 +725,122 @@ function AppHeader(title){
  * Juan García Fernández (@juan_gf) 
  * AppView Class
  */
+function AppList(element){
+
+	this._element = null;
+
+	this._pullToRefresh = {
+		listTop : 0,
+		touchTop : 0,
+		lastTouchTop : 0,
+		loadingBox : null,
+		PTR_MAX_BOX_HEIGHT : 100
+	};
+
+	this._init = function(){
+		var list = this._element,
+			that = this;
+
+		if ( s._checkTagAttribute(list, 'pull-to-refresh') ){
+
+			trace('Pull to refresh detected.', '', 2);							
+
+			var ptrLoadingBox = _d.createElement('esp-list-ptr-loading-box');
+
+			ptrLoadingBox.innerHTML = '<i class="fa fa-arrow-down"></i>';
+
+			list.insertBefore(ptrLoadingBox, list.firstChild);
+
+			list.addEventListener("touchstart", function(e){
+				if(list.scrollTop===0){
+
+					that._pullToRefresh.listTop = list.getBoundingClientRect().top;
+					that._pullToRefresh.touchTop = e.touches[0].clientY;
+
+					that._pullToRefresh.loadingBox = ptrLoadingBox;
+
+					if(that._pullToRefresh.loadingBox.classList.contains('closeAnim')){
+						that._pullToRefresh.loadingBox.classList.remove('closeAnim');	
+					}
+				}
+			});
+
+			list.addEventListener("touchmove", function(e){
+				if( that._pullToRefresh.loadingBox ){
+
+					if( that._pullToRefresh.lastTouchTop > e.touches[0].clientY ){
+						e.preventDefault();
+					}
+
+					that._pullToRefresh.lastTouchTop = e.touches[0].clientY;
+
+					var ptrBoxHeight = e.touches[0].clientY-that._pullToRefresh.touchTop;
+
+					that._pullToRefresh.loadingBox.style.height = ptrBoxHeight+'px';
+
+					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){										
+
+						if(that._pullToRefresh.loadingBox.classList.contains('refresh')){
+							that._pullToRefresh.loadingBox.classList.remove('refresh');
+						}
+
+					}else{
+						//that._pullToRefresh.loadingBox.style.height = that._pullToRefresh.PTR_MAX_BOX_HEIGHT+'px';
+
+						if(!that._pullToRefresh.loadingBox.classList.contains('refresh')){
+							that._pullToRefresh.loadingBox.classList.add('refresh');
+						}
+
+					}
+
+					that._pullToRefresh.loadingBox.style.lineHeight = that._pullToRefresh.loadingBox.style.height;
+				}
+
+			});
+
+			list.addEventListener("touchend", function(e){
+				if( that._pullToRefresh.loadingBox ){
+
+					if(that._pullToRefresh.loadingBox.classList.contains('refresh')){
+						that._pullToRefresh.loadingBox.classList.remove('refresh');
+
+						//Raise event
+						this.dispatchEvent(
+							new CustomEvent("pullToRefresh", {})	
+						);
+					}
+
+					that._pullToRefresh.loadingBox.classList.add('closeAnim');
+					that._pullToRefresh.loadingBox.style.height = '';
+					that._pullToRefresh.loadingBox = null;
+					that._pullToRefresh.lastTouchTop = 0;
+				}
+			});
+		}
+	}
+
+	this.setElement = function(element){
+		this._element = element;
+
+		this._init();
+
+		return this;
+	};
+
+	this.getElement = function(){
+		return this._element;
+	};
+
+	//Constructor
+	if(element){
+		this.setElement(element);
+	}
+}
+/*! 
+ * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
+ * Juan García Fernández (@juan_gf) 
+ * AppView Class
+ */
 function AppView(name){
 
 	this._events = {};
@@ -747,12 +863,9 @@ function AppView(name){
 
 	this._params = null;
 
-	this._pullToRequest = {
-		listTop : 0,
-		touchTop : 0,
-		loadingBox : null,
-		PTR_MAX_BOX_HEIGHT : 100
-	};
+	this.systemTags = {
+		lists : []
+	}
 
 	this.addEventListener = function(eventName, callBack){
 		var events = this._events,
@@ -861,98 +974,38 @@ function AppView(name){
 		this._loaded = false;
 	}; 
 
+	this.getSystemTags = function(){
+		return this.systemTags;
+	};
+
 	this.prepareCustomTags = function(){
 		trace('Preparing view "'+this._name+'" custom tags.', 'info');
 
 		//Custom tags list
 		var tags = ['esp-list'];
 		
+		
 		//Check for custom tags in the view
 		for(var i=0; i<tags.length; i++){
 			var tag = tags[i];			
 
 			switch(tag){
+
 				case 'esp-list':
-					var lists = this._element.getElementsByTagName(tag),
-						that = this;
+					var lists = this._element.getElementsByTagName(tag);
 
 					for(var j=0; j<lists.length; j++){
-						var list = lists[j];
+						trace('<'+tag+'>', '', 1);
 
-						trace('<'+tag+'>', '', 1);						
+						var listObj = new AppList(lists[j]);
 
-						if ( list.getAttribute('pull-to-refresh') ){
+						this.systemTags.lists.push( listObj );
 
-							trace('Pull to refresh detected.', '', 2);
-
-							var ptrLoadingBox = _d.createElement('esp-list-ptr-loading-box');
-
-							ptrLoadingBox.innerHTML = '<i class="fa fa-arrow-down"></i>';
-
-							list.insertBefore(ptrLoadingBox, list.firstChild);
-
-							list.addEventListener("touchstart", function(e){
-								if(list.scrollTop===0){
-									
-									//Reset the native scrolling
-									_w.scrollTo(0,0);
-
-									that._pullToRequest.listTop = list.getBoundingClientRect().top;
-									that._pullToRequest.touchTop = e.touches[0].clientY;
-
-									that._pullToRequest.loadingBox = ptrLoadingBox;
-
-									if(that._pullToRequest.loadingBox.classList.contains('closeAnim')){
-										that._pullToRequest.loadingBox.classList.remove('closeAnim');	
-									}									
-								}
-							});
-
-							list.addEventListener("touchmove", function(e){
-
-								if( that._pullToRequest.loadingBox ){
-
-									var ptrBoxHeight = e.touches[0].clientY-that._pullToRequest.touchTop;
-
-									that._pullToRequest.loadingBox.style.height = ptrBoxHeight+'px';
-
-									if( ptrBoxHeight <= that._pullToRequest.PTR_MAX_BOX_HEIGHT ){										
-
-										if(that._pullToRequest.loadingBox.classList.contains('refresh')){
-											that._pullToRequest.loadingBox.classList.remove('refresh');
-										}
-									}else{
-										//that._pullToRequest.loadingBox.style.height = that._pullToRequest.PTR_MAX_BOX_HEIGHT+'px';
-
-										if(!that._pullToRequest.loadingBox.classList.contains('refresh')){
-											that._pullToRequest.loadingBox.classList.add('refresh');
-										}
-									}
-
-									that._pullToRequest.loadingBox.style.lineHeight = that._pullToRequest.loadingBox.style.height;
-								}
-
-							});
-
-							list.addEventListener("touchend", function(e){
-								if( that._pullToRequest.loadingBox ){
-
-									if(that._pullToRequest.loadingBox.classList.contains('refresh')){
-										that._pullToRequest.loadingBox.classList.remove('refresh');
-									}
-
-									that._pullToRequest.loadingBox.classList.add('closeAnim');
-									that._pullToRequest.loadingBox.style.height = '';
-									that._pullToRequest.loadingBox = null;
-								}
-							});
-						}
 					}
 
 				break;
 			}
 		}
-
 	
 	};
 
