@@ -252,8 +252,8 @@ _w.esp = _w.s = {
 								}							
 							}
 
-							//Prepare Custom Tags
-							view.prepareCustomTags();
+							//Prepare View System Tags
+							view.prepareSystemTags();
 
 							//Run the views transitions
 							that

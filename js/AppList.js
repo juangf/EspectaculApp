@@ -1,7 +1,7 @@
 /*! 
  * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
  * Juan García Fernández (@juan_gf) 
- * AppView Class
+ * AppList Class
  */
 function AppList(element){
 

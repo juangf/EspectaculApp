@@ -252,8 +252,8 @@
 								}							
 							}
 
-							//Prepare Custom Tags
-							view.prepareCustomTags();
+							//Prepare View System Tags
+							view.prepareSystemTags();
 
 							//Run the views transitions
 							that
@@ -723,7 +723,7 @@ function AppHeader(title){
 /*! 
  * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
  * Juan García Fernández (@juan_gf) 
- * AppView Class
+ * AppList Class
  */
 function AppList(element){
 
@@ -978,7 +978,7 @@ function AppView(name){
 		return this.systemTags;
 	};
 
-	this.prepareCustomTags = function(){
+	this.prepareSystemTags = function(){
 		trace('Preparing view "'+this._name+'" custom tags.', 'info');
 
 		//Custom tags list

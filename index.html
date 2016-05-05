@@ -100,7 +100,7 @@
 								console.log('show users');
 
 								s.on(document.getElementById('user-list'), 'pullToRefresh', function(){
-									console.log('FUNCIONA!');
+									s.dialog.show({title:'Refresh', content:'Refresh!', okOnly:true});
 								});
 							},
 							hide : function(){

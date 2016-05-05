@@ -140,7 +140,7 @@ function AppView(name){
 		return this.systemTags;
 	};
 
-	this.prepareCustomTags = function(){
+	this.prepareSystemTags = function(){
 		trace('Preparing view "'+this._name+'" custom tags.', 'info');
 
 		//Custom tags list
