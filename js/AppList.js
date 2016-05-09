@@ -27,7 +27,8 @@ function AppList(element){
 
 			ptrLoadingBox.innerHTML = '<i class="fa fa-arrow-down"></i>';
 
-			list.insertBefore(ptrLoadingBox, list.firstChild);
+			//list.insertBefore(ptrLoadingBox, list.firstChild);
+			list.parentNode.insertBefore(ptrLoadingBox, list);
 
 			list.addEventListener("touchstart", function(e){
 				if( list.scrollTop === 0 ){
@@ -38,7 +39,8 @@ function AppList(element){
 					that._pullToRefresh.loadingBox = ptrLoadingBox;
 
 					if(that._pullToRefresh.loadingBox.classList.contains('closeAnim')){
-						that._pullToRefresh.loadingBox.classList.remove('closeAnim');	
+						that._pullToRefresh.loadingBox.classList.remove('closeAnim');
+						list.classList.remove('closeAnim');
 					}
 				}
 			});
@@ -71,8 +73,8 @@ function AppList(element){
 					}
 
 					that._pullToRefresh.loadingBox.style.height = ptrBoxHeight+'px';
-
 					that._pullToRefresh.loadingBox.style.lineHeight = that._pullToRefresh.loadingBox.style.height;
+					list.style.top = that._pullToRefresh.loadingBox.style.height;
 				}
 
 			});
@@ -91,7 +93,11 @@ function AppList(element){
 
 					that._pullToRefresh.loadingBox.classList.add('closeAnim');
 					that._pullToRefresh.loadingBox.style.height = '';
+					this.classList.add('closeAnim');
+					this.style.top = '';
+
 					that._pullToRefresh.loadingBox = null;
+
 					that._pullToRefresh.lastTouchTop = 0;
 				}
 			});
