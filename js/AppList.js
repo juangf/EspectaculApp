@@ -10,7 +10,6 @@ function AppList(element){
 	this._pullToRefresh = {
 		listTop : 0,
 		touchTop : 0,
-		lastTouchTop : 0,
 		loadingBox : null,
 		PTR_MAX_BOX_HEIGHT : 100
 	};
@@ -49,14 +48,12 @@ function AppList(element){
 
 				if( that._pullToRefresh.loadingBox ){
 					var touch = e.touches[0];
-
-					if( that._pullToRefresh.lastTouchTop > touch.clientY ){
-						e.preventDefault();
-					}
-
-					that._pullToRefresh.lastTouchTop = touch.clientY;
-
 					var ptrBoxHeight = touch.clientY - that._pullToRefresh.touchTop;
+
+					if( ptrBoxHeight > 0 ){
+						e.preventDefault();
+						e.stopPropagation();
+					}
 
 					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){								
 
@@ -97,8 +94,6 @@ function AppList(element){
 					this.style.top = '';
 
 					that._pullToRefresh.loadingBox = null;
-
-					that._pullToRefresh.lastTouchTop = 0;
 				}
 			});
 		}
