@@ -434,8 +434,8 @@
 		if(indentNum){
 			var indent = "";
 
-			for(var i=0; i<indentNum; i++){
-				indent += " ";
+			for(var i=1; i<indentNum; i++){
+				indent += "  ";
 			}
 
 			message = indent + '└──> ' + message;
@@ -774,7 +774,7 @@ function AppList(element){
 
 					if( ptrBoxHeight > 0 ){
 						e.preventDefault();
-						e.stopPropagation();
+						//e.stopPropagation();
 					}
 
 					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){								
@@ -997,9 +997,11 @@ function AppView(name){
 					var lists = this._element.getElementsByTagName(tag);
 
 					for(var j=0; j<lists.length; j++){
-						trace('<'+tag+'>', '', 1);
+						var listEl = lists[j];
+						
+						trace('<'+tag+(listEl.hasAttribute('id')?' id="'+listEl.getAttribute('id')+'"':'')+'>', '', 1);
 
-						var listObj = new AppList(lists[j]);
+						var listObj = new AppList(listEl);
 
 						this.systemTags.lists.push( listObj );
 

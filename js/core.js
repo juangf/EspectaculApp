@@ -434,8 +434,8 @@ _w.esp = _w.s = {
 		if(indentNum){
 			var indent = "";
 
-			for(var i=0; i<indentNum; i++){
-				indent += " ";
+			for(var i=1; i<indentNum; i++){
+				indent += "  ";
 			}
 
 			message = indent + '└──> ' + message;

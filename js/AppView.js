@@ -157,9 +157,11 @@ function AppView(name){
 					var lists = this._element.getElementsByTagName(tag);
 
 					for(var j=0; j<lists.length; j++){
-						trace('<'+tag+'>', '', 1);
+						var listEl = lists[j];
+						
+						trace('<'+tag+(listEl.hasAttribute('id')?' id="'+listEl.getAttribute('id')+'"':'')+'>', '', 1);
 
-						var listObj = new AppList(lists[j]);
+						var listObj = new AppList(listEl);
 
 						this.systemTags.lists.push( listObj );
 

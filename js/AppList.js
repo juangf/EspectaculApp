@@ -52,7 +52,7 @@ function AppList(element){
 
 					if( ptrBoxHeight > 0 ){
 						e.preventDefault();
-						e.stopPropagation();
+						//e.stopPropagation();
 					}
 
 					if( ptrBoxHeight <= that._pullToRefresh.PTR_MAX_BOX_HEIGHT ){								
