@@ -17,110 +17,110 @@ $dialogOptionBorderColor : #BBB;
 $dialogOptionHeight : 50px;
 $dialogOptionActiveBgColor : #EEE;
 
-esp-dialog-wrapper{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 101;
+esp-dialog-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 101;
 
-	/*display: flex;*/
-	/*flex-direction: row;*/
-	/*align-items: center;*/
-	@include vendor-prefix-value(display, flex); 
-	@include vendor-prefix(flex-direction, row);
-	@include vendor-prefix(align-items, center);
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: center;*/
+    @include vendor-prefix-value(display, flex); 
+    @include vendor-prefix(flex-direction, row);
+    @include vendor-prefix(align-items, center);
 
-	padding: $dialogWrapperPadding;
+    padding: $dialogWrapperPadding;
 
-	opacity: 0;
-	
-	&.in{
-		opacity: 1;
-	}
+    opacity: 0;
+    
+    &.in {
+        opacity: 1;
+    }
 
-	/*-webkit-transition: opacity $dialogSpeed linear;
-	transition: opacity $dialogSpeed linear;*/
-	@include vendor-prefix(transition, opacity .18s  $dialogSpeed linear);
+    /*-webkit-transition: opacity $dialogSpeed linear;
+    transition: opacity $dialogSpeed linear;*/
+    @include vendor-prefix(transition, opacity .18s  $dialogSpeed linear);
 
-	esp-dialog{		
-		/*min-height: $dialogMinHeight;*/
-		width: 100%;
-		background-color: $dialogBgColor;
-			
-		max-width: $dialogMaxWidth;
+    esp-dialog {
+        /*min-height: $dialogMinHeight;*/
+        width: 100%;
+        background-color: $dialogBgColor;
+            
+        max-width: $dialogMaxWidth;
 
-		box-shadow: 0px 0px 10px $dialogShadowColor;
+        box-shadow: 0px 0px 10px $dialogShadowColor;
 
-		margin: auto;
+        margin: auto;
 
-		border-radius: 4px;
+        border-radius: 4px;
 
-		overflow: hidden;
+        overflow: hidden;
 
-		esp-dialog-title{
-			text-align: center;
-		 	display: block;
-		 	padding: 8px;
-		 	background-color: $dialogTitleBgColor;
-		 	color: $dialogTitleColor;
-		 	font-weight: bold;
-		}
+        esp-dialog-title {
+            text-align: center;
+            display: block;
+            padding: 8px;
+            background-color: $dialogTitleBgColor;
+            color: $dialogTitleColor;
+            font-weight: bold;
+        }
 
-		esp-dialog-content{
-			display: block;
-  			padding: 10px;
-		}
+        esp-dialog-content {
+            display: block;
+            padding: 10px;
+        }
 
-		esp-dialog-controls{
-			/*display: flex;
-  			flex-direction: row;
-  			align-items: stretch;*/
-			@include vendor-prefix-value(display, flex);
-			@include vendor-prefix(flex-direction, row);
-			@include vendor-prefix(align-items, stretch);
+        esp-dialog-controls {
+            /*display: flex;
+            flex-direction: row;
+            align-items: stretch;*/
+            @include vendor-prefix-value(display, flex);
+            @include vendor-prefix(flex-direction, row);
+            @include vendor-prefix(align-items, stretch);
 
-			esp-dialog-option{
-				height: $dialogOptionHeight;
-				line-height: $dialogOptionHeight;
-	  			text-align: center;
-				border-top: 1px solid $dialogOptionBorderColor;
-				/*flex-grow: 1;
-				flex-basis: 0;*/
-				@include vendor-prefix(flex-grow, 1);
-				@include vendor-prefix(flex-basis, 0);
+            esp-dialog-option {
+                height: $dialogOptionHeight;
+                line-height: $dialogOptionHeight;
+                text-align: center;
+                border-top: 1px solid $dialogOptionBorderColor;
+                /*flex-grow: 1;
+                flex-basis: 0;*/
+                @include vendor-prefix(flex-grow, 1);
+                @include vendor-prefix(flex-basis, 0);
 
-				&:active{
-					background-color: $dialogOptionActiveBgColor;
-				};
-			}
-			esp-dialog-option:not(:last-child){
-				border-right: 1px solid $dialogOptionBorderColor;
-			}
-		}
+                &:active{
+                    background-color: $dialogOptionActiveBgColor;
+                };
+            }
+            esp-dialog-option:not(:last-child) {
+                border-right: 1px solid $dialogOptionBorderColor;
+            }
+        }
 
-	}
+    }
 }
 
-esp-dialog-bg{
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background: #000;
-	z-index: 100;
-	opacity: 0;
+esp-dialog-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 100;
+    opacity: 0;
 
-	-webkit-transition: opacity $dialogBgSpeed linear;
-	transition: opacity $dialogBgSpeed linear;
+    -webkit-transition: opacity $dialogBgSpeed linear;
+    transition: opacity $dialogBgSpeed linear;
 
-	&.in{
-		opacity: $dialogBgOpacity;
-	}
+    &.in {
+        opacity: $dialogBgOpacity;
+    }
 
 
-	/*display: flex;
-	flex-direction: column;
-	justify-content:space-between;*/
-	@include vendor-prefix-value(display, flex); 
-	@include vendor-prefix(flex-direction, column);
-	@include vendor-prefix(justify-content, space-between);
+    /*display: flex;
+    flex-direction: column;
+    justify-content:space-between;*/
+    @include vendor-prefix-value(display, flex); 
+    @include vendor-prefix(flex-direction, column);
+    @include vendor-prefix(justify-content, space-between);
 }

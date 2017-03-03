@@ -7,105 +7,105 @@ $headerColor: black;
 $blurSpeed : .1s;
 
 /* Style Reseting */
-*{
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 /* App body style */
-body{
+body {
 
-	background-color: #FFF;
-	width: 100%;
-	height: 100%;
+    background-color: #FFF;
+    width: 100%;
+    height: 100%;
 
-	-webkit-touch-callout: none;
-	-webkit-font-smoothing: antialiased;
-	font-smoothing: antialiased;
+    -webkit-touch-callout: none;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
 
-	-webkit-text-size-adjust: none;
-	-moz-text-size-adjust: none;
-	text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
 
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-	-webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
-	overflow: hidden;
+    overflow: hidden;
 
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 
-	color: #000;
+    color: #000;
 
-	word-wrap: break-word;
+    word-wrap: break-word;
 
-	font-size: 14px;
-	font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-	line-height: 20px;
-	text-rendering: optimizeLegibility;
-	-webkit-backface-visibility: hidden;
-	-webkit-user-drag: none;
-	-ms-content-zooming: none;
+    font-size: 14px;
+    font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    line-height: 20px;
+    text-rendering: optimizeLegibility;
+    -webkit-backface-visibility: hidden;
+    -webkit-user-drag: none;
+    -ms-content-zooming: none;
 
-	.dialog-open{
-		
-	}
+    .dialog-open {
+        
+    }
 }
 
 /* App Navigation headers wrapper */
-esp-nav-wrapper{
-	width: 100%;
-	height: $header-height;
-	position: absolute;
-	overflow: hidden;
+esp-nav-wrapper {
+    width: 100%;
+    height: $header-height;
+    position: absolute;
+    overflow: hidden;
 
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	background-color: $headerBgColor;
-	color: $headerColor;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: $headerBgColor;
+    color: $headerColor;
 
-	z-index: 1;
+    z-index: 1;
 
-	/*@include vendor-prefix(transition, filter $blurSpeed linear);*/
+    /*@include vendor-prefix(transition, filter $blurSpeed linear);*/
 
-	&.blur{
-		@include vendor-prefix(filter, blur(3px));
-	}
+    &.blur {
+        @include vendor-prefix(filter, blur(3px));
+    }
 }
 
 /* App Views wrapper */
-esp-view-wrapper{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	overflow: hidden;
+esp-view-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	-webkit-perspective:1000px;	
-	perspective:1000px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective:1000px; 
+    perspective:1000px;
 
-	&.blur{
-		@include vendor-prefix(filter, blur(3px));
-	}
+    &.blur {
+        @include vendor-prefix(filter, blur(3px));
+    }
 }
 
-disable-touch{
-	position: absolute;
-	z-index: 99999;
-	width: 100%;
-	height: 100%;
+disable-touch {
+    position: absolute;
+    z-index: 99999;
+    width: 100%;
+    height: 100%;
 }
 
 @import 'core';

@@ -4,60 +4,60 @@ $list-item-border-color: #777;
 $list-item-padding: 16px;
 $list-ptr-loading-box-bg-color: #EEE;
 
-esp-list{
-	display: block;
-	padding: inherit;
+esp-list {
+    display: block;
+    padding: inherit;
 
-	/* overflow-scroll */
-	overflow-x: hidden;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	position: absolute;
-	/* end overflow-scroll */
+    /* overflow-scroll */
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    /* end overflow-scroll */
 
-	esp-li{
-		display: block;
-		padding: $list-item-padding;		
+    esp-li {
+        display: block;
+        padding: $list-item-padding;        
 
-		border-width: 1px;
-		border-style: solid;
-		border-color: $list-item-border-color;
-		margin: -1px;
-	}
+        border-width: 1px;
+        border-style: solid;
+        border-color: $list-item-border-color;
+        margin: -1px;
+    }
 
-	&.closeAnim{
-		@include vendor-prefix(transition, top 0.2s ease-out);
-	}
+    &.closeAnim {
+        @include vendor-prefix(transition, top 0.2s ease-out);
+    }
 }
 
-esp-list-ptr-loading-box{
-	display: block;
-	position: relative;
-	height: 0px;
-	background-color: $list-ptr-loading-box-bg-color;
+esp-list-ptr-loading-box {
+    display: block;
+    position: relative;
+    height: 0px;
+    background-color: $list-ptr-loading-box-bg-color;
 
-	overflow: hidden;
-	text-align: center;
+    overflow: hidden;
+    text-align: center;
 
-	font-size: 28px;
+    font-size: 28px;
 
-	@include vendor-prefix(box-shadow, inset 0 -3px 3px #CCC);
+    @include vendor-prefix(box-shadow, inset 0 -3px 3px #CCC);
 
-	i{
-		transform: rotateZ(0deg);
-		@include vendor-prefix(transition, transform 0.2s ease-out);
-	}
-	&.refresh > i{
-		transform: rotateZ(180deg);
-		
-	}
+    i {
+        transform: rotateZ(0deg);
+        @include vendor-prefix(transition, transform 0.2s ease-out);
+    }
+    &.refresh > i {
+        transform: rotateZ(180deg);
+        
+    }
 
-	&.closeAnim{
-		@include vendor-prefix(transition, height 0.2s ease-out);
-	}
+    &.closeAnim {
+        @include vendor-prefix(transition, height 0.2s ease-out);
+    }
 
 }

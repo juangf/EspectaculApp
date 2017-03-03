@@ -3,6 +3,6 @@
  * Juan García Fernández (@juan_gf) 
  * Global Functions
  */
-function trace(message, type, indentNum){
-	esp.trace(message, type, indentNum);
+function trace(message, type, indentNum) {
+    esp.trace(message, type, indentNum);
 }

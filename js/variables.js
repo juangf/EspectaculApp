@@ -34,4 +34,3 @@ _w.esp._userTransition = null;
 
 /* User specified stay visible previous view on change */
 _w.esp._previousViewStayVisible = false;
-

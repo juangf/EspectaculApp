@@ -43,7 +43,7 @@ gulp.task('sass', function() {
 
 
 // Minify css
-gulp.task('minifycss', function(){
+gulp.task('minifycss', function() {
     return gulp.src('dist/css/espectaculapp.css')
         .pipe( minifycss( { keepBreaks : false } ) )
         .pipe( gulp.dest('dist/css/'))

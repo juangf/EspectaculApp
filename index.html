@@ -1,171 +1,171 @@
 <!DOCTYPE html> 
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>EspectaculApp</title>
-		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
-		<meta name="format-detection" content="telephone=no">
-		<!-- CSS development files -->
-		<link rel="stylesheet" href="dist/css/espectaculapp.css" />
-		<link rel="stylesheet" href="dist/css/font-awesome.min.css" />
+    <head>
+        <meta charset="utf-8">
+        <title>EspectaculApp</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+        <meta name="format-detection" content="telephone=no">
+        <!-- CSS development files -->
+        <link rel="stylesheet" href="dist/css/espectaculapp.css" />
+        <link rel="stylesheet" href="dist/css/font-awesome.min.css" />
 
-		<style>
-		  *{
-		    -ms-touch-action: none; /* Direct all pointer events to JavaScript code. */
-		  }
-		</style>
-	</head>
-	<body>
-		<!-- Navigation Headers wrapper -->
-		<esp-nav-wrapper></esp-nav-wrapper>
+        <style>
+          *{
+            -ms-touch-action: none; /* Direct all pointer events to JavaScript code. */
+          }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation Headers wrapper -->
+        <esp-nav-wrapper></esp-nav-wrapper>
 
-		<!-- Views wrapper -->
-		<esp-view-wrapper></esp-view-wrapper>		
+        <!-- Views wrapper -->
+        <esp-view-wrapper></esp-view-wrapper>       
 
-		<script id="templates/home.html" type="text/esp-template">
-			<esp-view view-title="Home">
-				<!--esp-header><div class="title">Esto es una prueba</div></esp-header-->
-				<esp-content class="padding overflow-scroll">
-					<p>Contenido de la vista HOME</p>
-					<p><a href="#users">Ir a la página de usuarios</a></p>
-					<p>
-						
-					</p>
-					<p><a href="#users" id="test">Ir a la página de usuarios 2</a></p>
-					<br/>
-					<p><a href="javascript:s.dialog.show({title:'Título del diálogo', content:'Soy el contenido del diálogo'});">Diálogo</a>
-					</p>
-					<br/>
-					<p>
-						<a href="#" id="test-tap">Test TAP event</a>
-					</p>
-					<p><button id="bt1">Button 1</button></p>
-					<p><button>Button 2</button></p>
-				</esp-content>
-			</esp-view>
-		</script>
+        <script id="templates/home.html" type="text/esp-template">
+            <esp-view view-title="Home">
+                <!--esp-header><div class="title">Esto es una prueba</div></esp-header-->
+                <esp-content class="padding overflow-scroll">
+                    <p>Contenido de la vista HOME</p>
+                    <p><a href="#users">Ir a la página de usuarios</a></p>
+                    <p>
+                        
+                    </p>
+                    <p><a href="#users" id="test">Ir a la página de usuarios 2</a></p>
+                    <br/>
+                    <p><a href="javascript:s.dialog.show({title:'Título del diálogo', content:'Soy el contenido del diálogo'});">Diálogo</a>
+                    </p>
+                    <br/>
+                    <p>
+                        <a href="#" id="test-tap">Test TAP event</a>
+                    </p>
+                    <p><button id="bt1">Button 1</button></p>
+                    <p><button>Button 2</button></p>
+                </esp-content>
+            </esp-view>
+        </script>
 
-		<script id="templates/zoom.html" type="text/esp-template">
-			<esp-view view-title="Zoom">
-				<esp-content>
-					<esp-zoom>
-						<img src="http://popchassid.com/wp-content/uploads/2013/05/Earth-the-universe-stars-435.jpg">
-					</esp-zoom>
-				</esp-content>
-			</esp-view>
-		</script>
+        <script id="templates/zoom.html" type="text/esp-template">
+            <esp-view view-title="Zoom">
+                <esp-content>
+                    <esp-zoom>
+                        <img src="http://popchassid.com/wp-content/uploads/2013/05/Earth-the-universe-stars-435.jpg">
+                    </esp-zoom>
+                </esp-content>
+            </esp-view>
+        </script>
 
-		<script src="js/libs/handlebars-v3.0.3.js"></script>
-		<script src="dist/js/espectaculapp.js"></script>
-		<script>
-			//Handlebars helper
-			/*
-				{{#times 10}}
-				    <span>{{this}}</span>
-				{{/times}}
-			 */
-			Handlebars.registerHelper('times', function(n, block) {
-			    var accum = '';
-			    for(var i = 0; i < n; ++i)
-			        accum += block.fn(i);
-			    return accum;
-			});
+        <script src="js/libs/handlebars-v3.0.3.js"></script>
+        <script src="dist/js/espectaculapp.js"></script>
+        <script>
+            //Handlebars helper
+            /*
+                {{#times 10}}
+                    <span>{{this}}</span>
+                {{/times}}
+             */
+            Handlebars.registerHelper('times', function(n, block) {
+                var accum = '';
+                for(var i = 0; i < n; ++i)
+                    accum += block.fn(i);
+                return accum;
+            });
 
-			//Handlebars 'for' helper
-			/*
-				{{#for 0 10 2}}
-				    <span>{{this}}</span>
-				{{/for}}
-			 */
-			Handlebars.registerHelper('for', function(from, to, incr, block) {
-			    var accum = '';
-			    for(var i = from; i < to; i += incr)
-			        accum += block.fn(i);
-			    return accum;
-			});
+            //Handlebars 'for' helper
+            /*
+                {{#for 0 10 2}}
+                    <span>{{this}}</span>
+                {{/for}}
+             */
+            Handlebars.registerHelper('for', function(from, to, incr, block) {
+                var accum = '';
+                for(var i = from; i < to; i += incr)
+                    accum += block.fn(i);
+                return accum;
+            });
 
-			//Configure EspectaculApp
-			s.config({
-				views : {
-					'users':{
-						url : 'users',
-						templateUrl: 'templates/users.html',
-						transition: 'slide',
-						/* Predefine events */
-						events : {
-							load : function(){
-								console.log('loaded users');
-							},
-							show : function(){
-								console.log('show users');
+            //Configure EspectaculApp
+            s.config({
+                views : {
+                    'users': {
+                        url : 'users',
+                        templateUrl: 'templates/users.html',
+                        transition: 'slide',
+                        /* Predefine events */
+                        events : {
+                            load : function() {
+                                console.log('loaded users');
+                            },
+                            show : function() {
+                                console.log('show users');
 
-								s.on(document.getElementById('user-list'), 'pullToRefresh', function(){
-									s.dialog.show({title:'Refresh', content:'Refresh!', okOnly:true});
-								});
-							},
-							hide : function(){
-								console.log('hide users');
-							},
-							beforeShow : function(){
-								console.log('before show users');
-							},
-							beforeHide : function(){
-								console.log('before hide users');
-							}
-						},
-						templateData : function(){
-							return {
-								'users':'Dídaaaaaaaaac <b>hola</b>'
-							}
-						},
-					},
-					'home':{
-						url : 'home',
-						transition: 'slideup',
-						templateUrl: 'templates/home.html',
-					},
-					'zoom':{
-						url : 'zoom',
-						templateUrl: 'templates/zoom.html',
-					}
-				},
-				firstView	: 'users',
-				handlebarsTemplates : true,
-				simulateTouch: false, /* Simulate touch in TAP events */
-				debugMode : true /*Debug flag Enabled*/
-			});
+                                s.on(document.getElementById('user-list'), 'pullToRefresh', function() {
+                                    s.dialog.show({title:'Refresh', content:'Refresh!', okOnly:true});
+                                });
+                            },
+                            hide : function() {
+                                console.log('hide users');
+                            },
+                            beforeShow : function() {
+                                console.log('before show users');
+                            },
+                            beforeHide : function() {
+                                console.log('before hide users');
+                            }
+                        },
+                        templateData : function() {
+                            return {
+                                'users':'Dídaaaaaaaaac <b>hola</b>'
+                            }
+                        },
+                    },
+                    'home': {
+                        url : 'home',
+                        transition: 'slideup',
+                        templateUrl: 'templates/home.html',
+                    },
+                    'zoom': {
+                        url : 'zoom',
+                        templateUrl: 'templates/zoom.html',
+                    }
+                },
+                firstView   : 'users',
+                handlebarsTemplates : true,
+                simulateTouch: false, /* Simulate touch in TAP events */
+                debugMode : true /*Debug flag Enabled*/
+            });
 
-			/* Post define events */
-			esp.on(s.getView('home'), 'show', function(e){
-				//console.log('THIS',this);
-				var callback = function(){
-					console.log('button!');
-				};
-				
-				s.on(document.getElementById('test-tap'), 'tap', function(){
-					alert('TAP');
-				});
+            /* Post define events */
+            esp.on(s.getView('home'), 'show', function(e) {
+                //console.log('THIS',this);
+                var callback = function() {
+                    console.log('button!');
+                };
+                
+                s.on(document.getElementById('test-tap'), 'tap', function() {
+                    alert('TAP');
+                });
 
-				s.on(document.getElementById('bt1'),'click', function(){
-					console.log('button 1!');
-				});
+                s.on(document.getElementById('bt1'),'click', function() {
+                    console.log('button 1!');
+                });
 
-				s.on(document.getElementsByTagName('button'),'click', callback);
+                s.on(document.getElementsByTagName('button'),'click', callback);
 
-				//s.off(document.getElementsByTagName('button'),'click', callback);
+                //s.off(document.getElementsByTagName('button'),'click', callback);
 
-			});
+            });
 
-			//s.drawTouches(true);
+            //s.drawTouches(true);
 
-			//Init EspectaculApp
-			s.init();
+            //Init EspectaculApp
+            s.init();
 
-			/*if(navigator.userAgent.match(/Windows Phone/i)){
-	    		alert('Is a windows phone!');
-			}*/
-			//alert(window.navigator.msPointerEnabled);
-		</script>
-	</body>
+            /*if(navigator.userAgent.match(/Windows Phone/i)){
+                alert('Is a windows phone!');
+            }*/
+            //alert(window.navigator.msPointerEnabled);
+        </script>
+    </body>
 
 </html>
