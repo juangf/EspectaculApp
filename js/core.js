@@ -258,7 +258,7 @@ _w.esp = _w.s = {
                             that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
                                 //Set the current and previous views
                                 that
-                                .setPreviousView(that.getCurrentView());
+                                .setPreviousView(that.getCurrentView())
                                 .setCurrentView(newCurrentView)
                                 ._noTouch(false);
                             });
