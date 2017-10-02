@@ -1,0 +1,12 @@
+/* App Bottom */
+
+esp-bottom {
+    position: absolute;
+    height: $bottom-height;
+    width: 100%;
+
+    &:not(.current) {
+        z-index: 0;
+        display: none;
+    }
+}

@@ -41,6 +41,9 @@ esp-view {
             &.has-header {
                 top: $header-height
             }
+            &.has-bottom {
+                bottom: $bottom-height
+            }
         }
     }
 }

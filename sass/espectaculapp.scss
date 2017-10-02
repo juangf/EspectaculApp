@@ -4,6 +4,10 @@ $header-height: 50px;
 $headerBgColor: #bad6f5;
 $headerColor: black;
 
+$bottom-height: 50px;
+$bottomBgColor: #bad6f5;
+$bottomColor: black;
+
 $blurSpeed : .1s;
 
 /* Style Reseting */
@@ -78,6 +82,26 @@ esp-nav-wrapper {
     z-index: 1;
 
     /*@include vendor-prefix(transition, filter $blurSpeed linear);*/
+
+    &.blur {
+        @include vendor-prefix(filter, blur(3px));
+    }
+}
+
+/* App bottom wrapper */
+esp-bottom-wrapper {
+    width: 100%;
+    height: $bottom-height;
+    position: absolute;
+    overflow: hidden;
+    bottom: 0;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: $bottomBgColor;
+    color: $bottomColor;
+
+    z-index: 2;
 
     &.blur {
         @include vendor-prefix(filter, blur(3px));
