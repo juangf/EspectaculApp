@@ -5,6 +5,9 @@ _w.esp._debug = false;
 /* App navigation header wrapper */
 _w.esp._navWrapper = null;
 
+/* App bottom wrapper */
+_w.esp._bottomWrapper = null;
+
 /* App view wrapper */
 _w.esp._viewWrapper = null;
 

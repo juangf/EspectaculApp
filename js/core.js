@@ -54,12 +54,12 @@ _w.esp = _w.s = {
     _registerEvents : function() {
         var that = this;
 
-        //On Hash change
+        // On Hash change
         _w.onhashchange = function() {
             that._appNavigation(_w.location.hash.substr(1));
         };
 
-        //Touching control system
+        // Touching control system
         this._registerTouchEvents();
 
         /*_w.onclick = function(e) {
@@ -119,13 +119,13 @@ _w.esp = _w.s = {
             outViewIsFullscreen = outViewElement ? outViewElement.classList.contains('fullscreen') : false,
             transition = inView.getTransition() ? inView.getTransition() : 'fade';          
 
-        //If the user put an specified transition on the goTo
+        // If the user put an specified transition on the goTo
         if (this._userTransition) {
             transition = this._userTransition;
             this._userTransition = null;
         }
 
-        //Call to view beforeShow event
+        // Call to view beforeShow event
         inView.raiseEvent('beforeShow', inView._params);
 
         this.one(inViewElement, 'webkitAnimationEnd animationEnd', function(event) {
@@ -137,7 +137,7 @@ _w.esp = _w.s = {
             
             inViewElement.classList.remove('in');
             
-            //Call to view show event
+            // Call to view show event
             inView.raiseEvent('show', inView._params);
 
             callBack(inView);
@@ -145,19 +145,19 @@ _w.esp = _w.s = {
 
         inViewElement.className = 'current ' + transition +' in' + (inViewIsFullscreen ? ' fullscreen' : '');
 
-        //In header
+        // In header
         if (inView.getHeader())
         inView.getHeader().getElement().classList.add('current');
 
         if (outViewElement) {
             var that = this;
-            //Call to view beforeHide event
+            // Call to view beforeHide event
             outView.raiseEvent('beforeHide', outView._params);
 
             this.one(outViewElement, 'webkitAnimationEnd animationEnd', function(event) {
                 var className = outViewIsFullscreen ? 'fullscreen' : '';
                 
-                //If the user wants to mantain visible the outer view
+                // If the user wants to mantain visible the outer view
                 if (that._previousViewStayVisible) {
                     className+=' visible';
 
@@ -166,16 +166,16 @@ _w.esp = _w.s = {
 
                 outViewElement.className = className; 
 
-                //Call to view hide event
+                // Call to view hide event
                 outView.raiseEvent('hide', outView._params);
 
-                //Reset params
+                // Reset params
                 outView._params = null;
             }); 
 
             outViewElement.className = 'current ' + transition + ' out' + (outViewIsFullscreen ? ' fullscreen' : '');
 
-            //out header
+            // out header
             if (outView.getHeader())
             outView.getHeader().getElement().classList.remove('current');
         }
@@ -195,15 +195,15 @@ _w.esp = _w.s = {
             var view = this._getViewByUrl(viewUrl);
 
             if (view) {
-                //Disable user touching
+                // Disable user touching
                 this._noTouch(true);
 
                 if (!view.isLoaded()) {
-                    //Load the view template
+                    // Load the view template
                     this._loadTemplate(view, function(status, viewElement) {
                         if (status) {
 
-                            //If the system is allowed to use Handlebars templates
+                            // If the system is allowed to use Handlebars templates
                             if (that._handlebars) {
                                 view.raiseEvent('beforeRenderTemplate', view._params);
                                 
@@ -220,20 +220,20 @@ _w.esp = _w.s = {
                             .setIsLoaded(true)
                             .raiseEvent('load', view._params);
 
-                            //If there is navigation top header, add 'has-header' class to content
-                            if (that.getNavWrapper()) {
-                                var contentElements = viewElement.getElementsByTagName('esp-content');
-
-                                if (contentElements.length) {
+                            var contentElements = viewElement.getElementsByTagName('esp-content');
+                            
+                            if (contentElements.length) {
+                                // If there is navigation top header, add 'has-header' class to content
+                                if (that.getNavWrapper()) {
                                     contentElements[0].classList.add('has-header');
 
                                     var title = view.getElement().getAttribute('view-title'),
                                         header = new AppHeader(title);
 
-                                    //Check if the view has an personalized header
+                                    // Check if the view has an personalized header
                                     var headerElement = viewElement.getElementsByTagName('esp-header');
 
-                                    //If the view has its own header, put it and set the title
+                                    // If the view has its own header, put it and set the title
                                     if (headerElement.length) {
                                         header.setElement(that._appendHeaderNode(headerElement[0]));
 
@@ -245,18 +245,33 @@ _w.esp = _w.s = {
                                     }
 
                                     view.setHeader(header)
-
-                                } else {
-                                    trace('Cannot find an "esp-content" tag".', 'error');
-                                }                           
+                                }
+                                
+                                // If there is the app bottom wrapper, add 'has-bottom' class to content
+                                if (that.getBottomWrapper()) {
+                                    contentElements[0].classList.add('has-bottom');       
+                                    
+                                    var bottom = new AppBottom();
+                                    
+                                    // Check if the view has an personalized bottom
+                                    var bottomElement = viewElement.getElementsByTagName('esp-bottom');
+                                    
+                                    if (bottomElement.length) {
+                                        bottom.setElement(bottomElement[0]);
+                                        
+                                        console.log(bottom);
+                                    }
+                                }
+                            } else {
+                                trace('Cannot find an "esp-content" tag".', 'error');
                             }
 
-                            //Prepare View System Tags
+                            // Prepare View System Tags
                             view.prepareSystemTags();
 
-                            //Run the views transitions
+                            // Run the views transitions
                             that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
-                                //Set the current and previous views
+                                // Set the current and previous views
                                 that
                                 .setPreviousView(that.getCurrentView())
                                 .setCurrentView(newCurrentView)
@@ -269,7 +284,7 @@ _w.esp = _w.s = {
                     });
                 } else {
                     that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
-                        //Set te previous view value
+                        // Set te previous view value
                         that.setPreviousView(that.getCurrentView());
 
                         that
@@ -297,7 +312,7 @@ _w.esp = _w.s = {
         loadedDependenciesNum = 0,
         bodyTag = _d.getElementsByTagName('body')[0];
 
-        //Load each dependency
+        // Load each dependency
         for (var i=0; i<dependencies.length; i++) {
             var script = _d.createElement('script');
 
@@ -307,7 +322,7 @@ _w.esp = _w.s = {
             
             if (callBack) {
                 script.onload = function() {
-                    //If all the dependencies are loaded --> callback
+                    // If all the dependencies are loaded --> callback
                     if (++loadedDependenciesNum === dependencies.length) {
                         callBack();
                     }
@@ -362,9 +377,18 @@ _w.esp = _w.s = {
         this._navWrapper = w;
         return this;
     },
+    
+    setBottomWrapper : function(w) {
+        this._bottomWrapper = w;
+        return this;
+    },
 
     getNavWrapper : function() {
         return this._navWrapper;
+    },
+    
+    getBottomWrapper : function() {
+        return this._bottomWrapper;
     },
 
     getViewWrapper : function() {
@@ -387,16 +411,16 @@ _w.esp = _w.s = {
      * @return {[type]}         [description]
      */
     goTo : function(viewId, options) {
-        //transition, stayVisible
+        // transition, stayVisible
         if (this._views.hasOwnProperty(viewId)) {
             if (options) {
-                //Set the wanted user transition
+                // Set the wanted user transition
                 if (options.transition) this._userTransition = options.transition;
 
-                //Set to mantain the current view visible
+                // Set to mantain the current view visible
                 if (options.stayVisible) this._previousViewStayVisible = options.stayVisible;
 
-                //Set the params object available in view event
+                // Set the params object available in view event
                 if (options.params) {
                     this.getView(viewId)._params = {params: options.params};
                 }
@@ -417,7 +441,7 @@ _w.esp = _w.s = {
      * @return {Boolean}
      */
     _checkTagAttribute : function(element, attributeName){
-        return element.getAttribute(attributeName)!==null ? (element.getAttribute(attributeName)==='true' || element.getAttribute(attributeName)==='') : false;
+        return element.getAttribute(attributeName) !== null ? (element.getAttribute(attributeName) === 'true' || element.getAttribute(attributeName) === '') : false;
     },
 
     /**
@@ -492,18 +516,18 @@ _w.esp = _w.s = {
      * @return {[type]}       [description]
      */
     _loadTemplate : function(view, callBack) {
-        //Check if there is a template <script>
+        // Check if there is a template <script>
         var scriptTemplate = _d.getElementById(view.getTemplateUrl()),
             that = this;
         
         if (scriptTemplate) {
-            //Load the view HTML
+            // Load the view HTML
             var viewTag = this._appendView(scriptTemplate.innerHTML);
 
             if (callBack) callBack(true, viewTag);
         } else {
 
-            // Load the view HTML from external file
+            //  Load the view HTML from external file
             this.ajax({
                 url : view.getTemplateUrl(),
                 success : function(data){
@@ -554,7 +578,7 @@ _w.esp = _w.s = {
             if (viewData.transition)
             view.setTransition(viewData.transition);
 
-            //if there are predefined events in the config
+            // if there are predefined events in the config
             if (events) {
                 if (events.load) this.on(view, 'load', events.load);
                 if (events.show) this.on(view, 'show', events.show);
@@ -563,7 +587,7 @@ _w.esp = _w.s = {
                 if (events.beforeHide) this.on(view, 'beforeHide', events.beforeHide);
             }
 
-            //If there is template data
+            // If there is template data
             if (handlebarsTemplates && viewData.templateData) {
                 view.setTemplateData(viewData.templateData());
             }
@@ -579,39 +603,46 @@ _w.esp = _w.s = {
     config : function(params) {          
         var that = this;
 
-        // Set the debug flag
+        //  Set the debug flag
         if (params.debugMode) {
-            //Store the flag
+            // Store the flag
             this._debug = params.debugMode;
         }
 
         trace('Configure EspectaculApp.', 'info');
 
-        //Register basic events
+        // Register basic events
         this._registerEvents();
 
-        //Set the view wrapper
+        // Set the view wrapper
         this._viewWrapper = _d.getElementsByTagName('esp-view-wrapper')[0];
 
-        //Set the navigation wrapper (if exists)
+        // Set the navigation wrapper (if exists)
         var navWrapper = _d.getElementsByTagName('esp-nav-wrapper');    
+        
+        // Set the bottom wrapper (if exists)
+        var bottomWrapper = _d.getElementsByTagName('esp-bottom-wrapper');    
 
-        //Set if we must use handlebars
-        this._handlebars = params.handlebarsTemplates!==undefined ? params.handlebarsTemplates : true;
+        // Set if we must use handlebars
+        this._handlebars = params.handlebarsTemplates !== undefined ? params.handlebarsTemplates : true;
 
-        //Set if we have to simulate touch event
-        this._simulateTouch = params.handlebarsTemplates!==undefined ? params.simulateTouch : false;
+        // Set if we have to simulate touch event
+        this._simulateTouch = params.handlebarsTemplates !== undefined ? params.simulateTouch : false;
 
         if (navWrapper.length) {
             this.setNavWrapper(navWrapper[0]);
         }
+        
+        if (bottomWrapper.length) {
+            this.setBottomWrapper(bottomWrapper[0]);
+        }
 
-        // Work the app views
+        //  Work the app views
         if (params.views) {
-            //Prepare the system views
+            // Prepare the system views
             this._prepareViews(params.views, this._handlebars);
 
-            //check the "fistView" param
+            // check the "fistView" param
             if (params.firstView) {
                 if (this.getViews().hasOwnProperty(params.firstView)) {
                     this.setFirstView(this.getView([params.firstView]));
@@ -634,13 +665,13 @@ _w.esp = _w.s = {
         trace('Init EspectaculApp.', 'info');
 
         if (this._debug) {
-            //Reset the location hash for easy manual window refreshing
+            // Reset the location hash for easy manual window refreshing
             _w.location.hash = '';
         }
 
-        //check the "fistView" param
+        // check the "fistView" param
         if (!this.getFirstView()) {
-            //If the "firstRout2e param is not defined, get the first defined.
+            // If the "firstRout2e param is not defined, get the first defined.
             var viewsKeys = Object.keys(this.getViews());
 
             this.setFirstView(this.getView([viewsKeys[0]]));
