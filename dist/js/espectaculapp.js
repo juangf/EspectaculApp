@@ -258,8 +258,6 @@
                                     
                                     if (bottomElement.length) {
                                         bottom.setElement(bottomElement[0]);
-                                        
-                                        console.log(bottom);
                                     }
                                 }
                             } else {
