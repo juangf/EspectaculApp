@@ -625,7 +625,7 @@
         this._handlebars = params.handlebarsTemplates !== undefined ? params.handlebarsTemplates : true;
 
         // Set if we have to simulate touch event
-        this._simulateTouch = params.handlebarsTemplates !== undefined ? params.simulateTouch : false;
+        this._simulateTouch = params.simulateTouch !== undefined ? params.simulateTouch : false;
 
         if (navWrapper.length) {
             this.setNavWrapper(navWrapper[0]);
