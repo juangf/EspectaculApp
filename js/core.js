@@ -282,6 +282,10 @@ _w.esp = _w.s = {
                                         if (bottomElement.length) {
                                             bottom.setElement(bottomElement[0]);
                                         }
+                                        
+                                        if (bottomWrapper.classList.contains('hide')) {
+                                            bottomWrapper.classList.remove('hide');    
+                                        }
                                     } else if (!bottomWrapper.classList.contains('hide')) {
                                         bottomWrapper.classList.add('hide');
                                     }
