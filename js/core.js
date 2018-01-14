@@ -223,41 +223,67 @@ _w.esp = _w.s = {
                             var contentElements = viewElement.getElementsByTagName('esp-content');
                             
                             if (contentElements.length) {
+                                var navWrapper = that.getNavWrapper();
+                                var bottomWrapper = that.getBottomWrapper();
+                                
                                 // If there is navigation top header, add 'has-header' class to content
-                                if (that.getNavWrapper()) {
-                                    contentElements[0].classList.add('has-header');
-
-                                    var title = view.getElement().getAttribute('view-title'),
-                                        header = new AppHeader(title);
+                                if (navWrapper) {
+                                    var title = view.getElement().getAttribute('view-title');
 
                                     // Check if the view has an personalized header
                                     var headerElement = viewElement.getElementsByTagName('esp-header');
 
                                     // If the view has its own header, put it and set the title
                                     if (headerElement.length) {
+                                        var header = new AppHeader();
+                                        
                                         header.setElement(that._appendHeaderNode(headerElement[0]));
-
+                                        
                                         if (title) {
-                                            header.setTitle(title);                                     
+                                            header.setTitle(title);
                                         }
-                                    } else {
-                                        header.setElement(that._appendHeader(title ? title : ''));
+                                        
+                                        contentElements[0].classList.add('has-header');
+                                        
+                                        if (navWrapper.classList.contains('hide')) {
+                                            navWrapper.classList.remove('hide');    
+                                        }
+                                        
+                                        view.setHeader(header);
+                                    } else if (title) {
+                                        var header = new AppHeader(title);
+                                        
+                                        header.setElement(that._appendHeader(title));
+                                        contentElements[0].classList.add('has-header');
+                                        
+                                        if (navWrapper.classList.contains('hide')) {
+                                            navWrapper.classList.remove('hide');    
+                                        }
+                                        
+                                        view.setHeader(header)
+                                    } else if (!navWrapper.classList.contains('hide')) {
+                                        navWrapper.classList.add('hide');
                                     }
-
-                                    view.setHeader(header)
                                 }
                                 
                                 // If there is the app bottom wrapper, add 'has-bottom' class to content
-                                if (that.getBottomWrapper()) {
-                                    contentElements[0].classList.add('has-bottom');       
+                                if (bottomWrapper) {
+                                    var bottomFlag = viewElement.getAttribute('view-bottom');
                                     
-                                    var bottom = new AppBottom();
+                                    if (bottomFlag !== 'false' && bottomFlag !== '0') {
                                     
-                                    // Check if the view has an personalized bottom
-                                    var bottomElement = viewElement.getElementsByTagName('esp-bottom');
-                                    
-                                    if (bottomElement.length) {
-                                        bottom.setElement(bottomElement[0]);
+                                        // Check if the view has an personalized bottom
+                                        var bottomElement = viewElement.getElementsByTagName('esp-bottom');
+                                        
+                                        contentElements[0].classList.add('has-bottom');       
+                                        
+                                        var bottom = new AppBottom();
+                                        
+                                        if (bottomElement.length) {
+                                            bottom.setElement(bottomElement[0]);
+                                        }
+                                    } else if (!bottomWrapper.classList.contains('hide')) {
+                                        bottomWrapper.classList.add('hide');
                                     }
                                 }
                             } else {
