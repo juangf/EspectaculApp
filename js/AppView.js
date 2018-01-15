@@ -20,6 +20,8 @@ function AppView(name) {
     this._element = null;
 
     this._header = null;
+    
+    this._bottom = null;
 
     this._templateData = null;
 
@@ -76,6 +78,15 @@ function AppView(name) {
 
     this.getHeader = function() {
         return this._header;
+    };
+    
+    this.setBottom = function(bottom) {
+        this._bottom = bottom;
+        return this;
+    };
+
+    this.getBottom = function() {
+        return this._bottom;
     };
 
     this.setTransition = function(trans) {

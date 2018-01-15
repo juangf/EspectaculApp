@@ -26,7 +26,7 @@
         <esp-bottom-wrapper></esp-bottom-wrapper>
 
         <script id="templates/home.html" type="text/esp-template">
-            <esp-view view-title="Home">
+            <esp-view view-title="" view-bottom="0">
                 <!--esp-header><div class="title">Esto es una prueba</div></esp-header-->
                 <esp-content class="padding overflow-scroll">
                     <p>Contenido de la vista HOME</p>
@@ -132,7 +132,7 @@
                         templateUrl: 'templates/zoom.html',
                     }
                 },
-                firstView   : 'users',
+                firstView   : 'home',
                 handlebarsTemplates : true,
                 simulateTouch: false, /* Simulate touch in TAP events */
                 debugMode : true /*Debug flag Enabled*/

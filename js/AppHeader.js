@@ -31,4 +31,12 @@ function AppHeader(title) {
     this.getTitle = function() {
         return this._title;
     };
+    
+    this.hide = function() {
+        this._element.parentElement.classList.add('hide');
+    };
+    
+    this.show = function() {
+        this._element.parentElement.classList.remove('hide');
+    };
 }

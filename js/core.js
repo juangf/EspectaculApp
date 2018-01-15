@@ -180,6 +180,58 @@ _w.esp = _w.s = {
             outView.getHeader().getElement().classList.remove('current');
         }
     },
+    
+    /**
+     * Show the app navigation header and prepare the view
+     * @param  {[type]} view [description]
+     * @return {[type]}      [description]
+     */
+    _showHeader : function(view) {
+        var bottomWrapper  = this.getNavWrapper();
+        var contentElement = view.getElement().getElementsByTagName('esp-content')[0];
+        
+        bottomWrapper.classList.remove('hide');
+        contentElement.classList.add('has-header');
+    },
+
+    /**
+     * Hide the app navigation header and prepare the view
+     * @param  {[type]} view [description]
+     * @return {[type]}      [description]
+     */    
+    _hideHeader : function(view) {
+        var bottomWrapper  = this.getNavWrapper();
+        var contentElement = view.getElement().getElementsByTagName('esp-content')[0];
+        
+        bottomWrapper.classList.add('hide');
+        contentElement.classList.remove('has-header');
+    },
+
+    /**
+     * Show the app bottom and prepare the view
+     * @param  {[type]} view [description]
+     * @return {[type]}      [description]
+     */
+    _showBottom : function(view) {
+        var bottomWrapper  = this.getBottomWrapper();
+        var contentElement = view.getElement().getElementsByTagName('esp-content')[0];
+        
+        bottomWrapper.classList.remove('hide');
+        contentElement.classList.add('has-bottom');
+    },
+    
+    /**
+     * Hide the app bottom and prepare the view
+     * @param  {[type]} view [description]
+     * @return {[type]}      [description]
+     */
+    _hideBottom : function(view) {
+        var bottomWrapper  = this.getBottomWrapper();
+        var contentElement = view.getElement().getElementsByTagName('esp-content')[0];
+        
+        bottomWrapper.classList.add('hide');
+        contentElement.classList.remove('has-bottom');
+    },
 
     /**
      * [_appNavigation description]
@@ -243,26 +295,17 @@ _w.esp = _w.s = {
                                             header.setTitle(title);
                                         }
                                         
-                                        contentElements[0].classList.add('has-header');
-                                        
-                                        if (navWrapper.classList.contains('hide')) {
-                                            navWrapper.classList.remove('hide');    
-                                        }
-                                        
                                         view.setHeader(header);
+                                        that._showHeader(view);
                                     } else if (title) {
                                         var header = new AppHeader(title);
                                         
                                         header.setElement(that._appendHeader(title));
-                                        contentElements[0].classList.add('has-header');
                                         
-                                        if (navWrapper.classList.contains('hide')) {
-                                            navWrapper.classList.remove('hide');    
-                                        }
-                                        
-                                        view.setHeader(header)
-                                    } else if (!navWrapper.classList.contains('hide')) {
-                                        navWrapper.classList.add('hide');
+                                        view.setHeader(header);
+                                        that._showHeader(view);
+                                    } else {
+                                        that._hideHeader(view);
                                     }
                                 }
                                 
@@ -271,23 +314,23 @@ _w.esp = _w.s = {
                                     var bottomFlag = viewElement.getAttribute('view-bottom');
                                     
                                     if (bottomFlag !== 'false' && bottomFlag !== '0') {
-                                    
+                                        
                                         // Check if the view has an personalized bottom
                                         var bottomElement = viewElement.getElementsByTagName('esp-bottom');
-                                        
-                                        contentElements[0].classList.add('has-bottom');       
-                                        
                                         var bottom = new AppBottom();
                                         
+                                        contentElements[0].classList.add('has-bottom');
+                                        
                                         if (bottomElement.length) {
-                                            bottom.setElement(bottomElement[0]);
+                                            bottom.setElement(that._appendBottomNode(bottomElement[0]));
+                                        } else {
+                                            bottom.setElement(that._appendBottom());
                                         }
                                         
-                                        if (bottomWrapper.classList.contains('hide')) {
-                                            bottomWrapper.classList.remove('hide');    
-                                        }
-                                    } else if (!bottomWrapper.classList.contains('hide')) {
-                                        bottomWrapper.classList.add('hide');
+                                        view.setBottom(bottom);
+                                        that._showBottom(view);
+                                    } else {
+                                        that._hideBottom(view);
                                     }
                                 }
                             } else {
@@ -311,6 +354,20 @@ _w.esp = _w.s = {
                         }
                     });
                 } else {
+                    // Show or hide the header if the view has it          
+                    if (view.getHeader()) {
+                        that._showHeader(view);
+                    } else {
+                        that._hideHeader(view);
+                    }
+                    
+                    // Show or hide the bottom if the view has it          
+                    if (view.getBottom()) {
+                        that._showBottom(view);
+                    } else {
+                        that._hideBottom(view);
+                    }
+                    
                     that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
                         // Set te previous view value
                         that.setPreviousView(that.getCurrentView());
@@ -536,6 +593,20 @@ _w.esp = _w.s = {
         this.getNavWrapper().appendChild(headerNode);
 
         return headerNode;
+    },
+    
+    _appendBottom : function() {
+        var newNode = _d.createElement('esp-bottom');
+        
+        this.getBottomWrapper().appendChild(newNode);
+
+        return newNode;
+    },
+    
+    _appendBottomNode : function(bottomNode) {
+        this.getBottomWrapper().appendChild(bottomNode);
+
+        return bottomNode;
     },
 
     /**

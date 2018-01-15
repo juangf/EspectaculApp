@@ -14,4 +14,12 @@ function AppBottom() {
     this.getElement = function() {
         return this._element;
     };
+    
+    this.hide = function() {
+        this._element.parentElement.classList.add('hide');
+    };
+    
+    this.show = function() {
+        this._element.parentElement.classList.remove('hide');
+    };
 }
