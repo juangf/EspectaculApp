@@ -324,7 +324,11 @@ _w.esp = _w.s = {
                                         if (bottomElement.length) {
                                             bottom.setElement(that._appendBottomNode(bottomElement[0]));
                                         } else {
-                                            bottom.setElement(that._appendBottom());
+                                            var bottomNode = that._getBotomNode();
+                                            
+                                            if (bottomNode) {
+                                                bottom.setElement(bottomNode);
+                                            }
                                         }
                                         
                                         view.setBottom(bottom);
@@ -607,6 +611,16 @@ _w.esp = _w.s = {
         this.getBottomWrapper().appendChild(bottomNode);
 
         return bottomNode;
+    },
+    
+    _getBotomNode : function() {
+        var bottomNode =  this.getBottomWrapper().getElementsByTagName('esp-bottom');
+        
+        if (bottomNode.length) {
+            return bottomNode[0];
+        }
+        
+        return null;
     },
 
     /**
