@@ -1031,7 +1031,7 @@ function AppView(name) {
 
         for (var i = 0, l = callBacks.length; i < l; i++) {
             if (callBacks[i].toString() === callBack.toString()) {
-                view._events[eventName].splice(i, 1);   
+                this._events[eventName].splice(i, 1);   
                 return true;
             }                       
         }
