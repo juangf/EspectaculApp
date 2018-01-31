@@ -1132,6 +1132,8 @@ function AppView(name) {
 
         this._element = null;
         this._loaded = false;
+        
+        this.raiseEvent('unload', this._params);
     }; 
 
     this.getSystemTags = function() {
