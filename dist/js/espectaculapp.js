@@ -868,6 +868,10 @@ function AppHeader(title) {
     this.show = function() {
         this._element.parentElement.classList.remove('hide');
     };
+    
+    this.destroy = function() {
+        this._element.remove();
+    };
 }
 /*! 
  * EspectaculApp v0.0.1 ~ (c) 2015 ~ http://www.espectaculapp.com
@@ -1132,6 +1136,11 @@ function AppView(name) {
 
         this._element = null;
         this._loaded = false;
+        
+        if (this._header) {
+            this._header.destroy();
+            delete this._header;
+        }
         
         this.raiseEvent('unload', this._params);
     }; 

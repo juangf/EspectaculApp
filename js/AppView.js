@@ -146,6 +146,11 @@ function AppView(name) {
         this._element = null;
         this._loaded = false;
         
+        if (this._header) {
+            this._header.destroy();
+            delete this._header;
+        }
+        
         this.raiseEvent('unload', this._params);
     }; 
 

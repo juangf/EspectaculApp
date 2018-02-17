@@ -39,4 +39,8 @@ function AppHeader(title) {
     this.show = function() {
         this._element.parentElement.classList.remove('hide');
     };
+    
+    this.destroy = function() {
+        this._element.remove();
+    };
 }
