@@ -358,6 +358,8 @@
                         
                         view.raiseEvent('beforeRenderTemplate', view._params);
                         
+                        var templateData = view.getTemplateData();
+                        
                         // If we have to use a handlebars compiled template (prefix '@')
                         if (templateCommand === '@') {
                             view.raiseEvent('beforeRenderTemplate', view._params);
@@ -375,8 +377,6 @@
                                 if (status) {
                                     view.raiseEvent('beforeRenderTemplate', view._params);
                                     
-                                    var templateData = view.getTemplateData();
-
                                     if (templateData) {
                                         var template = Handlebars.compile(viewElement.innerHTML);
                                         viewElement.innerHTML = template(templateData);
