@@ -244,119 +244,153 @@ _w.esp = _w.s = {
         if (viewUrl === '') return this;
 
         if (!this._currentView || this._currentView.url !== viewUrl) {
-            var view = this._getViewByUrl(viewUrl);
+            var view        = this._getViewByUrl(viewUrl);
 
             if (view) {
                 // Disable user touching
                 this._noTouch(true);
 
                 if (!view.isLoaded()) {
-                    // Load the view template
-                    this._loadTemplate(view, function(status, viewElement) {
-                        if (status) {
+                    var templateUrl           = view.getTemplateUrl();
+                    var templateCommand       = templateUrl.substr(0,1);
+                    var afterTemplateRenderFn = function(viewElement) {
+                        // If the system is allowed to use Handlebars templates
+                        view
+                        .setElement(viewElement)
+                        .setIsLoaded(true)
+                        .raiseEvent('load', view._params);
 
-                            // If the system is allowed to use Handlebars templates
-                            if (that._handlebars) {
-                                view.raiseEvent('beforeRenderTemplate', view._params);
-                                
-                                var templateData = view.getTemplateData();
-
-                                if (templateData) {
-                                    var template = Handlebars.compile(viewElement.innerHTML);
-                                    viewElement.innerHTML = template(view.getTemplateData());
-                                }
-                            }
-
-                            view
-                            .setElement(viewElement)
-                            .setIsLoaded(true)
-                            .raiseEvent('load', view._params);
-
-                            var contentElements = viewElement.getElementsByTagName('esp-content');
+                        var contentElements = viewElement.getElementsByTagName('esp-content');
+                        
+                        if (contentElements.length) {
+                            var navWrapper = that.getNavWrapper();
+                            var bottomWrapper = that.getBottomWrapper();
                             
-                            if (contentElements.length) {
-                                var navWrapper = that.getNavWrapper();
-                                var bottomWrapper = that.getBottomWrapper();
-                                
-                                // If there is navigation top header, add 'has-header' class to content
-                                if (navWrapper) {
-                                    var title = view.getElement().getAttribute('view-title');
+                            // If there is navigation top header, add 'has-header' class to content
+                            if (navWrapper) {
+                                var title = view.getElement().getAttribute('view-title');
 
-                                    // Check if the view has an personalized header
-                                    var headerElement = viewElement.getElementsByTagName('esp-header');
+                                // Check if the view has an personalized header
+                                var headerElement = viewElement.getElementsByTagName('esp-header');
 
-                                    // If the view has its own header, put it and set the title
-                                    if (headerElement.length) {
-                                        var header = new AppHeader();
-                                        
-                                        header.setElement(that._appendHeaderNode(headerElement[0]));
-                                        
-                                        if (title) {
-                                            header.setTitle(title);
-                                        }
-                                        
-                                        view.setHeader(header);
-                                        that._showHeader(view);
-                                    } else if (title) {
-                                        var header = new AppHeader(title);
-                                        
-                                        header.setElement(that._appendHeader(title));
-                                        
-                                        view.setHeader(header);
-                                        that._showHeader(view);
-                                    } else {
-                                        that._hideHeader(view);
-                                    }
-                                }
-                                
-                                // If there is the app bottom wrapper, add 'has-bottom' class to content
-                                if (bottomWrapper) {
-                                    var bottomFlag = viewElement.getAttribute('view-bottom');
+                                // If the view has its own header, put it and set the title
+                                if (headerElement.length) {
+                                    var header = new AppHeader();
                                     
-                                    if (bottomFlag !== 'false' && bottomFlag !== '0') {
-                                        
-                                        // Check if the view has an personalized bottom
-                                        var bottomElement = viewElement.getElementsByTagName('esp-bottom');
-                                        var bottom = new AppBottom();
-                                        
-                                        contentElements[0].classList.add('has-bottom');
-                                        
-                                        if (bottomElement.length) {
-                                            bottom.setElement(that._appendBottomNode(bottomElement[0]));
-                                        } else {
-                                            var bottomNode = that._getBotomNode();
-                                            
-                                            if (bottomNode) {
-                                                bottom.setElement(bottomNode);
-                                            }
-                                        }
-                                        
-                                        view.setBottom(bottom);
-                                        that._showBottom(view);
-                                    } else {
-                                        that._hideBottom(view);
+                                    header.setElement(that._appendHeaderNode(headerElement[0]));
+                                    
+                                    if (title) {
+                                        header.setTitle(title);
                                     }
+                                    
+                                    view.setHeader(header);
+                                    that._showHeader(view);
+                                } else if (title) {
+                                    var header = new AppHeader(title);
+                                    
+                                    header.setElement(that._appendHeader(title));
+                                    
+                                    view.setHeader(header);
+                                    that._showHeader(view);
+                                } else {
+                                    that._hideHeader(view);
                                 }
-                            } else {
-                                trace('Cannot find an "esp-content" tag".', 'error');
                             }
-
-                            // Prepare View System Tags
-                            view.prepareSystemTags();
-
-                            // Run the views transitions
-                            that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
-                                // Set the current and previous views
-                                that
-                                .setPreviousView(that.getCurrentView())
-                                .setCurrentView(newCurrentView)
-                                ._noTouch(false);
-                            });
-
+                            
+                            // If there is the app bottom wrapper, add 'has-bottom' class to content
+                            if (bottomWrapper) {
+                                var bottomFlag = viewElement.getAttribute('view-bottom');
+                                
+                                if (bottomFlag !== 'false' && bottomFlag !== '0') {
+                                    
+                                    // Check if the view has an personalized bottom
+                                    var bottomElement = viewElement.getElementsByTagName('esp-bottom');
+                                    var bottom = new AppBottom();
+                                    
+                                    contentElements[0].classList.add('has-bottom');
+                                    
+                                    if (bottomElement.length) {
+                                        bottom.setElement(that._appendBottomNode(bottomElement[0]));
+                                    } else {
+                                        var bottomNode = that._getBotomNode();
+                                        
+                                        if (bottomNode) {
+                                            bottom.setElement(bottomNode);
+                                        }
+                                    }
+                                    
+                                    view.setBottom(bottom);
+                                    that._showBottom(view);
+                                } else {
+                                    that._hideBottom(view);
+                                }
+                            }
                         } else {
-                            trace('Cannot load the view template "'+view.url+'".', 'error');
+                            trace('Cannot find an "esp-content" tag".', 'error');
                         }
-                    });
+
+                        // Prepare View System Tags
+                        view.prepareSystemTags();
+
+                        // Run the views transitions
+                        that._viewsTransition(view, that.getCurrentView(), function(newCurrentView) {
+                            // Set the current and previous views
+                            that
+                            .setPreviousView(that.getCurrentView())
+                            .setCurrentView(newCurrentView)
+                            ._noTouch(false);
+                        });
+                    }
+
+                    // If we have to get the view by its id (prefix '#')
+                    if (templateCommand === '#') {
+                        var viewId      = templateUrl.substr(1, templateUrl.length - 1);
+                        var viewElement = _d.getElementById(viewId);
+                        
+                        if (viewElement) {
+                            afterTemplateRenderFn(viewElement);
+                        } else {
+                            trace('Cannot load the view by its id "' + templateUrl + '".', 'error');
+                        }
+                    } else if (that._handlebars) {
+                        // If the system is allowed to use Handlebars templates
+                        trace('Using Handlebars for render the view template', 'info', 1);
+                        
+                        view.raiseEvent('beforeRenderTemplate', view._params);
+                        
+                        var templateData = view.getTemplateData();
+                        
+                        // If we have to use a handlebars compiled template (prefix '@')
+                        if (templateCommand === '@') {
+                            view.raiseEvent('beforeRenderTemplate', view._params);
+                            
+                            var templateName = templateUrl.substr(1, templateUrl.length - 1);
+                            trace('Using the compiled template \'' + templateName + '\'', 'info', 2);
+
+                            var template = Handlebars.templates[templateName];
+                            var viewElement = this._appendView(template(templateData));
+
+                            afterTemplateRenderFn(viewElement);
+                        } else {
+                            // Load the view template
+                            this._loadTemplate(view, function(status, viewElement) {
+                                if (status) {
+                                    view.raiseEvent('beforeRenderTemplate', view._params);
+                                    
+                                    if (templateData) {
+                                        var template = Handlebars.compile(viewElement.innerHTML);
+                                        viewElement.innerHTML = template(templateData);
+                                    }
+                                    
+                                    afterTemplateRenderFn(viewElement);
+                                } else {
+                                    trace('Cannot load the view template "' + view.url + '".', 'error');
+                                }
+                            });
+                        }
+                    } else {
+                        trace('Cannot load the view by its template url "' + templateUrl+ '".', 'error');
+                    }
                 } else {
                     // Show or hide the header if the view has it          
                     if (view.getHeader()) {
@@ -381,7 +415,6 @@ _w.esp = _w.s = {
                         ._noTouch(false);
                     });
                 }
-
             } else {
                 trace('Cannot find the view "'+viewUrl+'".', 'error');
             }
@@ -630,19 +663,23 @@ _w.esp = _w.s = {
      */
     _loadTemplate : function(view, callBack) {
         // Check if there is a template <script>
-        var scriptTemplate = _d.getElementById(view.getTemplateUrl()),
+        var templateUrl    = view.getTemplateUrl();
+        var scriptTemplate = _d.getElementById(templateUrl),
             that = this;
         
         if (scriptTemplate) {
+            trace('Loading the template from script with id \'' + templateUrl + '\'', 'info', 2);
+            
             // Load the view HTML
             var viewTag = this._appendView(scriptTemplate.innerHTML);
 
             if (callBack) callBack(true, viewTag);
         } else {
-
+            trace('Loading the template from file \'' + templateUrl + '\'', 'info', 2);
+            
             //  Load the view HTML from external file
             this.ajax({
-                url : view.getTemplateUrl(),
+                url : templateUrl,
                 success : function(data){
                     var viewTag = that._appendView(data);
 
