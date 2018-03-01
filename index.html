@@ -20,7 +20,13 @@
         <esp-nav-wrapper></esp-nav-wrapper>
 
         <!-- Views wrapper -->
-        <esp-view-wrapper></esp-view-wrapper>
+        <esp-view-wrapper>
+            <esp-view view-title="Hello!" id="hello">
+                <esp-content>
+                    Hello!
+                </esp-content>
+            </esp-view>
+        </esp-view-wrapper>
         
         <!-- App bottom wrapper -->
         <esp-bottom-wrapper></esp-bottom-wrapper>
@@ -130,9 +136,13 @@
                     'zoom': {
                         url : 'zoom',
                         templateUrl: 'templates/zoom.html',
+                    },
+                    'hello': {
+                        url : 'hello',
+                        templateUrl: '#hello',
                     }
                 },
-                firstView   : 'home',
+                firstView   : 'hello',
                 handlebarsTemplates : true,
                 simulateTouch: false, /* Simulate touch in TAP events */
                 debugMode : true /*Debug flag Enabled*/

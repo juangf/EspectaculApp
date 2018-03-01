@@ -14,6 +14,8 @@ function AppView(name) {
     this._transition = 'fade';
 
     this._templateUrl = '';
+    
+    this._compiledTemplate = null;
 
     this._loaded = false;
 
