@@ -342,7 +342,7 @@
                         });
                     }
 
-                    // If we have to get the view by its id
+                    // If we have to get the view by its id (prefix '#')
                     if (templateCommand === '#') {
                         var viewId      = templateUrl.substr(1, templateUrl.length - 1);
                         var viewElement = _d.getElementById(viewId);
@@ -350,7 +350,7 @@
                         if (viewElement) {
                             afterTemplateRenderFn(viewElement);
                         } else {
-                            trace('Cannot load the view by its id "' + templateUrl+ '".', 'error');
+                            trace('Cannot load the view by its id "' + templateUrl + '".', 'error');
                         }
                     } else if (that._handlebars) {
                         // If the system is allowed to use Handlebars templates
@@ -358,7 +358,7 @@
                         
                         view.raiseEvent('beforeRenderTemplate', view._params);
                         
-                        // If we have to use a handlebars compiled template
+                        // If we have to use a handlebars compiled template (prefix '@')
                         if (templateCommand === '@') {
                             view.raiseEvent('beforeRenderTemplate', view._params);
                             
