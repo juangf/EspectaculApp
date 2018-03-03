@@ -111,6 +111,10 @@
                                 s.on(document.getElementById('user-list'), 'pullToRefresh', function() {
                                     s.dialog.show({title:'Refresh', content:'Refresh!', okOnly:true});
                                 });
+                                
+                                s.on(document.getElementById('user-list'), 'lazyLoad', function() {
+                                    console.log('vamosss');
+                                });
                             },
                             hide : function() {
                                 console.log('hide users');
@@ -142,7 +146,7 @@
                         templateUrl: '#hello',
                     }
                 },
-                firstView   : 'hello',
+                firstView   : 'users',
                 handlebarsTemplates : true,
                 simulateTouch: false, /* Simulate touch in TAP events */
                 debugMode : true /*Debug flag Enabled*/

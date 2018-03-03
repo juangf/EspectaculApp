@@ -2,9 +2,11 @@
     <esp-content class="_padding">
         
         <!--p><a href="#home">Ir a la página HOME</a></p-->
-        <esp-list id="user-list" pull-to-refresh="true">            
+        <esp-list id="user-list" pull-to-refresh="true" lazy-load="true" lazy-load-class="image">
             {{#times 20}}
-            <esp-li>Element {{this}}</esp-li>
+            <esp-li>Element {{this}}
+                <img class="image" lazy-src="http://www.macba.cat/uploads/20170314/Dep.exotn_ric_dibuix_Jordi.3.jpg">
+            </esp-li>
             {{/times}}
         </esp-list>
 

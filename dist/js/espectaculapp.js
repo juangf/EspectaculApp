@@ -925,6 +925,39 @@ function AppList(element) {
         loadingBox : null,
         PTR_MAX_BOX_HEIGHT : 100
     };
+    
+    this._prepareLazyLoad = function() {
+        var list = this._element;
+        
+        if (s._checkTagAttribute(list, 'lazy-load')) {
+            var lazyClass = list.getAttribute('lazy-load-class');
+            
+            if (lazyClass) {
+                var lazyItems  = _d.getElementsByClassName(lazyClass);
+
+                for (var i = 0, len = lazyItems.length; i < len; i++) {
+                    var item     = lazyItems[i];
+                    var imageSrc = item.getAttribute('lazy-src');
+                    var img      = new Image();
+
+                    img.onLoad = (function() {
+                        if (item.nodeName === 'IMG') {
+                            item.src = item.getAttribute('lazy-src');
+                        } else {
+                            item.style.backgroundImage = 'url(' + item.getAttribute('lazy-src') + ')';
+                        }
+
+                        //Raise event
+                        list.dispatchEvent(
+                            new CustomEvent("lazyLoad", {})
+                        );
+                    })();
+                    
+                    img.src = imageSrc;
+                }
+            }
+        }
+    };
 
     this._init = function() {
         var list = this._element,
@@ -1006,8 +1039,12 @@ function AppList(element) {
                     that._pullToRefresh.loadingBox = null;
                 }
             });
+            
+            this._prepareLazyLoad();
         }
     }
+    
+    this.runLazyLoad = this._prepareLazyLoad;
 
     this.setElement = function(element) {
         this._element = element;
