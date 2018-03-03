@@ -14,35 +14,74 @@ function AppList(element) {
         PTR_MAX_BOX_HEIGHT : 100
     };
     
-    this._prepareLazyLoad = function() {
-        var list = this._element;
+    this._lazyLoad = {
+        className : '',
+        elements  : [],
+        interval  : null,
+        scrollTop : 0
+    };
+    
+    this._checkLazyLoad = function() {
+        var that = this;
         
-        if (s._checkTagAttribute(list, 'lazy-load')) {
-            var lazyClass = list.getAttribute('lazy-load-class');
+        if (this._lazyLoad.scrollTop === this._element.scrollTop) {
+            clearInterval(this._lazyLoad.interval);
+            this._lazyLoad.interval = null;
+        }
+        
+        this._lazyLoad.scrollTop = this._element.scrollTop;
+        
+        for (var i = 0, len = this._lazyLoad.elements.length; i < len; i++) {
+            var el = this._lazyLoad.elements[i];
+
+            if (el.offsetTop < this._element.clientHeight + this._element.scrollTop) {
+                var imageSrc = el.getAttribute('lazy-src');
+                var img      = new Image();
+                
+                img.onLoad = (function() {
+                    if (el.nodeName === 'IMG') {
+                        el.src = el.getAttribute('lazy-src');
+                    } else {
+                        el.style.backgroundImage = 'url(' + el.getAttribute('lazy-src') + ')';
+                    }
+
+                    //Raise event
+                    that._element.dispatchEvent(
+                        new CustomEvent("lazyLoad", {
+                            detail : {
+                                element : el
+                            }
+                        })
+                    );
+                })();
+                
+                img.src = imageSrc;
+                
+                this._lazyLoad.elements.splice(i, 1);
+                i--;
+                len--;
+            }
+        }
+    };
+    
+    this._prepareLazyLoad = function() {
+        var that = this;
+        if (s._checkTagAttribute(this._element, 'lazy-load')) {
+            var lazyClass = this._element.getAttribute('lazy-load-class');
             
             if (lazyClass) {
-                var lazyItems  = _d.getElementsByClassName(lazyClass);
-
-                for (var i = 0, len = lazyItems.length; i < len; i++) {
-                    var item     = lazyItems[i];
-                    var imageSrc = item.getAttribute('lazy-src');
-                    var img      = new Image();
-
-                    img.onLoad = (function() {
-                        if (item.nodeName === 'IMG') {
-                            item.src = item.getAttribute('lazy-src');
-                        } else {
-                            item.style.backgroundImage = 'url(' + item.getAttribute('lazy-src') + ')';
-                        }
-
-                        //Raise event
-                        list.dispatchEvent(
-                            new CustomEvent("lazyLoad", {})
-                        );
-                    })();
-                    
-                    img.src = imageSrc;
-                }
+                this._lazyLoad.className = lazyClass;
+                
+                var elements = _d.getElementsByClassName(lazyClass);
+                for (var i = 0, len = elements.length; i < len; i++) {
+                    this._lazyLoad.elements.push(elements[i]);
+                };
+                
+                this._element.onscroll = function() {
+                    if (!that._lazyLoad.interval) {
+                        that._lazyLoad.interval = setInterval(function() {that._checkLazyLoad()}, 200);
+                    }
+                };
             }
         }
     };
@@ -128,11 +167,16 @@ function AppList(element) {
                 }
             });
             
+            
             this._prepareLazyLoad();
+            
+            setTimeout(function() {
+                that._checkLazyLoad();
+            }, 0);
         }
     }
     
-    this.runLazyLoad = this._prepareLazyLoad;
+    this.checkLazyLoad = this._checkLazyLoad;
 
     this.setElement = function(element) {
         this._element = element;

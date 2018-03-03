@@ -112,8 +112,8 @@
                                     s.dialog.show({title:'Refresh', content:'Refresh!', okOnly:true});
                                 });
                                 
-                                s.on(document.getElementById('user-list'), 'lazyLoad', function() {
-                                    console.log('vamosss');
+                                s.on(document.getElementById('user-list'), 'lazyLoad', function(e) {
+                                    console.log(e);
                                 });
                             },
                             hide : function() {
