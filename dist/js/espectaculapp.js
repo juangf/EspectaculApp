@@ -1088,7 +1088,8 @@ function AppList(element) {
         }
     }
     
-    this.checkLazyLoad = this._checkLazyLoad;
+    this.prepareLazyLoad = this._prepareLazyLoad;
+    this.checkLazyLoad   = this._checkLazyLoad;
 
     this.setElement = function(element) {
         this._element = element;
