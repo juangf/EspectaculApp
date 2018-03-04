@@ -944,9 +944,16 @@ function AppList(element) {
         this._lazyLoad.scrollTop = this._element.scrollTop;
         
         for (var i = 0, len = this._lazyLoad.elements.length; i < len; i++) {
-            var el = this._lazyLoad.elements[i];
-
-            if (el.offsetTop < this._element.clientHeight + this._element.scrollTop) {
+            var listItem = this._lazyLoad.elements[i];
+                        
+            if (listItem.offsetTop < this._element.clientHeight + this._element.scrollTop) {
+                var el = listItem.getElementsByClassName(this._lazyLoad.className);
+                
+                if (el.length === 0) {
+                    continue;
+                }
+                el = el[0];
+                
                 var imageSrc = el.getAttribute('lazy-src');
                 var img      = new Image();
                 
@@ -984,7 +991,7 @@ function AppList(element) {
             if (lazyClass) {
                 this._lazyLoad.className = lazyClass;
                 
-                var elements = _d.getElementsByClassName(lazyClass);
+                var elements = _d.getElementsByTagName('esp-li');
                 for (var i = 0, len = elements.length; i < len; i++) {
                     this._lazyLoad.elements.push(elements[i]);
                 };
