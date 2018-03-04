@@ -93,7 +93,7 @@ function AppList(element) {
             
             this._element.onscroll = function() {
                 if (!that._lazyLoad.interval) {
-                    that._lazyLoad.interval = setInterval(function() {that._checkLazyLoad()}, 200);
+                    that._lazyLoad.interval = setInterval(function() {that._checkLazyLoad()}, 400);
                 }
             };
         }
