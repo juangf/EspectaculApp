@@ -153,6 +153,8 @@ function AppView(name) {
             delete this._header;
         }
         
+        this.systemTags.lists = [];
+        
         this.raiseEvent('unload', this._params);
     }; 
 
