@@ -992,7 +992,7 @@ function AppList(element) {
         if (lazyClass) {
             this._lazyLoad.className = lazyClass;
             
-            var elements = _d.getElementsByTagName('esp-li');
+            var elements = this._element.getElementsByTagName('esp-li');
             for (var i = 0, len = elements.length; i < len; i++) {
                 this._lazyLoad.elements.push(elements[i]);
             };
