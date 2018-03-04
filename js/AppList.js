@@ -24,6 +24,31 @@ function AppList(element) {
     this._checkLazyLoad = function() {
         var that = this;
         
+        function imageLoad(el) {
+            var imageSrc = el.getAttribute('lazy-src');
+            var img      = new Image();
+            
+            img.onload = function() {
+                
+                if (el.nodeName === 'IMG') {
+                    el.src = el.getAttribute('lazy-src');
+                } else {
+                    el.style.backgroundImage = 'url(' + el.getAttribute('lazy-src') + ')';
+                }
+
+                //Raise event
+                that._element.dispatchEvent(
+                    new CustomEvent("lazyLoad", {
+                        detail : {
+                            element : el
+                        }
+                    })
+                );
+            };
+            
+            img.src = imageSrc;
+        }
+        
         if (this._lazyLoad.scrollTop === this._element.scrollTop) {
             clearInterval(this._lazyLoad.interval);
             this._lazyLoad.interval = null;
@@ -40,29 +65,10 @@ function AppList(element) {
                 if (el.length === 0) {
                     continue;
                 }
+                
                 el = el[0];
                 
-                var imageSrc = el.getAttribute('lazy-src');
-                var img      = new Image();
-                
-                img.onLoad = (function() {
-                    if (el.nodeName === 'IMG') {
-                        el.src = el.getAttribute('lazy-src');
-                    } else {
-                        el.style.backgroundImage = 'url(' + el.getAttribute('lazy-src') + ')';
-                    }
-
-                    //Raise event
-                    that._element.dispatchEvent(
-                        new CustomEvent("lazyLoad", {
-                            detail : {
-                                element : el
-                            }
-                        })
-                    );
-                })();
-                
-                img.src = imageSrc;
+                imageLoad(el);
                 
                 this._lazyLoad.elements.splice(i, 1);
                 i--;
