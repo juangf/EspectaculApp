@@ -986,24 +986,22 @@ function AppList(element) {
     };
     
     this._prepareLazyLoad = function() {
-        var that = this;
-        if (s._checkTagAttribute(this._element, 'lazy-load')) {
-            var lazyClass = this._element.getAttribute('lazy-load-class');
+        var that      = this;
+        var lazyClass = this._element.getAttribute('lazy-load-class');
+        
+        if (lazyClass) {
+            this._lazyLoad.className = lazyClass;
             
-            if (lazyClass) {
-                this._lazyLoad.className = lazyClass;
-                
-                var elements = _d.getElementsByTagName('esp-li');
-                for (var i = 0, len = elements.length; i < len; i++) {
-                    this._lazyLoad.elements.push(elements[i]);
-                };
-                
-                this._element.onscroll = function() {
-                    if (!that._lazyLoad.interval) {
-                        that._lazyLoad.interval = setInterval(function() {that._checkLazyLoad()}, 200);
-                    }
-                };
-            }
+            var elements = _d.getElementsByTagName('esp-li');
+            for (var i = 0, len = elements.length; i < len; i++) {
+                this._lazyLoad.elements.push(elements[i]);
+            };
+            
+            this._element.onscroll = function() {
+                if (!that._lazyLoad.interval) {
+                    that._lazyLoad.interval = setInterval(function() {that._checkLazyLoad()}, 200);
+                }
+            };
         }
         
         return this;
@@ -1089,8 +1087,9 @@ function AppList(element) {
                     that._pullToRefresh.loadingBox = null;
                 }
             });
-            
-            
+        }
+        
+        if (s._checkTagAttribute(list, 'lazy-load')) {
             this._prepareLazyLoad();
             
             setTimeout(function() {
