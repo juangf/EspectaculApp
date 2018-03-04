@@ -69,6 +69,8 @@ function AppList(element) {
                 len--;
             }
         }
+        
+        return this;
     };
     
     this._prepareLazyLoad = function() {
@@ -91,6 +93,8 @@ function AppList(element) {
                 };
             }
         }
+        
+        return this;
     };
 
     this._init = function() {
