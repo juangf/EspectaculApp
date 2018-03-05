@@ -567,6 +567,20 @@ _w.esp = _w.s = {
     },
 
     /**
+     * Adds an attribute to a specified element
+     * @param  {DOM Element} element
+     * @param  {String}      attributeName
+     * @param  {String}      value
+     * @return {Object} 
+     */
+    _addTagAttribute : function(element, attributeName, value) {
+        var att = _d.createAttribute(attributeName);
+        att.value = value;
+        element.setAttributeNode(att);
+        return this;
+    },
+
+    /**
      * Console log helper
      * @param  {String} message   Console message
      * @param  {String} type      Message Type ('info' | 'error' | 'warn')

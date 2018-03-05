@@ -44,6 +44,12 @@ _w.esp.dialog = {
             title = _d.createElement('esp-dialog-title'),
             content = _d.createElement('esp-dialog-content'),
             controls = _d.createElement('esp-dialog-controls');
+        
+        title.id = 'esp-dialog-title';
+        
+        _w.esp._addTagAttribute(dialog, 'role', 'dialog');
+        _w.esp._addTagAttribute(dialog, 'aria-labelledby', 'esp-dialog-title');
+        _w.esp._addTagAttribute(dialog, 'tabindex', '-1');
 
         //If there is no buttons defined, put a default closing dialog button
         if (!params.buttons) {
@@ -65,6 +71,12 @@ _w.esp.dialog = {
 
             //Set the Press button event
             _w.esp.one(option, 'tap', button.onPress ? button.onPress : function(){that.close()});
+            
+            // Add the role
+            _w.esp._addTagAttribute(option, 'role', 'button');
+            
+            // Add the aria label
+            _w.esp._addTagAttribute(option, 'aria-label', button.title);
 
             controls.appendChild(option);
         }
