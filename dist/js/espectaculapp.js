@@ -631,17 +631,20 @@
     },
 
     _appendHeader : function(title) {
-        var newNode = _d.createElement('esp-header');
+        var newNode    = _d.createElement('esp-header');
+        var navWrapper = this.getNavWrapper();
 
         newNode.innerHTML = '<div class="title">'+title+'</div>';
         
-        this.getNavWrapper().appendChild(newNode);
+        navWrapper.insertBefore(newNode, navWrapper.firstChild);
 
         return newNode;
     },
 
     _appendHeaderNode : function(headerNode) {
-        this.getNavWrapper().appendChild(headerNode);
+        var navWrapper = this.getNavWrapper();
+        
+        navWrapper.insertBefore(headerNode, navWrapper.firstChild);
 
         return headerNode;
     },
