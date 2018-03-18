@@ -103,6 +103,10 @@ _w.esp.dialog = {
             if (_w.esp.getNavWrapper()) {
                 _w.esp.getNavWrapper().classList.add('blur');
             }
+            
+            if (_w.esp.getBottomWrapper()) {
+                _w.esp.getBottomWrapper().classList.add('blur');
+            }
         },0);
 
         return this;
