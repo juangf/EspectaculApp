@@ -567,20 +567,6 @@
     },
 
     /**
-     * Adds an attribute to a specified element
-     * @param  {DOM Element} element
-     * @param  {String}      attributeName
-     * @param  {String}      value
-     * @return {Object} 
-     */
-    _addTagAttribute : function(element, attributeName, value) {
-        var att = _d.createAttribute(attributeName);
-        att.value = value;
-        element.setAttributeNode(att);
-        return this;
-    },
-
-    /**
      * Console log helper
      * @param  {String} message   Console message
      * @param  {String} type      Message Type ('info' | 'error' | 'warn')
@@ -1413,9 +1399,9 @@ _w.esp.dialog = {
         
         title.id = 'esp-dialog-title';
         
-        _w.esp._addTagAttribute(dialog, 'role', 'dialog');
-        _w.esp._addTagAttribute(dialog, 'aria-labelledby', 'esp-dialog-title');
-        _w.esp._addTagAttribute(dialog, 'tabindex', '-1');
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-labelledby', 'esp-dialog-title');
+        dialog.setAttribute('tabindex', '-1');
 
         //If there is no buttons defined, put a default closing dialog button
         if (!params.buttons) {
@@ -1439,10 +1425,10 @@ _w.esp.dialog = {
             _w.esp.one(option, 'tap', button.onPress ? button.onPress : function(){that.close()});
             
             // Add the role
-            _w.esp._addTagAttribute(option, 'role', 'button');
+            option.setAttribute('role', 'button');
             
             // Add the aria label
-            _w.esp._addTagAttribute(option, 'aria-label', button.title);
+            option.setAttribute('aria-label', button.title);
 
             controls.appendChild(option);
         }
@@ -1462,16 +1448,23 @@ _w.esp.dialog = {
         bodyTag.appendChild(dialogWrapper);
 
         setTimeout(function(){
+            var navWrapper    = _w.esp.getNavWrapper();
+            var bottomWrapper = _w.esp.getBottomWrapper();
+            var viewWrapper   = _w.esp.getViewWrapper();
+            
             dialogWrapper.classList.add('in');
 
-            _w.esp.getViewWrapper().classList.add('blur');
+            viewWrapper.classList.add('blur');
+            viewWrapper.setAttribute('aria-hidden', true);
 
-            if (_w.esp.getNavWrapper()) {
-                _w.esp.getNavWrapper().classList.add('blur');
+            if (navWrapper) {
+                navWrapper.classList.add('blur');
+                navWrapper.setAttribute('aria-hidden', true);
             }
             
-            if (_w.esp.getBottomWrapper()) {
-                _w.esp.getBottomWrapper().classList.add('blur');
+            if (bottomWrapper) {
+                bottomWrapper.classList.add('blur');
+                bottomWrapper.setAttribute('aria-hidden', true);
             }
         },0);
 
@@ -1521,13 +1514,23 @@ _w.esp.dialog = {
 
             this._hideDialog(function() {
                 if (that._queue.length < 1) {
-
+                    var navWrapper    = _w.esp.getNavWrapper();
+                    var bottomWrapper = _w.esp.getBottomWrapper();
+                    var viewWrapper   = _w.esp.getViewWrapper();
+                    
                     that._hideBackground();
 
-                    _w.esp.getViewWrapper().classList.remove('blur');
+                    viewWrapper.classList.remove('blur');
+                    viewWrapper.removeAttribute('aria-hidden');
 
-                    if (_w.esp.getNavWrapper()) {
-                        _w.esp.getNavWrapper().classList.remove('blur');
+                    if (navWrapper) {
+                        navWrapper.classList.remove('blur');
+                        navWrapper.removeAttribute('aria-hidden');
+                    }
+                    
+                    if (bottomWrapper) {
+                        bottomWrapper.classList.remove('blur');
+                        bottomWrapper.removeAttribute('aria-hidden');
                     }
 
                     that._isOpen = false;
