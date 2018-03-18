@@ -46,8 +46,7 @@ _w.esp.dialog = {
             controls = _d.createElement('esp-dialog-controls');
         
         title.id = 'esp-dialog-title';
-        
-        dialog.setAttribute('role', 'dialog');
+
         dialog.setAttribute('aria-labelledby', 'esp-dialog-title');
         dialog.setAttribute('tabindex', '-1');
 
@@ -116,7 +115,7 @@ _w.esp.dialog = {
             }
         },0);
         
-        title.focus();
+        _w.esp.accessibility.setVoiceOverFocus(title);
 
         return this;
     },

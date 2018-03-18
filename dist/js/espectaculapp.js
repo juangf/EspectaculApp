@@ -1325,6 +1325,24 @@ function AppView(name) {
     };
 
 }
+_w.esp.accessibility = {
+    setVoiceOverFocus : function(element) {
+        var focusInterval = 10; // ms, time between function calls
+        var focusTotalRepetitions = 10; // number of repetitions
+
+        element.setAttribute('tabindex', '0');
+        element.blur();
+
+        var focusRepetitions = 0;
+        var interval = window.setInterval(function() {
+            element.focus();
+            focusRepetitions++;
+            if (focusRepetitions >= focusTotalRepetitions) {
+                window.clearInterval(interval);
+            }
+        }, focusInterval);
+    }
+};
 _w.esp.ajax = function(params) {
     var xmlhttp = new XMLHttpRequest();
 
@@ -1398,8 +1416,7 @@ _w.esp.dialog = {
             controls = _d.createElement('esp-dialog-controls');
         
         title.id = 'esp-dialog-title';
-        
-        dialog.setAttribute('role', 'dialog');
+
         dialog.setAttribute('aria-labelledby', 'esp-dialog-title');
         dialog.setAttribute('tabindex', '-1');
 
@@ -1468,7 +1485,7 @@ _w.esp.dialog = {
             }
         },0);
         
-        title.focus();
+        _w.esp.accessibility.setVoiceOverFocus(title);
 
         return this;
     },
