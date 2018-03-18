@@ -1467,6 +1467,8 @@ _w.esp.dialog = {
                 bottomWrapper.setAttribute('aria-hidden', true);
             }
         },0);
+        
+        title.focus();
 
         return this;
     },
