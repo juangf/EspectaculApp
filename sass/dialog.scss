@@ -91,7 +91,11 @@ esp-dialog-wrapper {
 
                 &:active{
                     background-color: $dialogOptionActiveBgColor;
-                };
+                }
+
+                &.highlight {
+                    font-weight: bold;
+                }
             }
             esp-dialog-option:not(:last-child) {
                 border-right: 1px solid $dialogOptionBorderColor;

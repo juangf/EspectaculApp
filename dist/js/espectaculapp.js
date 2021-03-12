@@ -1447,6 +1447,11 @@ _w.esp.dialog = {
             // Add the aria label
             option.setAttribute('aria-label', button.title);
 
+            // Check the button Highlight flag
+            if (button.highlight) {
+                option.classList.add('highlight');
+            }
+
             controls.appendChild(option);
         }
 
