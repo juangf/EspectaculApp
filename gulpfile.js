@@ -64,3 +64,5 @@ gulp.task('watch', function() {
     //Watch js files
     gulp.watch('js/*.js', ['concat','minjs']);
 });
+
+gulp.task('default', ['watch']);

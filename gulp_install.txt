@@ -1,3 +1,0 @@
-npm install gulp -g
-npm install gulp --save-dev
-npm install gulp-sass gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache del gulp-wrap jshint gulp-jshint --save-dev
